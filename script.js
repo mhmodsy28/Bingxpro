@@ -1,4 +1,4 @@
-let balance = 0.00; // الرصيد الحالي
+let balance = 10.00; // الرصيد الحالي
 
 // تحديث الرصيد المعروض
 function updateBalance() {
@@ -60,3 +60,22 @@ function requestBalanceUpdate() {
 // دالة لعرض أو إخفاء معلومات المحفظة
 function toggleWalletInfo() {
     const walletInfo = document.getElementById('wallet-info');
+    
+    // إذا كانت المحفظة مخفية، نظهرها
+    if (walletInfo.classList.contains('hidden')) {
+        walletInfo.classList.remove('hidden');
+    } else {
+        // إذا كانت ظاهرة، نخفيها
+        walletInfo.classList.add('hidden');
+    }
+}
+
+// دالة لفتح الشريط الجانبي
+function openSidebar() {
+    document.getElementById("sidebar").style.width = "250px";
+}
+
+// دالة لإغلاق الشريط الجانبي
+function closeSidebar() {
+    document.getElementById("sidebar").style.width = "0";
+}
