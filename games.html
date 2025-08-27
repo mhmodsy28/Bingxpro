@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>الألعاب - BingX</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
@@ -14,7 +14,7 @@
     </div>
 
     <div class="card">
-      <h3>لعبة الطائرة (Crash) — محاكاة رسومية</h3>
+      <h3>لعبة الطائرة (Crash)</h3>
       <div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
 
       <div style="margin-top:10px">
@@ -34,10 +34,7 @@
 
   <script src="script.js"></script>
   <script>
-    // page init handled in script.js (ensureLoggedInOrRedirect)
-    document.addEventListener('DOMContentLoaded', ()=>{
-      if(!ensureLoggedInOrRedirect()) return;
-    });
+    document.addEventListener('DOMContentLoaded', ()=>{ if(!ensureLoggedInOrRedirect()) return; });
   </script>
 </body>
 </html>
