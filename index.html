@@ -1,67 +1,117 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة BingX</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة BingX</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body onload="checkLogin()">
 
-    <!-- واجهة تسجيل الدخول -->
-    <div id="login-container" class="container">
-        <h1>تسجيل الدخول</h1>
-        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-        <input type="password" id="password" placeholder="كلمة المرور" required>
-        <button class="action-button" onclick="login()">تسجيل الدخول</button>
+  <!-- واجهة تسجيل الدخول / إنشاء حساب -->
+  <div id="auth-container" class="container">
+    <h1>مرحباً بك 👋</h1>
+
+    <!-- تسجيل الدخول -->
+    <div id="login-form">
+      <h2>تسجيل الدخول</h2>
+      <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="login-password" placeholder="كلمة المرور" required>
+      <button class="action-button" onclick="login()">تسجيل الدخول</button>
+      <p>ليس لديك حساب؟ <a href="#" onclick="toggleAuthForms()">إنشاء حساب</a></p>
     </div>
 
-    <!-- الواجهة الرئيسية بعد تسجيل الدخول -->
-    <div id="main-container" class="container hidden">
-        <h1>منصة BingX</h1>
-        <div id="balance">
-            <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
-        </div>
-        <button class="wallet-btn" onclick="toggleWalletInfo()">عرض المحفظة</button>
-        <div id="wallet-info" class="hidden">
-            <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
-            <p><strong>الشبكة:</strong> BEP20</p>
-        </div>
+    <!-- إنشاء حساب -->
+    <div id="register-form" class="hidden">
+      <h2>إنشاء حساب</h2>
+      <input type="text" id="first-name" placeholder="الاسم الأول" required>
+      <input type="text" id="last-name" placeholder="الاسم الثاني" required>
+      <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+      <input type="email" id="reg-email" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="reg-password" placeholder="كلمة المرور" required>
+      <button class="action-button" onclick="register()">إنشاء حساب</button>
+      <p>لديك حساب بالفعل؟ <a href="#" onclick="toggleAuthForms()">تسجيل الدخول</a></p>
+    </div>
+  </div>
 
-        <div class="transaction-section">
-            <h2>إيداع</h2>
-            <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
-            <input type="file" id="deposit-image" accept="image/*" required>
-            <button class="action-button" onclick="deposit()">إيداع</button>
-            <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
-        </div>
+  <!-- الصفحة الرئيسية -->
+  <div id="main-container" class="hidden">
+    <div class="container">
+      <h1>منصة BingX</h1>
+      <div id="balance">
+        <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
+      </div>
 
-        <div class="transaction-section">
-            <h2>سحب</h2>
-            <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
-            <button class="action-button" onclick="withdraw()">سحب</button>
-        </div>
+      <button class="wallet-btn" onclick="toggleWalletInfo()">عرض المحفظة</button>
+      <div id="wallet-info" class="hidden">
+        <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
+        <p><strong>الشبكة:</strong> BEP20</p>
+      </div>
 
-        <div class="admin-section">
-            <h2>إضافة رصيد</h2>
-            <input type="number" id="add-balance-amount" placeholder="أدخل المبلغ للإضافة" required>
-            <button class="action-button" onclick="requestBalanceUpdate()">إضافة رصيد</button>
-        </div>
+      <div class="transaction-section">
+        <h2>إيداع</h2>
+        <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
+        <input type="file" id="deposit-image" accept="image/*" required>
+        <button class="action-button" onclick="deposit()">إيداع</button>
+        <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
+      </div>
+
+      <div class="transaction-section">
+        <h2>سحب</h2>
+        <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
+        <button class="action-button" onclick="withdraw()">سحب</button>
+      </div>
     </div>
 
     <!-- القائمة الجانبية -->
     <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="closeSidebar()">×</button>
-        <h2>القائمة</h2>
-        <a href="#">📈 التداول</a>
-        <a href="#">💼 الاستثمار</a>
-        <a href="#">💳 الإيداع</a>
-        <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">📞 تواصل عبر واتساب</a>
+      <button class="close-btn" onclick="closeSidebar()">×</button>
+      <h2>القائمة</h2>
+
+      <!-- التداول -->
+      <a href="#" onclick="toggleSection('trade-section')">📈 التداول</a>
+      <div id="trade-section" class="hidden section-box">
+        <h3>اختر العملة</h3>
+        <select id="trade-coin">
+          <option value="BTC">Bitcoin (BTC)</option>
+          <option value="ETH">Ethereum (ETH)</option>
+          <option value="BNB">Binance Coin (BNB)</option>
+          <option value="SOL">Solana (SOL)</option>
+          <option value="USDT">Tether (USDT)</option>
+        </select>
+        <input type="number" id="trade-amount" placeholder="مبلغ التداول">
+        <button class="action-button" onclick="trade()">تنفيذ الصفقة</button>
+      </div>
+
+      <!-- الاستثمار -->
+      <a href="#" onclick="toggleSection('invest-section')">💼 الاستثمار</a>
+      <div id="invest-section" class="hidden section-box">
+        <h3>نوع العقد</h3>
+        <select id="invest-type">
+          <option value="long">طويل الأجل</option>
+          <option value="short">قصير الأجل</option>
+        </select>
+        <input type="number" id="invest-amount" placeholder="مبلغ الاستثمار">
+        <button class="action-button" onclick="invest()">بدء الاستثمار</button>
+      </div>
+
+      <!-- الإيداع -->
+      <a href="#" onclick="toggleSection('deposit-section')">💳 الإيداع</a>
+      <div id="deposit-section" class="hidden section-box">
+        <p>قم بالإيداع من الصفحة الرئيسية.</p>
+      </div>
+
+      <!-- واتساب -->
+      <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">📞 تواصل عبر واتساب</a>
+
+      <!-- تسجيل الخروج -->
+      <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
     </div>
 
     <!-- زر فتح القائمة -->
     <button class="open-btn" onclick="openSidebar()">☰ القائمة</button>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
