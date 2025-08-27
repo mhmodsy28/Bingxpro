@@ -5,6 +5,12 @@ function updateBalance() {
     document.getElementById('current-balance').innerText = balance.toFixed(2);
 }
 
+// دالة الترحيب
+function showWelcomeMessage() {
+    alert("👋 مرحباً بك في منصة BingX! نتمنى لك تجربة موفقة.");
+    updateBalance();
+}
+
 // دالة الإيداع
 function deposit() {
     const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
@@ -21,15 +27,8 @@ function deposit() {
         return;
     }
 
-    // إظهار حالة الإيداع
     depositStatus.classList.remove('hidden');
     depositStatus.innerText = "إيداعك قيد الانتظار...";
-
-    // تحديث الرصيد
-    balance += depositAmount;
-    updateBalance();
-
-    // رسالة للمستخدم
     alert("تم إرسال طلب الإيداع. سيتم إضافة الرصيد بعد المراجعة.");
 }
 
@@ -49,33 +48,24 @@ function withdraw() {
 
     balance -= withdrawAmount;
     updateBalance();
-    alert("تم سحب المبلغ بنجاح.");
+    alert("✅ تم سحب المبلغ بنجاح.");
 }
 
-// دالة إضافة رصيد يدوي
+// منع إضافة رصيد مباشر
 function requestBalanceUpdate() {
-    alert("يرجى التواصل مع الوكيل لإضافة رصيد.");
+    alert("⚠️ يرجى التواصل مع الوكيل لإضافة رصيد.");
 }
 
-// دالة لعرض أو إخفاء معلومات المحفظة
+// إظهار/إخفاء المحفظة
 function toggleWalletInfo() {
     const walletInfo = document.getElementById('wallet-info');
-    
-    // إذا كانت المحفظة مخفية، نظهرها
-    if (walletInfo.classList.contains('hidden')) {
-        walletInfo.classList.remove('hidden');
-    } else {
-        // إذا كانت ظاهرة، نخفيها
-        walletInfo.classList.add('hidden');
-    }
+    walletInfo.classList.toggle('hidden');
 }
 
-// دالة لفتح الشريط الجانبي
+// فتح وإغلاق القائمة
 function openSidebar() {
-    document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("sidebar").style.width = "260px";
 }
-
-// دالة لإغلاق الشريط الجانبي
 function closeSidebar() {
     document.getElementById("sidebar").style.width = "0";
 }
