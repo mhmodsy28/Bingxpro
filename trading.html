@@ -1,40 +1,84 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>التداول - BingX</title>
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body onload="loadPrices()">
-  <div class="container">
-    <h1>📈 التداول</h1>
-    <p>مؤشرات أسعار العملات</p>
+<body>
+  <div class="page-container">
+    <header class="page-header">
+      <h1>📈 التداول</h1>
+      <div>
+        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
+      </div>
+    </header>
 
-    <div id="crypto-prices">
-      <div class="crypto-card">
-        <h2>Bitcoin (BTC)</h2>
-        <p>السعر: <span id="btc-price">--</span> USD</p>
+    <div class="card trading-grid">
+      <div class="left-col">
+        <div class="market-top">
+          <label>اختر العملة</label>
+          <select id="crypto-select">
+            <option value="BTC">Bitcoin (BTC)</option>
+            <option value="ETH">Ethereum (ETH)</option>
+            <option value="BNB">BNB</option>
+            <option value="SOL">Solana (SOL)</option>
+          </select>
+
+          <div class="market-stats">
+            <div class="stat">
+              <small>السعر الحالي</small>
+              <div id="price" class="stat-value">--</div>
+            </div>
+            <div class="stat">
+              <small>تغير 24س</small>
+              <div id="change" class="stat-value">--</div>
+            </div>
+            <div class="stat">
+              <small>SMA(14)</small>
+              <div id="sma" class="stat-value">--</div>
+            </div>
+            <div class="stat">
+              <small>RSI(14)</small>
+              <div id="rsi" class="stat-value">--</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="priceChart"></canvas>
+        </div>
       </div>
 
-      <div class="crypto-card">
-        <h2>Ethereum (ETH)</h2>
-        <p>السعر: <span id="eth-price">--</span> USD</p>
-      </div>
+      <div class="right-col">
+        <div class="card">
+          <h3>تنفيذ صفقة</h3>
+          <label>المبلغ (USDT)</label>
+          <input id="trade-amount" type="number" placeholder="مثال: 50" />
 
-      <div class="crypto-card">
-        <h2>Binance Coin (BNB)</h2>
-        <p>السعر: <span id="bnb-price">--</span> USD</p>
-      </div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn btn-primary" onclick="executeTrade()">تنفيذ</button>
+            <button class="btn btn-outline" onclick="refreshMarket()">تحديث</button>
+          </div>
 
-      <div class="crypto-card">
-        <h2>Solana (SOL)</h2>
-        <p>السعر: <span id="sol-price">--</span> USD</p>
+          <div id="trade-log" class="muted" style="margin-top:12px;">سجل الصفقة سيظهر هنا.</div>
+        </div>
       </div>
     </div>
-
-    <a href="index.html" class="back-btn">⬅ العودة للرئيسية</a>
   </div>
+
   <script src="script.js"></script>
+  <script>
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      if(!ensureLoggedInOrRedirect()) return;
+      const sel = document.getElementById('crypto-select');
+      sel.addEventListener('change', ()=> loadMarketFor(sel.value));
+      loadMarketFor(sel.value);
+    });
+  </script>
 </body>
 </html>
