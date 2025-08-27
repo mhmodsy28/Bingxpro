@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>الإيداع</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الإيداع - BingX</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>💰 الإيداع</header>
   <div class="container">
-    <div class="card">
-      <h3>عنوان المحفظة (USDT - BEP20)</h3>
-      <p style="direction:ltr; color:#ffd700;">
-        0x3932890a5d1acb3ab036bd39ade26c47929b37e5
-      </p>
-      <button onclick="copyAddress()">📋 نسخ العنوان</button>
+    <div class="header">
+      <div class="brand">BingX</div>
+      <div><a class="link" href="index.html">العودة</a></div>
     </div>
+
+    <div class="card">
+      <h3>عنوان الإيداع</h3>
+      <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
+      <div class="muted">USDT - BEP20</div>
+      <button class="btn btn-primary" onclick="copyDepositAddress()">نسخ العنوان</button>
+    </div>
+
     <div class="card">
       <h3>إرسال إثبات الدفع</h3>
-      <input type="file">
-      <input type="number" placeholder="المبلغ (USDT)">
-      <button>إرسال إثبات</button>
+      <input id="proof-file" type="file" accept="image/*">
+      <input id="proof-amount" type="number" placeholder="المبلغ المرسل (USDT)">
+      <button class="btn btn-primary" onclick="submitProof()">إرسال إثبات</button>
+      <p id="proof-msg" class="muted"></p>
     </div>
-    <a href="index.html"><button>⬅ العودة</button></a>
   </div>
 
-  <script>
-    function copyAddress() {
-      navigator.clipboard.writeText("0x3932890a5d1acb3ab036bd39ade26c47929b37e5");
-      alert("تم نسخ العنوان ✅");
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
