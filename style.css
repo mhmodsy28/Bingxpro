@@ -54,6 +54,7 @@ h2 {
     background: linear-gradient(45deg, #f1c40f, #e67e22);
 }
 
+/* الحقول */
 input {
     width: 100%;
     padding: 12px;
@@ -75,7 +76,6 @@ input {
     font-size: 15px;
     color: white;
 }
-.hidden { display: none; }
 
 /* رسالة الإيداع */
 #deposit-status {
@@ -84,6 +84,8 @@ input {
     font-weight: bold;
     margin-top: 10px;
 }
+
+.hidden { display: none; }
 
 /* القائمة الجانبية */
 .sidebar {
@@ -101,10 +103,7 @@ input {
     text-align: center;
     backdrop-filter: blur(6px);
 }
-.sidebar h2 {
-    margin-bottom: 20px;
-    color: gold;
-}
+.sidebar h2 { margin-bottom: 20px; color: gold; }
 .sidebar a {
     padding: 12px;
     text-decoration: none;
@@ -115,10 +114,7 @@ input {
     border-radius: 8px;
     transition: 0.3s;
 }
-.sidebar a:hover {
-    background: rgba(255, 215, 0, 0.2);
-    color: gold;
-}
+.sidebar a:hover { background: rgba(255, 215, 0, 0.2); color: gold; }
 .sidebar .close-btn {
     color: white;
     font-size: 36px;
@@ -135,9 +131,7 @@ input {
     font-size: 18px;
     border-radius: 8px;
 }
-.whatsapp-button:hover {
-    background: #128C7E;
-}
+.whatsapp-button:hover { background: #128C7E; }
 
 /* زر فتح القائمة */
 .open-btn {
@@ -153,6 +147,4 @@ input {
     left: 20px;
     z-index: 101;
 }
-.open-btn:hover {
-    background: orange;
-}
+.open-btn:hover { background: orange; }
