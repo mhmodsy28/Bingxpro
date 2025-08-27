@@ -1,64 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>الاستثمار - BingX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>الاستثمار</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body>
-  <div class="page-container">
-    <header class="page-header">
-      <h1>💼 الاستثمار</h1>
-      <div>
-        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
-      </div>
-    </header>
-
-    <div class="card invest-card">
-      <div class="two-cols">
-        <div>
-          <label>اختر نوع العقد</label>
-          <select id="contract-type">
-            <option value="long">طويل الأجل</option>
-            <option value="short">قصير الأجل</option>
-          </select>
-
-          <label>مبلغ الاستثمار (USDT)</label>
-          <input id="invest-input" type="number" placeholder="أدخل المبلغ" />
-
-          <div style="display:flex; gap:8px; margin-top:10px;">
-            <button class="btn btn-primary" onclick="updateEstimate()">حساب العائد</button>
-            <button class="btn btn-outline" onclick="startInvestment()">بدء الاستثمار</button>
-          </div>
-        </div>
-
-        <div>
-          <h3>مؤشرات العقد</h3>
-          <div id="contract-indicators" class="muted">
-            <p>APR تقديري: <span id="apr">--</span></p>
-            <p>مخاطر: <span id="risk">--</span></p>
-            <p id="invest-estimate">العائد المتوقع: --</p>
-          </div>
-
-          <h3 style="margin-top:16px;">ملاحظات</h3>
-          <ul class="muted">
-            <li>الاستثمار هنا تجريبي ويخص المنصة فقط.</li>
-            <li>البيانات تقديرية ولا تمثل نصيحة استثمارية.</li>
-          </ul>
-        </div>
-      </div>
+  <header>📈 الاستثمار</header>
+  <div class="container">
+    <div class="card">
+      <h3>مخطط الاستثمار</h3>
+      <div id="chart2" style="height:400px;"></div>
     </div>
+    <div class="card">
+      <h3>إعداد عقد استثماري</h3>
+      <select>
+        <option>عقد قصير (7 أيام)</option>
+        <option>عقد متوسط (30 يوم)</option>
+        <option>عقد طويل (90 يوم)</option>
+      </select>
+      <input type="number" placeholder="المبلغ (USDT)">
+      <button>تنفيذ الاستثمار</button>
+    </div>
+    <a href="index.html"><button>⬅ العودة</button></a>
   </div>
 
-  <script src="script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if(!ensureLoggedInOrRedirect()) return;
-      // إعداد افتراضي للمؤشرات
-      document.getElementById('apr').innerText = 'طويل: 12% ، قصير: 5%';
-      document.getElementById('risk').innerText = 'متوسط';
+    new TradingView.widget({
+      "container_id": "chart2",
+      "width": "100%",
+      "height": "400",
+      "symbol": "BINANCE:ETHUSDT",
+      "interval": "60",
+      "theme": "dark",
+      "style": "1",
+      "locale": "ar",
+      "toolbar_bg": "#1a1a1a",
+      "hide_side_toolbar": false
     });
   </script>
 </body>
