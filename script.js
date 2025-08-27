@@ -1,298 +1,251 @@
-/* ===== تخزين المفاتيح ===== */
-const STORAGE_USERS_KEY = 'bx_users_v3';
-const STORAGE_LOGGED_KEY = 'bx_logged_user_v3';
+/* script.js - إدارة المستخدم/رصيد/تداول/استثمار/ألعاب */
+/* مفاتيح التخزين */
+const USERS_KEY = 'bx_users_final';
+const LOGGED_KEY = 'bx_logged_final';
 
-/* ===== مساعدات المستخدم ===== */
-function getAllUsers(){ return JSON.parse(localStorage.getItem(STORAGE_USERS_KEY) || '[]'); }
-function saveAllUsers(u){ localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(u)); }
-function findUserByEmail(email){ if(!email) return null; return getAllUsers().find(x=>x.email.toLowerCase()===email.toLowerCase()) || null; }
-function saveOrUpdateUser(user){ const arr=getAllUsers(); const i=arr.findIndex(x=>x.email.toLowerCase()===user.email.toLowerCase()); if(i===-1) arr.push(user); else arr[i]=user; saveAllUsers(arr); }
-function setLoggedUser(user){ localStorage.setItem(STORAGE_LOGGED_KEY, JSON.stringify(user)); }
-function getLoggedUser(){ return JSON.parse(localStorage.getItem(STORAGE_LOGGED_KEY) || 'null'); }
+/* ---- helpers ---- */
+function getUsers(){ return JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); }
+function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+function findUser(email){ if(!email) return null; return getUsers().find(x=>x.email.toLowerCase()===email.toLowerCase()) || null; }
+function saveOrUpdateUser(user){ const arr=getUsers(); const i=arr.findIndex(x=>x.email.toLowerCase()===user.email.toLowerCase()); if(i===-1) arr.push(user); else arr[i]=user; saveUsers(arr); }
+function setLogged(user){ localStorage.setItem(LOGGED_KEY, JSON.stringify(user)); }
+function getLogged(){ return JSON.parse(localStorage.getItem(LOGGED_KEY) || 'null'); }
+function ensureLoggedInOrRedirect(){ const u=getLogged(); if(!u){ alert('🔒 يرجى تسجيل الدخول أولاً'); window.location.href='index.html'; return false; } return true; }
 
-/* ===== واجهة التسجيل / الدخول ===== */
-function showRegisterForm(){ document.getElementById('login-block').classList.add('hidden'); document.getElementById('register-block').classList.remove('hidden'); }
-function showLoginForm(){ document.getElementById('register-block').classList.add('hidden'); document.getElementById('login-block').classList.remove('hidden'); }
-
+/* ---- Auth (index.html) ---- */
+function showRegister(){ document.getElementById('login-form').classList.add('hidden'); document.getElementById('register-form').classList.remove('hidden'); }
+function showLogin(){ document.getElementById('register-form').classList.add('hidden'); document.getElementById('login-form').classList.remove('hidden'); }
 function register(){
-  const firstName = (document.getElementById('first-name')?.value || '').trim();
-  const lastName = (document.getElementById('last-name')?.value || '').trim();
-  const phone = (document.getElementById('phone')?.value || '').trim();
-  const email = (document.getElementById('reg-email')?.value || '').trim();
-  const password = (document.getElementById('reg-password')?.value || '').trim();
-  if(!firstName || !lastName || !phone || !email || !password){ alert('يرجى تعبئة جميع الحقول'); return; }
-  if(findUserByEmail(email)){ alert('هذا البريد مسجل مسبقاً، قم بتسجيل الدخول'); showLoginForm(); return; }
-  const user = { firstName, lastName, phone, email, password, balance: 50.00, createdAt:new Date().toISOString() };
-  saveOrUpdateUser(user); setLoggedUser(user); alert('تم إنشاء الحساب وتسجيل الدخول'); goToMain();
+  const first = document.getElementById('first-name').value.trim();
+  const last = document.getElementById('last-name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-password').value.trim();
+  if(!first || !last || !phone || !email || !pass){ alert('يرجى ملء الحقول'); return; }
+  if(findUser(email)){ alert('هذا البريد مستخدم'); return; }
+  const user = { first, last, phone, email, password: pass, balance: 50.00, created: new Date().toISOString(), history:[] };
+  saveOrUpdateUser(user); setLogged(user);
+  alert('تم إنشاء الحساب وتسجيل الدخول'); goToApp();
 }
-
 function login(){
-  const email = (document.getElementById('login-email')?.value || '').trim();
-  const password = (document.getElementById('login-password')?.value || '').trim();
-  if(!email || !password){ alert('يرجى تعبئة الحقول'); return; }
-  const user = findUserByEmail(email);
-  if(!user){ alert('البريد الإلكتروني غير موجود'); return; }
-  if(user.password !== password){ alert('كلمة المرور غير صحيحة'); return; }
-  setLoggedUser(user); alert(`أهلاً ${user.firstName}`); goToMain();
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value.trim();
+  if(!email || !pass){ alert('املأ الحقول'); return; }
+  const u = findUser(email);
+  if(!u){ alert('البريد غير موجود'); return; }
+  if(u.password !== pass){ alert('كلمة المرور خطأ'); return; }
+  setLogged(u); alert('تم تسجيل الدخول'); goToApp();
 }
-
-/* ===== التحويل للواجهة الرئيسية ===== */
-function goToMain(){
-  // إذا نحن في index.html
-  const auth = document.getElementById('auth-wrap');
-  const main = document.getElementById('main-wrap');
-  if(auth && main){
-    auth.classList.add('hidden'); main.classList.remove('hidden');
-    renderUserName(); updateBalanceOnPage();
-  } else {
-    window.location.href = 'index.html';
-  }
-}
-
-/* ===== صفحة التحميل الأساسية (عند فتح index.html) ===== */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // index.html specific
+function goToApp(){
   if(document.getElementById('auth-wrap')){
-    const logged = getLoggedUser();
-    if(logged){ document.getElementById('auth-wrap').classList.add('hidden'); document.getElementById('main-wrap').classList.remove('hidden'); renderUserName(); updateBalanceOnPage(); }
-    else { document.getElementById('auth-wrap').classList.remove('hidden'); document.getElementById('main-wrap').classList.add('hidden'); }
+    document.getElementById('auth-wrap').classList.add('hidden');
+    document.getElementById('app-wrap').classList.remove('hidden');
+    renderUser();
+  } else {
+    window.location.href='index.html';
   }
-});
+}
+function renderUser(){
+  const u = getLogged(); if(!u) return;
+  document.getElementById('user-name').innerText = `${u.first} ${u.last}`;
+  document.getElementById('current-balance').innerText = Number(u.balance || 0).toFixed(2);
+}
+function logout(){ localStorage.removeItem(LOGGED_KEY); window.location.href='index.html'; }
 
-/* ===== عرض اسم المستخدم والرصيد ===== */
-function renderUserName(){ const u=getLoggedUser(); if(!u) return; const el=document.getElementById('user-name'); if(el) el.innerText = `${u.firstName} ${u.lastName}`; }
-function updateBalanceOnPage(){ const u=getLoggedUser(); if(!u) return; const el=document.getElementById('current-balance'); if(el) el.innerText = Number(u.balance||0).toFixed(2); }
-
-/* ===== الخروج ===== */
-function logout(){ localStorage.removeItem(STORAGE_LOGGED_KEY); window.location.href = 'index.html'; }
-
-/* ===== نسخ المحفظة ===== */
-function copyWallet(){ const addr = document.getElementById('wallet-address')?.innerText || ''; if(!addr){ alert('لا يوجد عنوان'); return; } navigator.clipboard?.writeText(addr).then(()=>alert('تم نسخ العنوان')); }
-
-/* ===== QUICK ADD / RESET (تجريبي) ===== */
+/* quick add/reset */
 function quickAdd(){
-  const amt = parseFloat(document.getElementById('quick-deposit-amount')?.value);
-  if(isNaN(amt) || amt <= 0){ alert('أدخل مبلغاً صالحاً'); return; }
-  const u = getLoggedUser(); if(!u){ alert('سجل الدخول أولاً'); return; }
+  const amt = parseFloat(document.getElementById('quick-amount')?.value);
+  if(isNaN(amt) || amt <=0){ alert('ادخل مبلغ صالح'); return; }
+  const u = getLogged(); if(!u){ alert('سجل اولاً'); return; }
   u.balance = Number((Number(u.balance||0) + amt).toFixed(8));
-  saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage(); alert('تمت إضافة الرصيد التجريبي');
+  saveOrUpdateUser(u); setLogged(u); renderUser(); alert('تم اضافة الرصيد التجريبي');
 }
 function quickReset(){
-  if(!confirm('هل تريد إعادة ضبط الرصيد إلى 0؟')) return;
-  const u = getLoggedUser(); if(!u){ alert('سجل الدخول أولاً'); return; }
-  u.balance = 0; saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage(); alert('تمت الإعادة');
+  if(!confirm('اعادة ضبط الرصيد؟')) return;
+  const u=getLogged(); if(!u){ alert('سجل اولاً'); return; }
+  u.balance = 0; saveOrUpdateUser(u); setLogged(u); renderUser(); alert('تمت الاعادة');
 }
 
-/* ===== صفحة الإيداع (deposit.html) ===== */
-function copyDepositAddress(){ const addr = document.getElementById('deposit-address')?.innerText || ''; if(!addr){ alert('لا يوجد عنوان'); return; } navigator.clipboard?.writeText(addr).then(()=>alert('تم نسخ عنوان الإيداع')); }
-function submitDepositProof(){
-  const u = getLoggedUser(); if(!u){ alert('سجل الدخول أولاً'); window.location.href='index.html'; return; }
-  const amt = parseFloat(document.getElementById('deposit-amount-input')?.value);
-  const fileInput = document.getElementById('proof-image');
-  if(isNaN(amt) || amt <= 0){ alert('أدخل مبلغ صالح'); return; }
-  if(!fileInput || !fileInput.files || fileInput.files.length === 0){ alert('أرفق صورة الإثبات'); return; }
-  // هنا مجرد محاكاة — نعرض رسالة أن الطلب قيد المراجعة
-  document.getElementById('deposit-msg').innerText = 'تم استلام إثبات الإيداع — قيد المراجعة.';
-  alert('تم إرسال إثبات الإيداع — سيتم المراجعة وإضافة الرصيد يدوياً.');
+/* wallet copy */
+function copyWallet(){
+  const addr = document.getElementById('wallet-address')?.innerText || '';
+  if(!addr) return;
+  navigator.clipboard.writeText(addr).then(()=> alert('تم نسخ العنوان'));
 }
 
-/* ===== التحقق العام للصفحات الفرعية ===== */
-function ensureLoggedInOrRedirect(){
-  const u = getLoggedUser();
-  if(!u){ alert('🔒 يجب تسجيل الدخول أولاً'); window.location.href = 'index.html'; return false; }
-  return true;
+/* deposit page */
+function copyDepositAddress(){ const addr=document.getElementById('deposit-address')?.innerText || ''; if(!addr) return; navigator.clipboard.writeText(addr).then(()=> alert('تم نسخ عنوان الإيداع'));}
+function submitProof(){
+  if(!ensureLoggedInOrRedirect()) return;
+  const amt = parseFloat(document.getElementById('proof-amount')?.value);
+  const f = document.getElementById('proof-file')?.files?.[0];
+  if(isNaN(amt) || !f){ alert('أدخل المبلغ وأرفق صورة'); return; }
+  document.getElementById('proof-msg').innerText = 'تم إرسال الإثبات — قيد المراجعة';
+  alert('تم إرسال إثبات الإيداع (محاكاة)');
 }
 
-/* ===== تداول: جلب الأسعار و-chart.js (trading.html) ===== */
-const COIN_MAP = { BTC:'bitcoin', ETH:'ethereum', BNB:'binancecoin', SOL:'solana' };
-let priceChart = null;
-
-async function loadMarketFor(symbol){
-  const id = COIN_MAP[symbol] || 'bitcoin';
+/* ---- Trading: coinGecko + Chart.js ---- */
+let tradeChart = null;
+async function loadMarket(id='bitcoin'){
+  if(!ensureLoggedInOrRedirect()) return;
   try{
+    // price + 24h change
     const sp = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`).then(r=>r.json());
     const info = sp[id];
-    const price = info?.usd ?? null;
-    const change = info?.usd_24h_change ?? 0;
-    const priceEl = document.getElementById('price'); if(priceEl) priceEl.innerText = price ? `$${price.toLocaleString(undefined,{maximumFractionDigits:2})}` : '--';
-    const changeEl = document.getElementById('change'); if(changeEl) changeEl.innerText = `${change ? change.toFixed(2) + '%' : '--'}`;
-  }catch(e){ console.warn('price fetch error', e); }
+    document.getElementById('trade-price').innerText = info ? `$${info.usd.toLocaleString(undefined,{maximumFractionDigits:2})}` : '--';
+    document.getElementById('trade-change').innerText = info ? `${info.usd_24h_change.toFixed(2)}%` : '--';
+  }catch(e){ console.warn(e); }
 
   try{
     const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7&interval=hourly`);
     const json = await res.json();
-    const prices = (json.prices || []).map(p=>({t:new Date(p[0]), v:p[1]}));
-    const labels = prices.map(p=>p.t.toLocaleString());
-    const data = prices.map(p=>p.v);
-    const ctx = document.getElementById('priceChart')?.getContext('2d');
+    const prices = (json.prices||[]).map(p=>p[1]);
+    const labels = (json.prices||[]).map(p=>new Date(p[0]).toLocaleString());
+    const ctx = document.getElementById('tradeChart')?.getContext('2d');
     if(ctx){
-      if(priceChart) priceChart.destroy();
-      priceChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{ label:'السعر (USD)', data, borderWidth:1.6, tension:0.18, pointRadius:0 }]},
-        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{ticks:{callback: v => `$${v}`}}} }
-      });
+      if(tradeChart) tradeChart.destroy();
+      tradeChart = new Chart(ctx, { type:'line', data:{labels, datasets:[{label:'السعر (USD)',data:prices,borderColor:'#f1c40f',backgroundColor:'rgba(241,196,15,0.08)',tension:0.2}]}, options:{responsive:true,maintainAspectRatio:false,scales:{x:{display:false}}} });
     }
-    const sma = calculateSMA(data,14);
-    const rsi = calculateRSI(data,14);
-    const smaEl = document.getElementById('sma'); if(smaEl) smaEl.innerText = isNaN(sma)?'--':`$${sma.toFixed(2)}`;
-    const rsiEl = document.getElementById('rsi'); if(rsiEl) rsiEl.innerText = isNaN(rsi)?'--':rsi.toFixed(2);
-  }catch(e){ console.error('chart fetch error', e); }
+    // sma & rsi simple
+    const sma = smaCalc(prices,14);
+    const rsi = rsiCalc(prices,14);
+    document.getElementById('trade-sma').innerText = isNaN(sma)?'--':`$${sma.toFixed(2)}`;
+    document.getElementById('trade-rsi').innerText = isNaN(rsi)?'--':rsi.toFixed(2);
+  }catch(e){ console.warn(e); }
 }
-
-function refreshMarket(){ const sel = document.getElementById('crypto-select'); if(sel) loadMarketFor(sel.value); }
-
-function calculateSMA(values, period){
-  if(!values || values.length < period) return NaN;
-  const slice = values.slice(-period); const sum = slice.reduce((s,v)=>s+v,0); return sum/period;
-}
-function calculateRSI(values, period=14){
-  if(!values || values.length <= period) return NaN;
-  let gains=0, losses=0;
-  for(let i=values.length-period; i<values.length; i++){
-    const change = values[i] - values[i-1];
-    if(change>0) gains += change; else losses += Math.abs(change);
-  }
-  const avgGain = gains/period; const avgLoss = losses/period;
-  if(avgLoss===0) return 100;
-  const rs = avgGain/avgLoss; return 100 - (100 / (1 + rs));
-}
-
-async function executeTrade(){
+function refreshMarket(){ const sel=document.getElementById('trade-symbol'); loadMarket(sel.value); }
+function doTrade(type){
   if(!ensureLoggedInOrRedirect()) return;
   const amt = parseFloat(document.getElementById('trade-amount')?.value);
-  if(isNaN(amt) || amt <=0){ alert('أدخل مبلغاً صالحاً'); return; }
-  const u = getLoggedUser();
-  if(amt > (u.balance || 0)){ alert('رصيد غير كافٍ'); return; }
-  u.balance = Number((u.balance - amt).toFixed(8));
-  saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage();
-  const log = document.getElementById('trade-log'); if(log) log.innerText = `تم تنفيذ صفقة بمبلغ ${amt} USDT`;
-  alert('✅ تم تنفيذ الصفقة (محاكاة)');
+  if(isNaN(amt) || amt<=0){ alert('ادخل مبلغ صالح'); return; }
+  const u=getLogged();
+  if(type==='buy' && amt>u.balance){ alert('رصيد غير كاف'); return; }
+  if(type==='buy'){ u.balance = Number((u.balance - amt).toFixed(8)); u.history.push({type:'buy',amount:amt,date:new Date().toISOString()}); }
+  else { u.history.push({type:'sell',amount:amt,date:new Date().toISOString()}); }
+  saveOrUpdateUser(u); setLogged(u); renderUser(); document.getElementById('trade-log').innerText = `تم ${type} بمبلغ ${amt} USDT`; alert('تم تنفيذ الصفقة (محاكاة)');
 }
+function smaCalc(arr,period){ if(!arr||arr.length<period) return NaN; const slice=arr.slice(-period); return slice.reduce((a,b)=>a+b,0)/period; }
+function rsiCalc(prices,period=14){ if(!prices || prices.length<=period) return NaN; let gains=0,losses=0; for(let i=prices.length-period;i<prices.length;i++){ const d = prices[i]-prices[i-1]; if(d>0) gains+=d; else losses+=Math.abs(d);} const avgG=gains/period, avgL=losses/period; if(avgL===0) return 100; const rs=avgG/avgL; return 100 - (100/(1+rs)); }
 
-/* ===== الاستثمار ===== */
-function updateEstimate(){
-  const type = document.getElementById('contract-type')?.value || 'long';
-  const amount = parseFloat(document.getElementById('invest-input')?.value);
-  if(isNaN(amount) || amount <=0){ alert('أدخل مبلغاً صالحاً'); return; }
-  const factor = type==='long'?1.12:1.05;
-  const est = amount * factor;
-  const el = document.getElementById('invest-estimate'); if(el) el.innerText = `العائد المتوقع: ${est.toFixed(2)} USDT (تقريبي)`;
-  // إظهار APR & risk
-  document.getElementById('apr').innerText = type==='long' ? '12%' : '5%';
-  document.getElementById('risk').innerText = type==='long' ? 'متوسط' : 'مرتفع';
-}
+/* ---- Investment ---- */
+function calculateInvest(){ const type=document.getElementById('invest-type')?.value; const amt=parseFloat(document.getElementById('invest-amount')?.value); if(isNaN(amt)||amt<=0){ alert('ادخل مبلغ'); return;} const factor = type==='long'?1.12:1.05; document.getElementById('invest-est').innerText = `${(amt*factor).toFixed(2)} USDT`; document.getElementById('apr').innerText = type==='long'?'12%':'5%'; document.getElementById('risk').innerText = type==='long'?'متوسط':'مرتفع'; }
+function startInvestment(){ if(!ensureLoggedInOrRedirect()) return; const amt=parseFloat(document.getElementById('invest-amount')?.value); const type=document.getElementById('invest-type')?.value; if(isNaN(amt)||amt<=0){ alert('ادخل مبلغ'); return;} const u=getLogged(); if(amt>u.balance){ alert('رصيد غير كاف'); return;} u.balance = Number((u.balance - amt).toFixed(8)); u.history.push({type:'invest',contract:type,amount:amt,date:new Date().toISOString()}); saveOrUpdateUser(u); setLogged(u); renderUser(); alert('تم بدء الاستثمار (محاكاة)'); }
 
-async function startInvestment(){
+/* ---- Games: Crash (plane), Wheel, Dice ---- */
+
+/* Crash game */
+let crashState = { running:false, interval:null, multiplier:1, crashAt: null, bet:0, cashed:false };
+function crashStart(){
   if(!ensureLoggedInOrRedirect()) return;
-  const amount = parseFloat(document.getElementById('invest-input')?.value);
-  const type = document.getElementById('contract-type')?.value || 'long';
-  if(isNaN(amount) || amount <=0){ alert('أدخل مبلغاً صالحاً'); return; }
-  const u = getLoggedUser();
-  if(amount > (u.balance || 0)){ alert('رصيد غير كافٍ'); return; }
-  u.balance = Number((u.balance - amount).toFixed(8));
-  saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage();
-  alert(`تم بدء استثمار ${type} بمبلغ ${amount} USDT (محاكاة)`);
-}
-
-/* ===== الألعاب: لعبة الطائرة (Crash) =====
-   آلية مبسطة:
-   - يُدخل اللاعب مبلغ الرهان.
-   - عند بدء الجولة تتصاعد المضاعف من 1.00 وصولاً إلى قيمة عشوائية (crashMultiplier).
-   - اللاعب يمكن الضغط على "سحب" قبل حدوث الcrash ليحصل على المبلغ * المضاعف.
-   - إذا حدث crash قبل السحب يخسر الرهان.
-*/
-let crashState = { running:false, intervalId:null, multiplier:1, crashAt: null, bet:0, cashed:false };
-
-function startRound(){
-  if(!ensureLoggedInOrRedirect()) return;
-  if(crashState.running){ alert('جولة قيد التشغيل'); return; }
-  const bet = parseFloat(document.getElementById('bet-amount')?.value);
-  if(isNaN(bet) || bet <=0){ alert('أدخل مبلغاً صالحاً'); return; }
-  const u = getLoggedUser();
-  if(bet > (u.balance || 0)){ alert('رصيد غير كافٍ'); return; }
-
-  // خصم الرهان فوراً
-  u.balance = Number((u.balance - bet).toFixed(8));
-  saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage();
-
-  // إعداد الجلسة
-  crashState.running = true;
-  crashState.multiplier = 1.0;
-  crashState.bet = bet;
-  crashState.cashed = false;
-  // حد عشوائي للcrash — نستخدم توزيع يعطي احتمالية كبيرة لصمود لبعض الوقت
-  // نولد قيمة بين 1.1 و 10 عشوائياً مع ميل إلى قيم صغيرة
-  const r = Math.random();
-  const crashAt = Math.max(1.1, (1 + (Math.pow(r, 2) * 9))); // 1.0..10
-  crashState.crashAt = crashAt;
-
-  document.getElementById('game-log').innerText = 'الجولة بدأت — اضغط سحب قبل الانهيار!';
-  document.getElementById('cash-btn').disabled = false;
-
-  // نزيد المضاعف تدريجياً كل 60ms (تسريع مع الوقت)
-  let last = Date.now();
-  crashState.intervalId = setInterval(()=>{
-    const now = Date.now();
-    const dt = (now - last) / 1000; last = now;
-    // زيادة أسية خفيفة لسرعة التصاعد
-    crashState.multiplier += 0.01 * (1 + crashState.multiplier/5) * dt * 60;
-    document.getElementById('multiplier').innerText = crashState.multiplier.toFixed(2) + 'x';
-    // تحقق الانهيار
-    if(crashState.multiplier >= crashState.crashAt){
-      // crash
-      endRound(false);
+  if(crashState.running){ alert('جولة تعمل'); return;}
+  const bet = parseFloat(document.getElementById('crash-bet')?.value);
+  if(isNaN(bet)||bet<=0){ alert('ادخل مبلغ'); return; }
+  const u=getLogged(); if(bet>u.balance){ alert('رصيد غير كاف'); return; }
+  // deduct bet immediately
+  u.balance = Number((u.balance - bet).toFixed(8)); saveOrUpdateUser(u); setLogged(u); renderUser();
+  crashState.running = true; crashState.multiplier = 1; crashState.bet = bet; crashState.cashed=false;
+  // random crash
+  const r = Math.random(); crashState.crashAt = Math.max(1.05, 1 + Math.pow(r,2)*6); // 1.05 .. ~7
+  document.getElementById('crash-cash').disabled=false; document.getElementById('crash-log').innerText='الجولة تعمل — اضغط سحب قبل الانهيار';
+  const planeEl = document.getElementById('plane'); planeEl.style.left='8px';
+  crashState.interval = setInterval(()=>{
+    crashState.multiplier += 0.02 + crashState.multiplier*0.002;
+    document.getElementById('crash-multi').innerText = crashState.multiplier.toFixed(2)+'x';
+    // animate plane
+    const curLeft = parseInt(planeEl.style.left || '8');
+    planeEl.style.left = (curLeft + 6) + 'px';
+    if(crashState.multiplier >= crashState.crashAt){ // crash
+      endCrash(false);
     }
-  }, 60);
+  },120);
 }
-
-function cashOut(){
-  if(!crashState.running) return;
-  if(crashState.cashed) return;
+function crashCashOut(){
+  if(!crashState.running || crashState.cashed) return;
   crashState.cashed = true;
-  // حساب المبلغ الفائز
   const win = Number((crashState.bet * crashState.multiplier).toFixed(8));
-  const u = getLoggedUser();
-  u.balance = Number((u.balance + win).toFixed(8));
-  saveOrUpdateUser(u); setLoggedUser(u); updateBalanceOnPage();
-  document.getElementById('game-log').innerText = `✅ سحبت عند ${crashState.multiplier.toFixed(2)}x — ربحت ${win.toFixed(4)} USDT`;
-  endRound(true);
+  const u = getLogged(); u.balance = Number((u.balance + win).toFixed(8));
+  u.history.push({type:'crash-win',bet:crashState.bet,mult:crashState.multiplier,win, date:new Date().toISOString()});
+  saveOrUpdateUser(u); setLogged(u); renderUser();
+  document.getElementById('crash-log').innerText = `تم السحب عند ${crashState.multiplier.toFixed(2)}x — ربح ${win.toFixed(4)} USDT`;
+  endCrash(true);
+}
+function endCrash(won){
+  clearInterval(crashState.interval); crashState.running=false; document.getElementById('crash-cash').disabled=true;
+  if(!won){ const u=getLogged(); u.history.push({type:'crash-lose',bet:crashState.bet, crashAt:crashState.crashAt, date:new Date().toISOString()}); saveOrUpdateUser(u); setLogged(u); renderUser(); document.getElementById('crash-log').innerText = `💥 انهارت عند ${crashState.crashAt.toFixed(2)}x — خسرت ${crashState.bet.toFixed(4)} USDT`; }
+  setTimeout(()=>{ document.getElementById('crash-multi').innerText='1.00x'; document.getElementById('plane').style.left='8px'; },1000);
 }
 
-function endRound(won){
-  clearInterval(crashState.intervalId);
-  crashState.running = false;
-  document.getElementById('cash-btn').disabled = true;
-  if(!won){
-    // اللاعب خسر، المبلغ تم خصمه بالفعل عند بداية الجولة
-    document.getElementById('game-log').innerText = `💥 انهارت الطائرة عند ${crashState.crashAt.toFixed(2)}x — خسرت ${crashState.bet.toFixed(4)} USDT`;
+/* Wheel */
+function spinWheel(){
+  if(!ensureLoggedInOrRedirect()) return;
+  const bet = parseFloat(document.getElementById('wheel-bet')?.value);
+  if(isNaN(bet)||bet<=0){ alert('ادخل مبلغ'); return; }
+  const u=getLogged(); if(bet>u.balance){ alert('رصيد غير كاف'); return; }
+  // deduct
+  u.balance = Number((u.balance - bet).toFixed(8)); saveOrUpdateUser(u); setLogged(u); renderUser();
+  const outcomes = [1.2,1.5,2,0,0.5,3]; // multiplier outcomes (0 means lose)
+  const idx = Math.floor(Math.random()*outcomes.length);
+  const multi = outcomes[idx];
+  document.getElementById('wheel-log').innerText='الدوران...';
+  // animation (rotate wheel element)
+  const wheelEl = document.getElementById('wheel');
+  const fullRot = 360*3 + idx*(360/outcomes.length);
+  wheelEl.style.transition = 'transform 3s cubic-bezier(.2,.9,.2,1)';
+  wheelEl.style.transform = `rotate(${fullRot}deg)`;
+  setTimeout(()=>{
+    wheelEl.style.transition = ''; wheelEl.style.transform = '';
+    if(multi>0){
+      const win = Number((bet * multi).toFixed(8));
+      u.balance = Number((u.balance + win).toFixed(8)); saveOrUpdateUser(u); setLogged(u); renderUser();
+      document.getElementById('wheel-log').innerText = `ربحت ${win.toFixed(4)} USDT (×${multi})`;
+      u.history.push({type:'wheel-win',bet,multi,win,date:new Date().toISOString()});
+    } else {
+      document.getElementById('wheel-log').innerText = `خسرت ${bet.toFixed(4)} USDT`;
+      u.history.push({type:'wheel-lose',bet,date:new Date().toISOString()});
+      saveOrUpdateUser(u); setLogged(u);
+    }
+  },3200);
+}
+
+/* Dice */
+function rollDice(){
+  if(!ensureLoggedInOrRedirect()) return;
+  const bet = parseFloat(document.getElementById('dice-bet')?.value);
+  if(isNaN(bet)||bet<=0){ alert('ادخل مبلغ'); return; }
+  const u=getLogged(); if(bet>u.balance){ alert('رصيد غير كاف'); return; }
+  // deduct
+  u.balance = Number((u.balance - bet).toFixed(8)); saveOrUpdateUser(u); setLogged(u); renderUser();
+  const roll = Math.floor(Math.random()*6)+1;
+  document.getElementById('dice-display').innerText = roll;
+  if(roll>=5){
+    const win = Number((bet * 1.8).toFixed(8));
+    u.balance = Number((u.balance + win).toFixed(8)); saveOrUpdateUser(u); setLogged(u); renderUser();
+    document.getElementById('dice-log').innerText = `ربحت ${win.toFixed(4)} USDT (الرقم ${roll})`;
+    u.history.push({type:'dice-win',bet,roll,win,date:new Date().toISOString()});
+  } else {
+    document.getElementById('dice-log').innerText = `خسرت ${bet.toFixed(4)} USDT (الرقم ${roll})`;
+    u.history.push({type:'dice-lose',bet,roll,date:new Date().toISOString()}); saveOrUpdateUser(u); setLogged(u);
   }
-  // Reset multiplier display after ثواني
-  setTimeout(()=>{ document.getElementById('multiplier').innerText = '1.00x'; }, 1200);
 }
 
-/* ===== مساعدة عند تحميل الصفحات الفرعية ===== */
+/* ---- page inits ---- */
 document.addEventListener('DOMContentLoaded', ()=>{
-  // trading.html init
-  if(document.getElementById('crypto-select')){
-    if(!ensureLoggedInOrRedirect()) return;
-    const sel = document.getElementById('crypto-select');
-    sel.addEventListener('change', ()=> loadMarketFor(sel.value));
-    loadMarketFor(sel.value);
+  // index page
+  if(document.getElementById('auth-wrap')){
+    const logged = getLogged();
+    if(logged){ document.getElementById('auth-wrap').classList.add('hidden'); document.getElementById('app-wrap').classList.remove('hidden'); renderUser(); }
+    else { document.getElementById('auth-wrap').classList.remove('hidden'); document.getElementById('app-wrap').classList.add('hidden'); }
   }
-  // investment.html init
-  if(document.getElementById('contract-type')){
-    if(!ensureLoggedInOrRedirect()) return;
-    // set defaults
-    document.getElementById('apr').innerText = 'طويل: 12% ، قصير: 5%';
-    document.getElementById('risk').innerText = 'متوسط';
-  }
-  // deposit.html: nothing special (just ensure login)
-  if(document.getElementById('deposit-address')){
-    if(!ensureLoggedInOrRedirect()) return;
-  }
-  // games.html init: ensure login
-  if(document.getElementById('bet-amount')){
-    if(!ensureLoggedInOrRedirect()) return;
-  }
+
+  // trade page
+  if(document.getElementById('tradeChart')){ if(!ensureLoggedInOrRedirect()) return; const sel=document.getElementById('trade-symbol'); sel.addEventListener('change', ()=> loadMarket(sel.value)); loadMarket('bitcoin'); }
+
+  // invest page
+  if(document.getElementById('invest-type')){ if(!ensureLoggedInOrRedirect()) return; }
+
+  // deposit page ensure login
+  if(document.getElementById('deposit-address')){ ensureLoggedInOrRedirect(); }
+
+  // games page ensure login
+  if(document.getElementById('crash-bet')){ ensureLoggedInOrRedirect(); }
 });
