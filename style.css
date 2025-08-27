@@ -1,57 +1,100 @@
-/* styles.css */
-body {
-  margin: 0;
-  font-family: 'Tajawal', sans-serif;
-  background: #0d0d0d;
-  color: #f5f5f5;
-  text-align: center;
+/* styles.css - تصميم داكن احترافي مستوحى من النسخة الأصلية */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+:root{
+  --bg1: #0f2027;
+  --bg2: #203a43;
+  --accent: #f1c40f;
+  --muted: rgba(255,255,255,0.75);
+  --card: rgba(255,255,255,0.04);
+  --glass: rgba(255,255,255,0.03);
 }
 
-header {
-  background: #1a1a1a;
-  padding: 15px;
-  font-size: 22px;
-  font-weight: bold;
-  color: #ffd700;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:'Tajawal',system-ui,Arial;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  direction: rtl;
+  -webkit-font-smoothing:antialiased;
 }
 
-.container {
-  padding: 20px;
+/* Containers */
+.container{width:100%;max-width:980px;margin:20px auto;padding:16px;}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
 }
 
-button {
-  background: linear-gradient(45deg, #ffd700, #ff8c00);
-  color: #0d0d0d;
+/* Headers */
+.header{
+  display:flex;justify-content:space-between;align-items:center;padding:12px 0;
+}
+.brand{font-size:24px;color:var(--accent);font-weight:700}
+
+/* Auth */
+.auth-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:28px;}
+.auth-card{width:100%;max-width:520px;background:var(--card);padding:28px;border-radius:12px;text-align:center;}
+.auth-card h1{color:var(--accent);margin-bottom:8px}
+
+/* Inputs / Buttons */
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
   border: none;
-  padding: 12px 20px;
-  margin: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
+  background: var(--glass);
+  color: #fff;
+  font-size:15px;
 }
-button:hover {
-  transform: scale(1.05);
+.two-cols{display:flex;gap:8px}
+.two-cols input{flex:1}
+.btn{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  text-decoration:none;
 }
+.btn-primary{background:linear-gradient(45deg,#f39c12,#d35400);color:#fff}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+.btn-danger{background:crimson;color:#fff}
 
-input, select {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  margin: 8px;
-  width: 80%;
-}
+/* Layout */
+.main-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){ .main-grid{grid-template-columns:1fr} .two-cols{flex-direction:column} }
 
-.card {
-  background: #1a1a1a;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px auto;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-}
+/* Balance / Wallet */
+.balance-card{display:flex;flex-direction:column;gap:8px}
+.balance-value{font-size:22px;color:var(--accent);font-weight:800}
+.wallet-address{font-family:monospace;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;word-break:break-all}
 
-h2, h3 {
-  color: #ffd700;
-}
+/* Trading / Charts */
+.chart-wrap{height:360px;background:rgba(255,255,255,0.02);border-radius:10px;padding:8px}
+.market-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.market-card{flex:1;min-width:120px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center}
+
+/* Invest */
+.invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){ .invest-grid{grid-template-columns:1fr} }
+
+/* Games */
+.game-area{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2));border-radius:12px;padding:12px;position:relative;overflow:hidden}
+#plane{position:absolute;left:12px;top:40%;font-size:36px;transition:transform 0.12s linear}
+.multiplier{font-size:20px;color:var(--accent);font-weight:800;margin-top:8px}
+
+/* small helpers */
+.muted{color:var(--muted);font-size:14px}
+.hidden{display:none}
+.link{color:var(--accent);text-decoration:none}
+
+/* Footer note */
+.note{font-size:13px;color:var(--muted);margin-top:8px}
