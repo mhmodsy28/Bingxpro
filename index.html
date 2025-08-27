@@ -1,101 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة BingX</title>
-
-  <!-- خط عربي أنيق -->
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <!-- شاشة المصادقة -->
-  <div id="auth-section" class="auth-wrap">
-    <div class="auth-card">
-      <h1>مرحباً في منصة BingX</h1>
+<body onload="checkLogin()">
 
-      <div id="login-form" class="form-block">
-        <h2>تسجيل الدخول</h2>
-        <input id="login-email" type="email" placeholder="البريد الإلكتروني" />
-        <input id="login-password" type="password" placeholder="كلمة المرور" />
-        <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
-        <p class="muted">ليس لديك حساب؟ <a href="#" onclick="showRegisterForm()">إنشاء حساب</a></p>
-      </div>
+  <!-- واجهة تسجيل الدخول -->
+  <div id="login-section" class="container">
+    <h1>تسجيل الدخول</h1>
+    <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+    <input type="password" id="login-password" placeholder="كلمة المرور" required>
+    <button onclick="login()">تسجيل الدخول</button>
+    <p>ليس لديك حساب؟ <a href="#" onclick="showRegister()">إنشاء حساب</a></p>
+  </div>
 
-      <div id="register-form" class="form-block hidden">
-        <h2>إنشاء حساب جديد</h2>
-        <div class="two-cols">
-          <input id="first-name" type="text" placeholder="الاسم الأول" />
-          <input id="last-name" type="text" placeholder="الاسم الثاني" />
-        </div>
-        <input id="phone" type="tel" placeholder="رقم الهاتف" />
-        <input id="reg-email" type="email" placeholder="البريد الإلكتروني" />
-        <input id="reg-password" type="password" placeholder="كلمة المرور" />
-        <button class="btn btn-primary" onclick="register()">إنشاء حساب وتسجيل الدخول</button>
-        <p class="muted">لديك حساب بالفعل؟ <a href="#" onclick="showLoginForm()">تسجيل الدخول</a></p>
-      </div>
+  <!-- واجهة إنشاء الحساب -->
+  <div id="register-section" class="container hidden">
+    <h1>إنشاء حساب</h1>
+    <input type="text" id="first-name" placeholder="الاسم الأول" required>
+    <input type="text" id="last-name" placeholder="الاسم الثاني" required>
+    <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+    <input type="email" id="register-email" placeholder="البريد الإلكتروني" required>
+    <input type="password" id="register-password" placeholder="كلمة المرور" required>
+    <button onclick="register()">تسجيل</button>
+    <p>لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a></p>
+  </div>
+
+  <!-- الصفحة بعد تسجيل الدخول -->
+  <div id="main-app" class="container hidden">
+    <h1>منصة BingX</h1>
+    <div id="balance">
+      <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
+    </div>
+    <button class="wallet-btn" onclick="toggleWalletInfo()">عرض المحفظة</button>
+    <div id="wallet-info" class="hidden">
+      <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
+      <p><strong>الشبكة:</strong> BEP20</p>
     </div>
   </div>
 
-  <!-- المحتوى الرئيسي -->
-  <div id="main-content" class="hidden page-wrap">
-    <header class="topbar">
-      <div class="brand">BingX</div>
-      <div class="top-actions">
-        <div class="user-info">مرحباً، <strong id="user-name">المستخدم</strong></div>
-        <button class="btn btn-outline" onclick="openSidebar()">☰ القائمة</button>
-      </div>
-    </header>
-
-    <main class="main-grid">
-      <section class="card small">
-        <h3>الرصيد</h3>
-        <div class="balance-row">
-          <div class="balance-value"><span id="current-balance">0.00</span> <small>USDT</small></div>
-          <button class="btn btn-primary" onclick="toggleWalletInfo()">عرض المحفظة</button>
-        </div>
-        <div id="wallet-info" class="wallet-card hidden">
-          <p><strong>عنوان المحفظة:</strong><br>0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
-          <p><strong>الشبكة:</strong> BEP20</p>
-        </div>
-      </section>
-
-      <section class="card">
-        <h3>الإجراءات السريعة</h3>
-        <div class="form-inline">
-          <input id="deposit-amount" type="number" placeholder="مبلغ الإيداع (USDT)" />
-          <input id="deposit-image" type="file" accept="image/*" />
-          <button class="btn btn-primary" onclick="deposit()">إرسال طلب إيداع</button>
-        </div>
-
-        <div class="form-inline" style="margin-top:12px;">
-          <input id="withdraw-amount" type="number" placeholder="مبلغ السحب (USDT)" />
-          <button class="btn btn-outline" onclick="withdraw()">سحب</button>
-        </div>
-      </section>
-
-      <section class="card actions-row">
-        <a class="btn btn-ghost big" href="trading.html">الذهاب للتداول</a>
-        <a class="btn btn-ghost big" href="invest.html">الذهاب للاستثمار</a>
-        <button class="btn btn-danger big" onclick="logout()">تسجيل الخروج</button>
-      </section>
-    </main>
-
-    <!-- sidebar -->
-    <aside id="sidebar" class="sidebar hidden">
-      <button class="close" onclick="closeSidebar()">×</button>
-      <h3>القائمة</h3>
-      <nav class="side-nav">
-        <a href="trading.html">📈 التداول</a>
-        <a href="invest.html">💼 الاستثمار</a>
-        <a href="#">💳 الإيداع</a>
-        <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp">📞 واتساب</a>
-        <button class="btn btn-danger" onclick="logout()">🚪 تسجيل الخروج</button>
-      </nav>
-    </aside>
+  <!-- القائمة الجانبية -->
+  <div id="sidebar" class="sidebar">
+    <button class="close-btn" onclick="closeSidebar()">×</button>
+    <h2>القائمة</h2>
+    <a href="trading.html">📈 التداول</a>
+    <a href="investment.html">💼 الاستثمار</a>
+    <a href="#">💳 الإيداع</a>
+    <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">📞 تواصل عبر واتساب</a>
   </div>
+
+  <!-- زر فتح القائمة -->
+  <button class="open-btn" onclick="openSidebar()">☰ القائمة</button>
 
   <script src="script.js"></script>
 </body>
