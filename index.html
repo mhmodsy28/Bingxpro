@@ -1,103 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>منصة BingX — الرئيسية</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>الرئيسية</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- AUTH / MAIN -->
-  <div id="auth-wrap" class="auth-wrap">
-    <div class="auth-card">
-      <h1>مرحباً في منصة BingX</h1>
-
-      <!-- تسجيل الدخول -->
-      <div id="login-block" class="form-block">
-        <h2>تسجيل الدخول</h2>
-        <input id="login-email" type="email" placeholder="البريد الإلكتروني" />
-        <input id="login-password" type="password" placeholder="كلمة المرور" />
-        <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
-        <p class="muted">ليس لديك حساب؟ <a href="#" onclick="showRegisterForm()">إنشاء حساب</a></p>
-      </div>
-
-      <!-- تسجيل / إنشاء -->
-      <div id="register-block" class="form-block hidden">
-        <h2>إنشاء حساب جديد</h2>
-        <div class="two-cols">
-          <input id="first-name" type="text" placeholder="الاسم الأول" />
-          <input id="last-name" type="text" placeholder="الاسم الثاني" />
-        </div>
-        <input id="phone" type="tel" placeholder="رقم الهاتف" />
-        <input id="reg-email" type="email" placeholder="البريد الإلكتروني" />
-        <input id="reg-password" type="password" placeholder="كلمة المرور" />
-        <button class="btn btn-primary" onclick="register()">إنشاء حساب وتسجيل الدخول</button>
-        <p class="muted">لديك حساب؟ <a href="#" onclick="showLoginForm()">تسجيل الدخول</a></p>
-      </div>
+  <header>المنصة</header>
+  <div class="container">
+    <div class="card">
+      <h2>مرحباً بك 👋</h2>
+      <p>اختر أحد الأقسام أدناه</p>
+      <a href="trade.html"><button>💹 التداول</button></a>
+      <a href="deposit.html"><button>💰 الإيداع</button></a>
+      <a href="invest.html"><button>📈 الاستثمار</button></a>
+      <a href="games.html"><button>🎮 الألعاب</button></a>
     </div>
   </div>
-
-  <div id="main-wrap" class="page-wrap hidden">
-    <header class="topbar">
-      <div class="brand">BingX</div>
-      <div class="top-actions">
-        <div class="user-info">مرحباً، <strong id="user-name">المستخدم</strong></div>
-      </div>
-    </header>
-
-    <main class="main-grid">
-      <!-- Left column: profile & balance -->
-      <section class="card profile-card">
-        <h3>الحساب</h3>
-        <div class="balance-row">
-          <div>
-            <div class="balance-value"><span id="current-balance">0.00</span> <small>USDT</small></div>
-            <div class="muted small">رصيدك المتاح</div>
-          </div>
-        </div>
-        <div style="margin-top:12px;">
-          <a class="btn btn-ghost big" href="trading.html">📈 التداول</a>
-          <a class="btn btn-ghost big" href="investment.html">💼 الاستثمار</a>
-          <a class="btn btn-ghost big" href="deposit.html">💳 الإيداع</a>
-          <a class="btn btn-ghost big" href="games.html">🎮 الألعاب</a>
-        </div>
-        <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">🚪 تسجيل الخروج</button>
-      </section>
-
-      <!-- Center: quick actions -->
-      <section class="card">
-        <h3>إجراءات سريعة</h3>
-        <div class="form-inline">
-          <input id="quick-deposit-amount" type="number" placeholder="أدخل مبلغ للاختبار (USDT)" />
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد تجريبي</button>
-            <button class="btn btn-outline" onclick="quickReset()">إعادة ضبط الرصيد</button>
-          </div>
-          <div class="muted" style="margin-top:8px;">زر إضافة الرصيد للتجربة فقط — الإيداع الحقيقي يتم عبر صفحة الإيداع.</div>
-        </div>
-      </section>
-
-      <!-- Right: wallet info & help -->
-      <section class="card">
-        <h3>المحفظة</h3>
-        <div id="wallet-info">
-          <p><strong>العنوان:</strong><br><span id="wallet-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</span></p>
-          <p><strong>نوع الشبكة:</strong> USDT - BEP20</p>
-          <button class="btn btn-outline" onclick="copyWallet()">نسخ العنوان</button>
-        </div>
-
-        <div style="margin-top:12px;">
-          <h4>ملاحظات</h4>
-          <ul class="muted">
-            <li>استعمل صفحة الإيداع لإرسال إثبات الدفع.</li>
-            <li>الألعاب والاستثمار داخلية وتجريبية — لا تمثل معاملات حقيقية.</li>
-          </ul>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
