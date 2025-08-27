@@ -1,123 +1,149 @@
-/* عام */
-:root {
-  --bg1: #0f2027;
-  --bg2: #203a43;
-  --bg3: #2c5364;
-  --accent: #f1c40f;
-  --muted: rgba(255,255,255,0.7);
-}
-
+/* خلفية عامة */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  padding:30px 12px;
-  color: #fff;
-  direction: rtl;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  color: white;
 }
 
-/* الحاويات */
+/* الصندوق */
 .container {
-  width:100%;
-  max-width:980px;
-  box-sizing:border-box;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  color: white;
 }
 
-/* بطاقة */
-.card {
-  background: rgba(255,255,255,0.05);
-  padding:16px;
-  border-radius:12px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-  margin-bottom:12px;
+h1 {
+  color: #f1c40f;
+  margin-bottom: 20px;
+  font-size: 26px;
 }
 
-/* عناوين */
-h1 { color: var(--accent); margin:0 0 12px 0; font-size:28px; }
-h2 { margin:0 0 10px 0; }
-
-/* أزرار */
-.action-button {
-  display:inline-block;
-  background: linear-gradient(45deg,#f39c12,#d35400);
-  color:white;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  text-decoration:none;
-  text-align:center;
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #f39c12, #d35400);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: 0.3s;
 }
-.action-button.small { padding:8px 10px; font-size:14px; }
-.action-button.big { width:48%; }
 
-/* حقول */
+button:hover {
+  background: linear-gradient(45deg, #f1c40f, #e67e22);
+}
+
 input, select {
-  width:100%;
-  padding:10px 12px;
-  margin:8px 0;
-  border-radius:8px;
-  border:none;
-  font-size:15px;
-  box-sizing:border-box;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  outline: none;
 }
 
-/* محفظة */
-.wallet-btn { width:100%; margin-top:8px; }
+.hidden { display: none; }
 
-/* لوحة السوق */
-.market-row { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; }
-.market-card {
-  flex:1;
-  min-width:120px;
-  background: rgba(255,255,255,0.03);
-  padding:10px;
-  border-radius:8px;
-  text-align:center;
+/* الكروت الخاصة بالعملات */
+.crypto-card {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid gold;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 10px 0;
+  text-align: center;
 }
 
-/* الرسم */
-canvas { width:100% !important; }
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #f39c12;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #e67e22;
+}
 
 /* القائمة الجانبية */
 .sidebar {
-  height:100%;
-  width:260px;
-  position:fixed;
-  top:30px;
-  left:30px;
-  background: rgba(0,0,0,0.4);
-  border-radius:12px;
-  padding:16px;
-  display:none;
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  background: rgba(20, 20, 20, 0.95);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 70px;
+  color: white;
+  text-align: center;
+  backdrop-filter: blur(6px);
 }
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  color: gold;
+}
+
+.sidebar a {
+  padding: 12px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 215, 0, 0.2);
+  color: gold;
+}
+
+.sidebar .close-btn {
+  color: white;
+  font-size: 36px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 .open-btn {
-  position:fixed;
-  top:30px;
-  right:30px;
-  z-index:1000;
-}
-
-/* طرازات خاصة */
-.hidden { display:none; }
-.small { width:auto; padding:6px 10px; }
-.muted { color:var(--muted); font-size:14px; }
-.card.small { padding:10px; }
-
-/* صندوق التداول/الاستثمار البسيط */
-.trade-box { display:flex; gap:8px; align-items:center; margin-top:10px; }
-.trade-box input { flex:1; }
-
-/* زر تسجيل الخروج */
-.logout-btn { width:100%; margin-top:12px; background:crimson; border-radius:8px; padding:10px; color:white; border:none; }
-
-/* استجابة */
-@media (max-width:720px) {
-  .market-row { flex-direction:column; }
-  .open-btn { left:12px; right:auto; }
+  font-size: 20px;
+  background: gold;
+  color: black;
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 101;
 }
