@@ -52,4 +52,11 @@ function withdraw() {
     alert("تم سحب المبلغ بنجاح.");
 }
 
-// دالة لتواصل مع
+// دالة إضافة رصيد يدوي
+function requestBalanceUpdate() {
+    alert("يرجى التواصل مع الوكيل لإضافة رصيد.");
+}
+
+// دالة لعرض أو إخفاء معلومات المحفظة
+function toggleWalletInfo() {
+    const walletInfo = document.getElementById('wallet-info');
