@@ -1,43 +1,118 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>الألعاب - BingX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>الألعاب - لعبة الطائرة</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(#1a1a1a, #000);
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    #plane {
+      position: absolute;
+      left: 20px;
+      top: 180px;
+      font-size: 40px;
+      transition: transform 0.2s;
+    }
+    #multiplier {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffd700;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-  <div class="page-container">
-    <header class="page-header">
-      <h1>🎮 الألعاب (محاكاة)</h1>
-      <div>
-        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
-      </div>
-    </header>
-
+  <header>🚀 لعبة الطائرة</header>
+  <div class="container">
     <div class="card">
-      <h3>لعبة الطائرة (Crash) — محاكاة</h3>
-      <p class="muted">يمكن اللعب فقط باستخدام رصيدك الداخلي. اللعبة تجريبية ووهمية (لا تعاملات خارجية).</p>
+      <h3>🚀 الطائرة تقلع!</h3>
+      <p>اضغط "قفز" قبل أن تنفجر الطائرة لتحصل على أرباح وهمية</p>
 
-      <label>المبلغ للمراهنة (USDT)</label>
-      <input id="bet-amount" type="number" placeholder="مثال: 5" />
-
-      <div style="display:flex; gap:8px; margin-top:10px;">
-        <button class="btn btn-primary" onclick="startRound()">بدء الجولة</button>
-        <button class="btn btn-outline" onclick="cashOut()" id="cash-btn" disabled>سحب</button>
+      <div id="gameArea">
+        <div id="plane">✈️</div>
       </div>
 
-      <div style="margin-top:12px;">
-        <div class="muted">المضاعف: <span id="multiplier">1.00x</span></div>
-        <div id="game-log" class="muted" style="margin-top:8px;">لم تبدأ جولة</div>
-      </div>
+      <div id="multiplier">x1.00</div>
+
+      <button id="startBtn">ابدأ اللعبة</button>
+      <button id="jumpBtn" disabled>قفز</button>
     </div>
+
+    <a href="index.html"><button>⬅ العودة</button></a>
   </div>
 
-  <script src="script.js"></script>
   <script>
-    // لعبة الطائرة: يتم تشغيل المنطق من script.js
+    let balance = 100; // رصيد وهمي
+    let multiplier = 1.00;
+    let gameInterval;
+    let crashPoint;
+    let isPlaying = false;
+
+    const plane = document.getElementById("plane");
+    const multiDisplay = document.getElementById("multiplier");
+    const startBtn = document.getElementById("startBtn");
+    const jumpBtn = document.getElementById("jumpBtn");
+
+    function startGame() {
+      if(balance <= 0) {
+        alert("❌ لا يمكنك اللعب بدون رصيد");
+        return;
+      }
+
+      isPlaying = true;
+      multiplier = 1.00;
+      crashPoint = (Math.random() * 5 + 1).toFixed(2); // عشوائي بين 1 و 6
+      plane.style.left = "20px";
+      multiDisplay.textContent = "x1.00";
+
+      startBtn.disabled = true;
+      jumpBtn.disabled = false;
+
+      gameInterval = setInterval(() => {
+        multiplier += 0.05;
+        multiDisplay.textContent = "x" + multiplier.toFixed(2);
+
+        let left = parseInt(plane.style.left);
+        plane.style.left = (left + 5) + "px";
+
+        if(multiplier >= crashPoint) {
+          endGame(false);
+        }
+      }, 300);
+    }
+
+    function jumpOut() {
+      if(isPlaying) {
+        endGame(true);
+      }
+    }
+
+    function endGame(success) {
+      clearInterval(gameInterval);
+      isPlaying = false;
+      startBtn.disabled = false;
+      jumpBtn.disabled = true;
+
+      if(success) {
+        let profit = (10 * multiplier).toFixed(2); // ربح وهمي
+        balance += parseFloat(profit);
+        alert("✅ قفزت في الوقت المناسب! ربحت " + profit + " USDT\nرصيدك الآن: " + balance.toFixed(2));
+      } else {
+        balance -= 10;
+        alert("💥 انفجرت الطائرة عند x" + multiplier.toFixed(2) + "\nخسرت 10 USDT\nرصيدك الآن: " + balance.toFixed(2));
+      }
+    }
+
+    startBtn.addEventListener("click", startGame);
+    jumpBtn.addEventListener("click", jumpOut);
   </script>
 </body>
 </html>
