@@ -1,40 +1,34 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>الإيداع - BingX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>الإيداع</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="page-container">
-    <header class="page-header">
-      <h1>💳 الإيداع</h1>
-      <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
-    </header>
-
+  <header>💰 الإيداع</header>
+  <div class="container">
     <div class="card">
-      <h3>عنوان الإيداع</h3>
-      <p>أرسل USDT عبر شبكة BEP20 إلى العنوان التالي:</p>
-      <div class="wallet-block">
-        <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
-        <div class="network-tag">USDT - BEP20</div>
-      </div>
-      <div style="margin-top:12px;">
-        <button class="btn btn-primary" onclick="copyDepositAddress()">نسخ العنوان</button>
-      </div>
-
-      <hr style="margin:16px 0" />
-
-      <h4>إرسال إثبات الدفع</h4>
-      <input id="proof-image" type="file" accept="image/*" />
-      <input id="deposit-amount-input" type="number" placeholder="المبلغ المرسل (USDT)" />
-      <button class="btn btn-primary" onclick="submitDepositProof()">إرسال إثبات</button>
-      <div id="deposit-msg" class="muted" style="margin-top:10px;"></div>
+      <h3>عنوان المحفظة (USDT - BEP20)</h3>
+      <p style="direction:ltr; color:#ffd700;">
+        0x3932890a5d1acb3ab036bd39ade26c47929b37e5
+      </p>
+      <button onclick="copyAddress()">📋 نسخ العنوان</button>
     </div>
+    <div class="card">
+      <h3>إرسال إثبات الدفع</h3>
+      <input type="file">
+      <input type="number" placeholder="المبلغ (USDT)">
+      <button>إرسال إثبات</button>
+    </div>
+    <a href="index.html"><button>⬅ العودة</button></a>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    function copyAddress() {
+      navigator.clipboard.writeText("0x3932890a5d1acb3ab036bd39ade26c47929b37e5");
+      alert("تم نسخ العنوان ✅");
+    }
+  </script>
 </body>
 </html>
