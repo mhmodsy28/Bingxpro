@@ -14,11 +14,6 @@
             <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
         </div>
 
-        <div id="wallet-info" class="wallet-box">
-            <p><strong> المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
-            <p><strong>الشبكة:</strong> BEP20</p>
-        </div>
-
         <div class="transaction-section">
             <h2>إيداع</h2>
             <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
@@ -37,8 +32,18 @@
             <h2>إضافة رصيد</h2>
             <button class="action-button" onclick="requestBalanceUpdate()">تواصل مع الوكيل لإضافة رصيد</button>
         </div>
+
+        <!-- زر عرض المحفظة -->
+        <div class="view-wallet-section">
+            <button class="action-button" onclick="toggleWalletInfo()">عرض المحفظة</button>
+            <div id="wallet-info" class="wallet-box hidden">
+                <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
+                <p><strong>الشبكة:</strong> BEP20</p>
+            </div>
+        </div>
     </div>
 
+    <!-- الشريط الجانبي -->
     <div id="sidebar" class="sidebar">
         <button class="close-btn" onclick="closeSidebar()">×</button>
         <h2>تواصل معنا</h2>
