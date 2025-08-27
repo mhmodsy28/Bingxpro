@@ -1,150 +1,191 @@
-let balance = 10.00;
+/* SCRIPT مشترك: تسجيل/دخول/رصيد/إجراءات */
+const STORAGE_USERS_KEY = 'bx_users_v1';
+const STORAGE_LOGGED_KEY = 'bx_logged_user_v1';
 
-// التحقق من تسجيل الدخول
-function checkLogin() {
-  if (sessionStorage.getItem("loggedIn") === "true") {
-    document.getElementById("auth-container").classList.add("hidden");
-    document.getElementById("main-container").classList.remove("hidden");
-    updateBalance();
+/* ===== مساعدات المستخدمين ===== */
+function getAllUsers() {
+  return JSON.parse(localStorage.getItem(STORAGE_USERS_KEY) || '[]');
+}
+function saveAllUsers(users) {
+  localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
+}
+function findUserByEmail(email) {
+  if (!email) return null;
+  const users = getAllUsers();
+  return users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
+}
+function saveOrUpdateUser(user) {
+  const users = getAllUsers();
+  const idx = users.findIndex(u => u.email.toLowerCase() === user.email.toLowerCase());
+  if (idx === -1) users.push(user); else users[idx] = user;
+  saveAllUsers(users);
+}
+
+/* ===== حالة الجلسة ===== */
+function setLoggedUser(user) {
+  localStorage.setItem(STORAGE_LOGGED_KEY, JSON.stringify(user));
+}
+function getLoggedUser() {
+  return JSON.parse(localStorage.getItem(STORAGE_LOGGED_KEY) || 'null');
+}
+function ensureLoggedInOrRedirect() {
+  const u = getLoggedUser();
+  if (!u) {
+    alert('🔒 يجب تسجيل الدخول أولاً');
+    window.location.href = 'index.html';
+    return false;
   }
+  return true;
 }
 
-// تبديل بين تسجيل الدخول وإنشاء الحساب
-function toggleAuthForms() {
-  document.getElementById("login-form").classList.toggle("hidden");
-  document.getElementById("register-form").classList.toggle("hidden");
+/* ===== عرض / تبديل واجهات التسجيل ===== */
+function showRegisterForm() {
+  document.getElementById('login-form').classList.add('hidden');
+  document.getElementById('register-form').classList.remove('hidden');
+}
+function showLoginForm() {
+  document.getElementById('register-form').classList.add('hidden');
+  document.getElementById('login-form').classList.remove('hidden');
 }
 
-// إنشاء حساب
+/* ===== تسجيل جديد (يحفظ المستخدم ويدخله مباشرة) ===== */
 function register() {
-  let email = document.getElementById("reg-email").value;
-  let password = document.getElementById("reg-password").value;
+  const firstName = (document.getElementById('first-name')?.value || '').trim();
+  const lastName = (document.getElementById('last-name')?.value || '').trim();
+  const phone = (document.getElementById('phone')?.value || '').trim();
+  const email = (document.getElementById('reg-email')?.value || '').trim();
+  const password = (document.getElementById('reg-password')?.value || '').trim();
 
-  if (!email || !password) {
-    alert("⚠️ يرجى ملء جميع الحقول.");
+  if (!firstName || !lastName || !phone || !email || !password) {
+    alert('⚠️ يرجى ملء جميع الحقول');
     return;
   }
 
-  localStorage.setItem("userEmail", email);
-  localStorage.setItem("userPassword", password);
+  const exists = findUserByEmail(email);
+  if (exists) {
+    alert('❌ هذا البريد مسجل مسبقاً. الرجاء تسجيل الدخول.');
+    showLoginForm();
+    return;
+  }
 
-  alert("✅ تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن.");
-  toggleAuthForms();
+  const user = {
+    firstName, lastName, phone, email, password,
+    balance: 10.00, // رصيد مبدئي تجريبي
+    createdAt: new Date().toISOString()
+  };
+
+  saveOrUpdateUser(user);
+  setLoggedUser(user);
+  alert('✅ تم إنشاء الحساب وتسجيل الدخول تلقائياً');
+  goToMainView();
 }
 
-// تسجيل الدخول
+/* ===== تسجيل الدخول ===== */
 function login() {
-  let email = document.getElementById("login-email").value;
-  let password = document.getElementById("login-password").value;
+  const email = (document.getElementById('login-email')?.value || '').trim();
+  const password = (document.getElementById('login-password')?.value || '').trim();
+  if (!email || !password) { alert('⚠️ يرجى ملء جميع الحقول'); return; }
 
-  if (email === localStorage.getItem("userEmail") &&
-      password === localStorage.getItem("userPassword")) {
-    sessionStorage.setItem("loggedIn", "true");
-    document.getElementById("auth-container").classList.add("hidden");
-    document.getElementById("main-container").classList.remove("hidden");
-    updateBalance();
-    alert("👋 مرحباً بك في منصة BingX!");
+  const user = findUserByEmail(email);
+  if (!user) { alert('❌ البريد الإلكتروني غير موجود. يرجى إنشاء حساب.'); return; }
+  if (user.password !== password) { alert('❌ كلمة المرور غير صحيحة.'); return; }
+
+  setLoggedUser(user);
+  alert(`✅ أهلاً ${user.firstName} !`);
+  goToMainView();
+}
+
+/* ===== الانتقال إلى العرض الرئيسي بعد تسجيل الدخول ===== */
+function goToMainView() {
+  // إن هذه الصفحة index.html تحوي العنصرين auth-section و main-content
+  const auth = document.getElementById('auth-section');
+  const main = document.getElementById('main-content');
+  if (auth && main) {
+    auth.classList.add('hidden');
+    main.classList.remove('hidden');
+    updateBalanceOnPage();
+    renderUserName();
   } else {
-    alert("❌ بيانات الدخول غير صحيحة.");
+    // إن لم تكن في index.html نعيد التوجيه
+    window.location.href = 'index.html';
   }
 }
 
-// تسجيل الخروج
+/* ===== تحديث واجهة المستخدم بالرصيد والاسم ===== */
+function updateBalanceOnPage() {
+  const user = getLoggedUser();
+  if (!user) return;
+  const el = document.getElementById('current-balance');
+  if (el) el.innerText = Number(user.balance || 0).toFixed(2);
+  renderUserName();
+}
+function renderUserName() {
+  const user = getLoggedUser();
+  if (!user) return;
+  const nameEl = document.getElementById('user-name');
+  if (nameEl) nameEl.innerText = `${user.firstName} ${user.lastName}`;
+}
+
+/* ===== تسجيل الخروج ===== */
 function logout() {
-  sessionStorage.clear();
-  location.reload();
+  localStorage.removeItem(STORAGE_LOGGED_KEY);
+  // لو نحن في صفحة فرعية أعِد للتوجه للصفحة الرئيسية
+  window.location.href = 'index.html';
 }
 
-// تحديث الرصيد
-function updateBalance() {
-  document.getElementById('current-balance').innerText = balance.toFixed(2);
-}
-
-// إيداع
-function deposit() {
-  const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
-  const depositStatus = document.getElementById('deposit-status');
-  const imageInput = document.getElementById('deposit-image');
-
-  if (isNaN(depositAmount) || depositAmount <= 0) {
-    alert("يرجى إدخال مبلغ صحيح للإيداع.");
-    return;
-  }
-  if (imageInput.files.length === 0) {
-    alert("يرجى تحميل صورة من عملية الإيداع.");
-    return;
-  }
-  depositStatus.classList.remove('hidden');
-  depositStatus.innerText = "إيداعك قيد الانتظار...";
-  alert("تم إرسال طلب الإيداع. سيتم إضافة الرصيد بعد المراجعة.");
-}
-
-// سحب
-function withdraw() {
-  const withdrawAmount = parseFloat(document.getElementById('withdraw-amount').value);
-  if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
-    alert("يرجى إدخال مبلغ صحيح للسحب.");
-    return;
-  }
-  if (withdrawAmount > balance) {
-    alert("لا يوجد رصيد كافٍ للسحب.");
-    return;
-  }
-  balance -= withdrawAmount;
-  updateBalance();
-  alert("✅ تم سحب المبلغ بنجاح.");
-}
-
-// استثمار
-function invest() {
-  const type = document.getElementById("invest-type").value;
-  const amount = parseFloat(document.getElementById("invest-amount").value);
-
-  if (isNaN(amount) || amount <= 0) {
-    alert("⚠️ أدخل مبلغ صالح للاستثمار.");
-    return;
-  }
-  if (amount > balance) {
-    alert("❌ لا يوجد رصيد كافٍ.");
-    return;
-  }
-
-  balance -= amount;
-  updateBalance();
-  alert(`✅ تم بدء استثمار ${type === "long" ? "طويل الأجل" : "قصير الأجل"} بمبلغ ${amount} USDT`);
-}
-
-// تداول
-function trade() {
-  const coin = document.getElementById("trade-coin").value;
-  const amount = parseFloat(document.getElementById("trade-amount").value);
-
-  if (isNaN(amount) || amount <= 0) {
-    alert("⚠️ أدخل مبلغ صالح للتداول.");
-    return;
-  }
-  if (amount > balance) {
-    alert("❌ لا يوجد رصيد كافٍ للتداول.");
-    return;
-  }
-
-  balance -= amount;
-  updateBalance();
-  alert(`✅ تم تنفيذ صفقة تداول ${coin} بمبلغ ${amount} USDT`);
-}
-
-// القائمة الجانبية
+/* ===== محفظة (عرض/اخفاء) ===== */
 function toggleWalletInfo() {
-  const walletInfo = document.getElementById('wallet-info');
-  walletInfo.classList.toggle('hidden');
+  const w = document.getElementById('wallet-info');
+  if (!w) return;
+  w.classList.toggle('hidden');
 }
-function openSidebar() {
-  document.getElementById("sidebar").style.width = "260px";
+
+/* ===== إيداع/سحب ===== */
+function deposit() {
+  const amount = parseFloat(document.getElementById('deposit-amount')?.value);
+  const img = document.getElementById('deposit-image')?.files?.length || 0;
+  if (isNaN(amount) || amount <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+  if (img === 0) { alert('يرجى إرفاق صورة الإيداع'); return; }
+  // نضع طلب قيد المراجعة (لا نضيف الرصيد تلقائياً)
+  const status = document.getElementById('deposit-status');
+  if (status) { status.classList.remove('hidden'); status.innerText = 'إيداع قيد المراجعة...'; }
+  alert('تم إرسال طلب الإيداع. سيتم إضافته بعد المراجعة.');
 }
-function closeSidebar() {
-  document.getElementById("sidebar").style.width = "0";
+async function withdraw() {
+  const amount = parseFloat(document.getElementById('withdraw-amount')?.value);
+  if (isNaN(amount) || amount <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+  const ok = await tryConsumeBalance(amount);
+  if (!ok) { alert('رصيد غير كافٍ'); return; }
+  alert('✅ تم سحب المبلغ بنجاح');
+  updateBalanceOnPage();
 }
-function toggleSection(id) {
-  const section = document.getElementById(id);
-  section.classList.toggle('hidden');
+
+/* ===== محاولات استهلاك الرصيد مع حفظ المستخدم ===== */
+async function tryConsumeBalance(amount) {
+  const user = getLoggedUser();
+  if (!user) { alert('يجب تسجيل الدخول'); return false; }
+  if (amount > (user.balance || 0)) return false;
+  user.balance = Number((user.balance - amount).toFixed(8));
+  // حفظ المستخدم في users و loggedUser
+  saveOrUpdateUser(user);
+  setLoggedUser(user);
+  return true;
 }
+
+/* ===== تشغيل التحقق عند تحميل الصفحة (index) ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  // إذا كنا في index.html
+  if (document.getElementById('auth-section')) {
+    const logged = getLoggedUser();
+    if (logged) {
+      // عرض الصفحة الرئيسية
+      document.getElementById('auth-section').classList.add('hidden');
+      document.getElementById('main-content').classList.remove('hidden');
+      updateBalanceOnPage();
+    } else {
+      // عرض شاشة تسجيل الدخول
+      document.getElementById('auth-section').classList.remove('hidden');
+      document.getElementById('main-content').classList.add('hidden');
+    }
+  }
+});
