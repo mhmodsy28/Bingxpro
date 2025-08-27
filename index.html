@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>منصة BingX - الرئيسية</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>منصة BingX</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container" id="index-container">
-    <!-- auth -->
+  <div class="container">
+    <!-- Auth card -->
     <div id="auth-card" class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div class="brand">BingX</div>
       </div>
 
-      <!-- login -->
+      <!-- Login -->
       <div id="login-block">
         <h3>تسجيل الدخول</h3>
         <input id="login-email" placeholder="البريد الإلكتروني" type="email">
@@ -23,13 +23,13 @@
           <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
           <button class="btn btn-ghost" onclick="showRegister()">إنشاء حساب</button>
         </div>
-        <p class="muted" style="margin-top:8px">البيانات تُخزن محليًا للاختبار فقط.</p>
+        <p class="muted" style="margin-top:8px">البيانات تُخزن محليًا على جهازك.</p>
       </div>
 
-      <!-- register -->
+      <!-- Register -->
       <div id="register-block" class="hidden">
         <h3>إنشاء حساب</h3>
-        <div style="display:flex;gap:8px">
+        <div class="two-cols">
           <input id="first-name" placeholder="الاسم الأول">
           <input id="last-name" placeholder="الاسم الثاني">
         </div>
@@ -40,11 +40,11 @@
           <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
           <button class="btn btn-ghost" onclick="showLogin()">إلغاء</button>
         </div>
-        <p class="muted" style="margin-top:8px">يتم الاحتفاظ بالحسابات في متصفحك (localStorage).</p>
+        <p class="muted" style="margin-top:8px">الحساب مخزن محليًا للاستخدام في الواجهة.</p>
       </div>
     </div>
 
-    <!-- app -->
+    <!-- App card (hidden before login) -->
     <div id="app-card" class="hidden">
       <div class="header">
         <div class="brand">BingX</div>
@@ -72,13 +72,13 @@
 
         <!-- center quick actions -->
         <section class="card">
-          <h3>إجراءات سريعة (تجريبي)</h3>
+          <h3>إجراءات سريعة</h3>
           <input id="quick-amount" type="number" placeholder="مبلغ (للتجربة)">
           <div style="display:flex;gap:8px">
-            <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد تجريبي</button>
-            <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط الرصيد</button>
+            <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد</button>
+            <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
           </div>
-          <p class="muted" style="margin-top:8px">استخدام تجريبي: لا تحويلات حقيقية.</p>
+          <p class="note">الأموال تُخزن محليًا على متصفحك.</p>
         </section>
 
         <!-- right wallet -->
