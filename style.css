@@ -1,7 +1,7 @@
-/* ستايل عام */
+/* خلفية جذابة */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,180 +9,150 @@ body {
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
+    color: white;
 }
 
+/* الصندوق الرئيسي */
 .container {
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.1);
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     width: 90%;
     max-width: 400px;
     box-sizing: border-box;
     text-align: center;
+    backdrop-filter: blur(10px);
+    color: white;
 }
 
+/* عناوين */
 h1 {
-    color: #2c3e50;
+    color: #f1c40f;
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 26px;
+}
+h2 {
+    color: #f9f9f9;
+    margin-bottom: 10px;
 }
 
-h2 {
-    color: #333;
-    margin-bottom: 10px;
+/* الأزرار */
+.action-button, .wallet-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #f39c12, #d35400);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+.action-button:hover, .wallet-btn:hover {
+    background: linear-gradient(45deg, #f1c40f, #e67e22);
 }
 
 input {
     width: 100%;
     padding: 12px;
     margin-bottom: 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-input[type="file"] {
-    margin-bottom: 15px;
-}
-
-.action-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
+    border-radius: 8px;
     border: none;
-    border-radius: 6px;
     font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.action-button:hover {
-    background-color: #0056b3;
-}
-
-#balance {
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #444;
-}
-
-.wallet-box {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 2px solid gold;
-    border-radius: 6px;
-    font-size: 16px;
-    color: #333;
     box-sizing: border-box;
-    text-align: center;
-    width: 100%;
+    outline: none;
 }
 
-.hidden {
-    display: none;
+/* معلومات المحفظة */
+#wallet-info {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 2px solid gold;
+    border-radius: 12px;
+    font-size: 15px;
+    color: white;
 }
+.hidden { display: none; }
 
+/* رسالة الإيداع */
 #deposit-status {
     font-size: 16px;
-    color: #e67e22;
+    color: #f1c40f;
     font-weight: bold;
     margin-top: 10px;
 }
 
-.admin-section {
-    margin-top: 30px;
-}
-
-.view-wallet-section {
-    margin-top: 20px;
-}
-
+/* القائمة الجانبية */
 .sidebar {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     top: 0;
     right: 0;
-    background-color: #111;
+    background: rgba(20, 20, 20, 0.95);
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    padding-top: 70px;
     color: white;
     text-align: center;
+    backdrop-filter: blur(6px);
 }
-
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: gold;
+}
 .sidebar a {
-    padding: 8px;
+    padding: 12px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
     color: white;
     display: block;
+    margin: 10px 0;
+    border-radius: 8px;
     transition: 0.3s;
 }
-
 .sidebar a:hover {
-    color: #f1f1f1;
+    background: rgba(255, 215, 0, 0.2);
+    color: gold;
 }
-
 .sidebar .close-btn {
     color: white;
     font-size: 36px;
     position: absolute;
-    top: 0;
-    right: 25px;
-    font-weight: bold;
-    background-color: transparent;
+    top: 10px;
+    right: 20px;
+    background: transparent;
     border: none;
+    cursor: pointer;
 }
-
 .whatsapp-button {
-    background-color: #25D366;
-    color: white;
-    padding: 10px 20px;
+    background: #25D366;
+    padding: 10px;
     font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
+    border-radius: 8px;
 }
-
 .whatsapp-button:hover {
-    background-color: #128C7E;
+    background: #128C7E;
 }
 
+/* زر فتح القائمة */
 .open-btn {
     font-size: 20px;
-    background-color: #007bff;
-    color: white;
+    background: gold;
+    color: black;
     border: none;
-    padding: 15px;
+    padding: 12px 18px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 10;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
 }
-
 .open-btn:hover {
-    background-color: #0056b3;
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 20px;
-    }
-
-    .action-button {
-        font-size: 14px;
-    }
-
-    input {
-        font-size: 14px;
-    }
+    background: orange;
 }
