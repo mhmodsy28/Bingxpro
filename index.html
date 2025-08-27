@@ -1,21 +1,92 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>الرئيسية</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>منصة BingX</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>المنصة</header>
-  <div class="container">
-    <div class="card">
-      <h2>مرحباً بك 👋</h2>
-      <p>اختر أحد الأقسام أدناه</p>
-      <a href="trade.html"><button>💹 التداول</button></a>
-      <a href="deposit.html"><button>💰 الإيداع</button></a>
-      <a href="invest.html"><button>📈 الاستثمار</button></a>
-      <a href="games.html"><button>🎮 الألعاب</button></a>
+  <div id="auth-wrap" class="auth-wrap">
+    <div class="auth-card">
+      <h1>منصة BingX</h1>
+
+      <!-- Login -->
+      <div id="login-form">
+        <input id="login-email" type="email" placeholder="البريد الإلكتروني">
+        <input id="login-password" type="password" placeholder="كلمة المرور">
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+          <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
+          <button class="btn btn-ghost" onclick="showRegister()">إنشاء حساب</button>
+        </div>
+        <p class="muted" style="margin-top:8px">استخدم حسابك للدخول إلى المنصة وتجربة الميزات.</p>
+      </div>
+
+      <!-- Register (hidden by default) -->
+      <div id="register-form" class="hidden">
+        <div class="two-cols">
+          <input id="first-name" placeholder="الاسم الأول">
+          <input id="last-name" placeholder="الاسم الثاني">
+        </div>
+        <input id="phone" placeholder="رقم الهاتف">
+        <input id="reg-email" placeholder="البريد الإلكتروني">
+        <input id="reg-password" type="password" placeholder="كلمة المرور">
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+          <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
+          <button class="btn btn-ghost" onclick="showLogin()">عودة</button>
+        </div>
+        <p class="muted" style="margin-top:8px">سيتم حفظ حسابك محليًا للتجربة فقط.</p>
+      </div>
     </div>
   </div>
+
+  <!-- Main app -->
+  <div id="app-wrap" class="container hidden">
+    <div class="header">
+      <div class="brand">BingX</div>
+      <div>
+        <span id="greet">مرحباً، <strong id="user-name"></strong></span>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- left -->
+      <section class="card balance-card">
+        <h3>الحساب</h3>
+        <div class="balance-value"><span id="current-balance">0.00</span> USDT</div>
+        <div class="muted">رصيدك المتاح</div>
+
+        <div style="margin-top:12px">
+          <a class="btn btn-ghost big" href="trade.html">📈 التداول</a>
+          <a class="btn btn-ghost big" href="invest.html">💼 الاستثمار</a>
+          <a class="btn btn-ghost big" href="deposit.html">💳 الإيداع</a>
+          <a class="btn btn-ghost big" href="games.html">🎮 الألعاب</a>
+        </div>
+
+        <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">تسجيل الخروج</button>
+      </section>
+
+      <!-- center -->
+      <section class="card">
+        <h3>إجراءات سريعة (تجريبي)</h3>
+        <input id="quick-amount" type="number" placeholder="أدخل مبلغ (للتجربة)">
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد تجريبي</button>
+          <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
+        </div>
+        <p class="note">الأموال هنا وهمية وتُستخدم فقط لعرض سلوك التطبيق.</p>
+      </section>
+
+      <!-- right -->
+      <section class="card">
+        <h3>المحفظة</h3>
+        <div class="wallet-address" id="wallet-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
+        <div class="muted">USDT - BEP20</div>
+        <button class="btn btn-ghost" onclick="copyWallet()">نسخ العنوان</button>
+      </section>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
