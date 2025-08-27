@@ -1,100 +1,54 @@
-/* styles.css - تصميم داكن احترافي مستوحى من النسخة الأصلية */
+/* styles.css - تصميم داكن بسيط ومرتب */
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
 
 :root{
-  --bg1: #0f2027;
-  --bg2: #203a43;
-  --accent: #f1c40f;
-  --muted: rgba(255,255,255,0.75);
+  --bg1:#0f2027; --bg2:#203a43; --accent:#f1c40f; --muted:rgba(255,255,255,0.78);
   --card: rgba(255,255,255,0.04);
-  --glass: rgba(255,255,255,0.03);
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
-  margin:0;
-  font-family:'Tajawal',system-ui,Arial;
-  background: linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:#fff;
-  direction: rtl;
-  -webkit-font-smoothing:antialiased;
+  margin:0; font-family:'Tajawal',system-ui,Arial; background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff; direction:rtl; -webkit-font-smoothing:antialiased;
 }
 
-/* Containers */
-.container{width:100%;max-width:980px;margin:20px auto;padding:16px;}
-.card{
-  background:var(--card);
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-}
+/* container */
+.container{max-width:920px;margin:18px auto;padding:14px}
 
-/* Headers */
-.header{
-  display:flex;justify-content:space-between;align-items:center;padding:12px 0;
-}
-.brand{font-size:24px;color:var(--accent);font-weight:700}
+/* header */
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand{color:var(--accent);font-weight:700;font-size:24px}
 
-/* Auth */
-.auth-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:28px;}
-.auth-card{width:100%;max-width:520px;background:var(--card);padding:28px;border-radius:12px;text-align:center;}
-.auth-card h1{color:var(--accent);margin-bottom:8px}
+/* cards */
+.card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 8px 20px rgba(0,0,0,0.45)}
 
-/* Inputs / Buttons */
-input,select,textarea{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:8px;
-  border: none;
-  background: var(--glass);
-  color: #fff;
-  font-size:15px;
-}
-.two-cols{display:flex;gap:8px}
-.two-cols input{flex:1}
-.btn{
-  display:inline-block;
-  padding:10px 14px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-  font-weight:700;
-  text-decoration:none;
-}
+/* inputs & buttons */
+input,select{width:100%;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.02);color:#fff;margin:8px 0}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
 .btn-primary{background:linear-gradient(45deg,#f39c12,#d35400);color:#fff}
 .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
 .btn-danger{background:crimson;color:#fff}
+.small{padding:6px 10px;font-size:14px}
 
-/* Layout */
-.main-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
-@media(max-width:900px){ .main-grid{grid-template-columns:1fr} .two-cols{flex-direction:column} }
+/* layout */
+.main-grid{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+@media(max-width:880px){.main-grid{grid-template-columns:1fr}}
 
-/* Balance / Wallet */
-.balance-card{display:flex;flex-direction:column;gap:8px}
-.balance-value{font-size:22px;color:var(--accent);font-weight:800}
-.wallet-address{font-family:monospace;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;word-break:break-all}
+/* wallet */
+.wallet-address{font-family:monospace;background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;word-break:break-all}
 
-/* Trading / Charts */
-.chart-wrap{height:360px;background:rgba(255,255,255,0.02);border-radius:10px;padding:8px}
-.market-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+/* market */
+.chart-wrap{height:340px;background:rgba(255,255,255,0.02);border-radius:10px;padding:8px;margin-top:12px}
+.market-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .market-card{flex:1;min-width:120px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center}
+.stat-value{color:var(--accent);font-weight:700}
 
-/* Invest */
-.invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:700px){ .invest-grid{grid-template-columns:1fr} }
+/* games */
+.game-area{height:160px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));border-radius:10px;position:relative;overflow:hidden;padding:8px}
+#plane{position:absolute;left:10px;top:45%;font-size:34px;transition:left 0.06s linear}
+.multiplier{font-weight:800;color:var(--accent);margin-top:8px}
 
-/* Games */
-.game-area{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2));border-radius:12px;padding:12px;position:relative;overflow:hidden}
-#plane{position:absolute;left:12px;top:40%;font-size:36px;transition:transform 0.12s linear}
-.multiplier{font-size:20px;color:var(--accent);font-weight:800;margin-top:8px}
-
-/* small helpers */
-.muted{color:var(--muted);font-size:14px}
+/* misc */
+.muted{color:var(--muted);font-size:13px}
 .hidden{display:none}
 .link{color:var(--accent);text-decoration:none}
-
-/* Footer note */
-.note{font-size:13px;color:var(--muted);margin-top:8px}
