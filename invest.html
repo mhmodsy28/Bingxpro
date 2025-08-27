@@ -1,62 +1,29 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>الاستثمار - BingX</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h1>الاستثمار</h1>
-      <a class="action-button small" href="index.html">🔙 العودة</a>
-    </div>
+    <h1>💼 الاستثمار</h1>
+    <p>اختر نوع العقد وأدخل مبلغ الاستثمار</p>
 
-    <div class="card">
-      <label>نوع العقد</label>
-      <select id="contract-type">
-        <option value="long">طويل الأجل (مرجح أعلى)</option>
-        <option value="short">قصير الأجل (تداول سريع)</option>
-      </select>
+    <label>نوع العقد:</label>
+    <select id="contract-type">
+      <option value="short">قصير المدى</option>
+      <option value="long">طويل المدى</option>
+    </select>
 
-      <label>مبلغ الاستثمار (USDT)</label>
-      <input id="invest-input" type="number" placeholder="أدخل المبلغ" />
+    <input type="number" id="investment-amount" placeholder="أدخل المبلغ للاستثمار">
+    <button onclick="invest()">استثمار</button>
 
-      <div id="invest-estimate" class="muted">العائد المتوقع: --</div>
+    <p id="investment-status"></p>
 
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <button class="action-button" onclick="updateEstimate()">حساب العائد</button>
-        <button class="action-button" onclick="startInvestment()">بدء الاستثمار</button>
-      </div>
-    </div>
+    <a href="index.html" class="back-btn">⬅ العودة للرئيسية</a>
   </div>
-
   <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      ensureLoggedInOrRedirect();
-    });
-
-    function updateEstimate() {
-      const type = document.getElementById('contract-type').value;
-      const amount = parseFloat(document.getElementById('invest-input').value);
-      if (isNaN(amount) || amount <= 0) { alert('أدخل مبلغ صالح'); return; }
-      // نموذج مبسط: طويل الأجل يعطي تقدير +12%، قصير +5%
-      const factor = type === 'long' ? 1.12 : 1.05;
-      const est = amount * factor;
-      document.getElementById('invest-estimate').innerText = `العائد المتوقع بعد فترة: ${est.toFixed(2)} USDT (تقديري)`;
-    }
-
-    async function startInvestment() {
-      const type = document.getElementById('contract-type').value;
-      const amount = parseFloat(document.getElementById('invest-input').value);
-      if (isNaN(amount) || amount <= 0) { alert('أدخل مبلغ صالح'); return; }
-      const ok = await tryConsumeBalance(amount);
-      if (!ok) { alert('رصيد غير كافٍ'); return; }
-      alert(`✅ تم بدء استثمار (${type === 'long' ? 'طويل' : 'قصير'}) بقيمة ${amount} USDT`);
-      updateBalanceOnPage();
-    }
-  </script>
 </body>
 </html>
