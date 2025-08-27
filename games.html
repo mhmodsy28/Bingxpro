@@ -2,15 +2,9 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>الألعاب - BingX</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .wheel { width:260px;height:260px;border-radius:50%;margin:12px auto;position:relative;border:8px solid rgba(255,255,255,0.06);overflow:hidden; }
-    .wheel .segment{ position:absolute; width:50%; height:50%; left:50%; top:50%; transform-origin:0% 0%; }
-    .pointer{ width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid var(--accent); margin:6px auto;}
-    .dice { font-size:48px; display:block; text-align:center; padding:20px; }
-  </style>
 </head>
 <body>
   <div class="container">
@@ -20,55 +14,30 @@
     </div>
 
     <div class="card">
-      <h3>🚀 لعبة الطائرة (Crash)</h3>
-      <p class="muted">أدخل مبلغ الرهان واضغط ابدأ — اضغط سحب قبل الانهيار</p>
-      <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-      <div class="game-area" style="height:160px;position:relative;">
-        <div id="plane" style="left:8px;top:45%;font-size:32px">✈️</div>
-      </div>
-      <div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
-        <button class="btn btn-ghost" id="crash-cash" onclick="crashCashOut()" disabled>سحب</button>
-      </div>
-      <p id="crash-log" class="muted"></p>
-    </div>
+      <h3>لعبة الطائرة (Crash) — محاكاة رسومية</h3>
+      <div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
 
-    <div class="card">
-      <h3>🎡 عجلة الحظ</h3>
-      <div class="pointer"></div>
-      <div class="wheel" id="wheel"></div>
-      <input id="wheel-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-primary" onclick="spinWheel()">دور</button>
+      <div style="margin-top:10px">
+        <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+        <div class="game-area" style="margin-top:10px">
+          <div id="plane">✈️</div>
+        </div>
+        <div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
+          <button id="crash-cash" class="btn btn-ghost" onclick="crashCashOut()" disabled>سحب</button>
+        </div>
+        <p id="crash-log" class="muted"></p>
       </div>
-      <p id="wheel-log" class="muted"></p>
-    </div>
-
-    <div class="card">
-      <h3>🎲 نرد</h3>
-      <div class="dice" id="dice-display">-</div>
-      <input id="dice-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-primary" onclick="rollDice()">رمي النرد</button>
-      </div>
-      <p id="dice-log" class="muted"></p>
     </div>
   </div>
 
   <script src="script.js"></script>
   <script>
-    // init wheel segments visually (6 segments)
-    const wheel = document.getElementById('wheel');
-    const colors = ['#f39c12','#d35400','#ffd700','#e67e22','#ffb347','#f1c40f'];
-    for(let i=0;i<6;i++){
-      const seg = document.createElement('div');
-      seg.className='segment';
-      seg.style.transform = `rotate(${i*60}deg)`;
-      seg.style.background = colors[i%colors.length];
-      seg.innerHTML = `<div style="transform: rotate(-${i*60}deg);width:200%;text-align:left;padding-left:8px;font-weight:700;">${(i+1)*2}x</div>`;
-      wheel.appendChild(seg);
-    }
+    // page init handled in script.js (ensureLoggedInOrRedirect)
+    document.addEventListener('DOMContentLoaded', ()=>{
+      if(!ensureLoggedInOrRedirect()) return;
+    });
   </script>
 </body>
 </html>
