@@ -1,58 +1,60 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الإيداع الخاصة BingX</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة BingX</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>منصة الإيداع الخاصة BingX</h1>
+<body onload="showWelcomeMessage()">
+  
+  <div class="container">
+      <h1>منصة BingX</h1>
 
-        <div id="balance">
-            <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
-        </div>
+      <div id="balance">
+          <p>الرصيد الحالي: <span id="current-balance">0.00</span> USDT</p>
+      </div>
 
-        <div class="transaction-section">
-            <h2>إيداع</h2>
-            <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
-            <input type="file" id="deposit-image" accept="image/*" required>
-            <button class="action-button" onclick="deposit()">إيداع</button>
-            <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
-        </div>
+      <button class="wallet-btn" onclick="toggleWalletInfo()">عرض المحفظة</button>
+      <div id="wallet-info" class="hidden">
+          <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
+          <p><strong>الشبكة:</strong> BEP20</p>
+      </div>
 
-        <div class="transaction-section">
-            <h2>سحب</h2>
-            <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
-            <button class="action-button" onclick="withdraw()">سحب</button>
-        </div>
+      <div class="transaction-section">
+          <h2>إيداع</h2>
+          <input type="number" id="deposit-amount" placeholder="أدخل المبلغ للإيداع" required>
+          <input type="file" id="deposit-image" accept="image/*" required>
+          <button class="action-button" onclick="deposit()">إيداع</button>
+          <p id="deposit-status" class="hidden">إيداعك قيد الانتظار...</p>
+      </div>
 
-        <div class="admin-section">
-            <h2>إضافة رصيد</h2>
-            <button class="action-button" onclick="requestBalanceUpdate()">تواصل مع الوكيل لإضافة رصيد</button>
-        </div>
+      <div class="transaction-section">
+          <h2>سحب</h2>
+          <input type="number" id="withdraw-amount" placeholder="أدخل المبلغ للسحب" required>
+          <button class="action-button" onclick="withdraw()">سحب</button>
+      </div>
 
-        <!-- زر عرض المحفظة -->
-        <div class="view-wallet-section">
-            <button class="action-button" onclick="toggleWalletInfo()">عرض المحفظة</button>
-            <div id="wallet-info" class="wallet-box hidden">
-                <p><strong>عنوان المحفظة:</strong><br> 0x3932890a5d1acb3ab036bd39ade26c47929b37e5</p>
-                <p><strong>الشبكة:</strong> BEP20</p>
-            </div>
-        </div>
-    </div>
+      <div class="admin-section">
+          <h2>إضافة رصيد</h2>
+          <input type="number" id="add-balance-amount" placeholder="أدخل المبلغ للإضافة" required>
+          <button class="action-button" onclick="requestBalanceUpdate()">إضافة رصيد</button>
+      </div>
+  </div>
 
-    <!-- الشريط الجانبي -->
-    <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="closeSidebar()">×</button>
-        <h2>تواصل معنا</h2>
-        <p>للتواصل عبر واتساب:</p>
-        <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">إرسال رسالة عبر واتساب</a>
-    </div>
+  <!-- القائمة الجانبية -->
+  <div id="sidebar" class="sidebar">
+      <button class="close-btn" onclick="closeSidebar()">×</button>
+      <h2>القائمة</h2>
+      <a href="#">📈 التداول</a>
+      <a href="#">💼 الاستثمار</a>
+      <a href="#">💳 الإيداع</a>
+      <a href="https://wa.me/+212784607357" target="_blank" class="whatsapp-button">📞 تواصل عبر واتساب</a>
+  </div>
 
-    <button class="open-btn" onclick="openSidebar()">تواصل معنا</button>
+  <!-- زر فتح القائمة -->
+  <button class="open-btn" onclick="openSidebar()">☰ القائمة</button>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
