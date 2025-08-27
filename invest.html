@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>الاستثمار - BingX</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,27 +13,25 @@
       <div><a class="link" href="index.html">العودة</a></div>
     </div>
 
-    <div class="card invest-grid">
-      <div>
-        <h4>إعداد عقد</h4>
-        <label>نوع العقد:</label>
-        <select id="invest-type">
-          <option value="short">قصير (7 أيام)</option>
-          <option value="long">طويل (90 يوم)</option>
-        </select>
-        <label>المبلغ (USDT)</label>
-        <input id="invest-amount" type="number" placeholder="أدخل المبلغ">
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
-          <button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
-        </div>
+    <div class="card">
+      <h4>إعداد عقد استثماري (محاكاة)</h4>
+      <label>نوع العقد</label>
+      <select id="invest-type">
+        <option value="short">قصير (7 أيام)</option>
+        <option value="long">طويل (90 يوم)</option>
+      </select>
+
+      <label>المبلغ (USDT)</label>
+      <input id="invest-amount" type="number" placeholder="أدخل المبلغ">
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
+        <button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
       </div>
 
-      <div>
-        <h4>مؤشرات العقد</h4>
-        <p class="muted">APR تقريبي: <span id="apr">--</span></p>
-        <p class="muted">المخاطر: <span id="risk">--</span></p>
-        <p class="muted">العائد المتوقع: <span id="invest-est">--</span></p>
+      <div style="margin-top:12px" class="muted">
+        APR: <span id="apr">--</span> — المخاطر: <span id="risk">--</span>
+        <div style="margin-top:6px">العائد المتوقع: <span id="invest-est">--</span></div>
       </div>
     </div>
   </div>
@@ -42,7 +40,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', ()=>{
       if(!ensureLoggedInOrRedirect()) return;
-      document.getElementById('apr').innerText = 'طويل:12% - قصير:5%';
+      document.getElementById('apr').innerText = 'طويل:12% ، قصير:5%';
       document.getElementById('risk').innerText = 'متوسط';
     });
   </script>
