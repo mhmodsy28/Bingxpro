@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الاستثمار - BingX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-container">
+    <header class="page-header">
+      <h1>💼 الاستثمار</h1>
+      <div>
+        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
+      </div>
+    </header>
+
+    <div class="card invest-card">
+      <div class="two-cols">
+        <div>
+          <label>اختر نوع العقد</label>
+          <select id="contract-type">
+            <option value="long">طويل الأجل</option>
+            <option value="short">قصير الأجل</option>
+          </select>
+
+          <label>مبلغ الاستثمار (USDT)</label>
+          <input id="invest-input" type="number" placeholder="أدخل المبلغ" />
+
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn btn-primary" onclick="updateEstimate()">حساب العائد</button>
+            <button class="btn btn-outline" onclick="startInvestment()">بدء الاستثمار</button>
+          </div>
+        </div>
+
+        <div>
+          <h3>مؤشرات العقد</h3>
+          <div id="contract-indicators" class="muted">
+            <p>APR تقديري: <span id="apr">--</span></p>
+            <p>مخاطر: <span id="risk">--</span></p>
+            <p id="invest-estimate">العائد المتوقع: --</p>
+          </div>
+
+          <h3 style="margin-top:16px;">ملاحظات</h3>
+          <ul class="muted">
+            <li>الاستثمار هنا تجريبي ويخص المنصة فقط.</li>
+            <li>البيانات تقديرية ولا تمثل نصيحة استثمارية.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if(!ensureLoggedInOrRedirect()) return;
+      // إعداد افتراضي للمؤشرات
+      document.getElementById('apr').innerText = 'طويل: 12% ، قصير: 5%';
+      document.getElementById('risk').innerText = 'متوسط';
+    });
+  </script>
+</body>
+</html>
