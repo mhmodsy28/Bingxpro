@@ -1,83 +1,46 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>التداول - BingX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>التداول</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body>
-  <div class="page-container">
-    <header class="page-header">
-      <h1>📈 التداول</h1>
+  <header>💹 التداول</header>
+  <div class="container">
+    <div class="card">
+      <h3>مخطط الأسعار</h3>
+      <div id="chart" style="height:400px;"></div>
+    </div>
+    <div class="card">
+      <h3>تنفيذ صفقة</h3>
+      <select>
+        <option>BTC/USDT</option>
+        <option>ETH/USDT</option>
+        <option>BNB/USDT</option>
+      </select>
+      <input type="number" placeholder="أدخل المبلغ (USDT)">
       <div>
-        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
-      </div>
-    </header>
-
-    <div class="card trading-grid">
-      <div class="left-col">
-        <div class="market-top">
-          <label>اختر العملة</label>
-          <select id="crypto-select">
-            <option value="BTC">Bitcoin (BTC)</option>
-            <option value="ETH">Ethereum (ETH)</option>
-            <option value="BNB">BNB</option>
-            <option value="SOL">Solana (SOL)</option>
-          </select>
-
-          <div class="market-stats">
-            <div class="stat">
-              <small>السعر الحالي</small>
-              <div id="price" class="stat-value">--</div>
-            </div>
-            <div class="stat">
-              <small>تغير 24س</small>
-              <div id="change" class="stat-value">--</div>
-            </div>
-            <div class="stat">
-              <small>SMA(14)</small>
-              <div id="sma" class="stat-value">--</div>
-            </div>
-            <div class="stat">
-              <small>RSI(14)</small>
-              <div id="rsi" class="stat-value">--</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-wrap">
-          <canvas id="priceChart"></canvas>
-        </div>
-      </div>
-
-      <div class="right-col">
-        <div class="card">
-          <h3>تنفيذ صفقة</h3>
-          <label>المبلغ (USDT)</label>
-          <input id="trade-amount" type="number" placeholder="مثال: 50" />
-
-          <div style="display:flex; gap:8px; margin-top:10px;">
-            <button class="btn btn-primary" onclick="executeTrade()">تنفيذ</button>
-            <button class="btn btn-outline" onclick="refreshMarket()">تحديث</button>
-          </div>
-
-          <div id="trade-log" class="muted" style="margin-top:12px;">سجل الصفقة سيظهر هنا.</div>
-        </div>
+        <button>شراء</button>
+        <button>بيع</button>
       </div>
     </div>
+    <a href="index.html"><button>⬅ العودة</button></a>
   </div>
 
-  <script src="script.js"></script>
   <script>
-    // تهيئة الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-      if(!ensureLoggedInOrRedirect()) return;
-      const sel = document.getElementById('crypto-select');
-      sel.addEventListener('change', ()=> loadMarketFor(sel.value));
-      loadMarketFor(sel.value);
+    new TradingView.widget({
+      "container_id": "chart",
+      "width": "100%",
+      "height": "400",
+      "symbol": "BINANCE:BTCUSDT",
+      "interval": "60",
+      "theme": "dark",
+      "style": "1",
+      "locale": "ar",
+      "toolbar_bg": "#1a1a1a",
+      "hide_side_toolbar": false
     });
   </script>
 </body>
