@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الألعاب - BingX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-container">
+    <header class="page-header">
+      <h1>🎮 الألعاب (محاكاة)</h1>
+      <div>
+        <a class="btn btn-outline small" href="index.html">🔙 العودة</a>
+      </div>
+    </header>
+
+    <div class="card">
+      <h3>لعبة الطائرة (Crash) — محاكاة</h3>
+      <p class="muted">يمكن اللعب فقط باستخدام رصيدك الداخلي. اللعبة تجريبية ووهمية (لا تعاملات خارجية).</p>
+
+      <label>المبلغ للمراهنة (USDT)</label>
+      <input id="bet-amount" type="number" placeholder="مثال: 5" />
+
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button class="btn btn-primary" onclick="startRound()">بدء الجولة</button>
+        <button class="btn btn-outline" onclick="cashOut()" id="cash-btn" disabled>سحب</button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div class="muted">المضاعف: <span id="multiplier">1.00x</span></div>
+        <div id="game-log" class="muted" style="margin-top:8px;">لم تبدأ جولة</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // لعبة الطائرة: يتم تشغيل المنطق من script.js
+  </script>
+</body>
+</html>
