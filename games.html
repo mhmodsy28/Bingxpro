@@ -20,8 +20,10 @@ body{
   color:#fff;
   direction:rtl;
 }
-.container{max-width:900px;margin:20px auto;padding:10px;}
+.container{max-width:950px;margin:20px auto;padding:10px;}
 .brand{font-size:24px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+.balance{display:flex;justify-content:space-between;margin-bottom:15px;font-size:16px;}
+.balance span{font-weight:600;}
 .card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);}
 .btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
 .btn-primary{background:var(--accent); color:#000;}
@@ -41,24 +43,28 @@ input::placeholder{color:var(--text-muted);}
 <div class="container">
   <div class="brand">الألعاب الاحترافية - BingX</div>
 
+  <div class="balance">
+    <span>الرصيد التجريبي: <span id="demo-balance">1000</span> USDT</span>
+    <span>الرصيد الحقيقي: <span id="real-balance">500</span> USDT</span>
+  </div>
+
   <div class="game-selector">
-    <button class="btn btn-primary" onclick="openGame('crash')">لعبة الطائرة (Crash)</button>
-    <button class="btn btn-primary" onclick="openGame('dice')">لعبة النرد (Dice)</button>
-    <button class="btn btn-primary" onclick="openGame('coin')">لعبة العملة (Coin Flip)</button>
-    <button class="btn btn-primary" onclick="openGame('slots')">لعبة السلوتس (Slots)</button>
-    <button class="btn btn-primary" onclick="openGame('roulette')">لعبة الروليت (Roulette)</button>
-    <button class="btn btn-primary" onclick="openGame('jackpot')">لعبة Jackpot</button>
-    <button class="btn btn-primary" onclick="openGame('wheel')">عجلة الحظ (Wheel)</button>
-    <button class="btn btn-primary" onclick="openGame('crash2')">Crash 2</button>
-    <button class="btn btn-primary" onclick="openGame('dice2')">Dice 2</button>
-    <button class="btn btn-primary" onclick="openGame('coin2')">Coin 2</button>
+    <button class="btn btn-primary" onclick="openGame('crash')">Crash</button>
+    <button class="btn btn-primary" onclick="openGame('dice')">Dice</button>
+    <button class="btn btn-primary" onclick="openGame('coin')">Coin Flip</button>
+    <button class="btn btn-primary" onclick="openGame('slots')">Slots</button>
+    <button class="btn btn-primary" onclick="openGame('roulette')">Roulette</button>
+    <button class="btn btn-primary" onclick="openGame('jackpot')">Jackpot</button>
+    <button class="btn btn-primary" onclick="openGame('wheel')">Wheel</button>
+    <button class="btn btn-primary" onclick="openGame('crash2')">Crash2</button>
+    <button class="btn btn-primary" onclick="openGame('dice2')">Dice2</button>
+    <button class="btn btn-primary" onclick="openGame('coin2')">Coin2</button>
   </div>
 
   <div id="games-container">
     <!-- لعبة الطائرة -->
-    <div id="crash-game" class="card" style="display:none">
+    <div id="crash" class="card" style="display:none">
       <h3>لعبة الطائرة (Crash)</h3>
-      <div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
       <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <div class="game-area"><div id="plane">✈️</div></div>
       <div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
@@ -70,7 +76,7 @@ input::placeholder{color:var(--text-muted);}
     </div>
 
     <!-- لعبة النرد -->
-    <div id="dice-game" class="card" style="display:none">
+    <div id="dice" class="card" style="display:none">
       <h3>لعبة النرد (Dice)</h3>
       <input id="dice-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="playDice()">رمي النرد</button>
@@ -78,7 +84,7 @@ input::placeholder{color:var(--text-muted);}
     </div>
 
     <!-- لعبة العملة -->
-    <div id="coin-game" class="card" style="display:none">
+    <div id="coin" class="card" style="display:none">
       <h3>لعبة العملة (Coin Flip)</h3>
       <input id="coin-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="playCoin()">اقلب العملة</button>
@@ -86,7 +92,7 @@ input::placeholder{color:var(--text-muted);}
     </div>
 
     <!-- لعبة السلوتس -->
-    <div id="slots-game" class="card" style="display:none">
+    <div id="slots" class="card" style="display:none">
       <h3>لعبة السلوتس (Slots)</h3>
       <input id="slots-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="playSlots()">تشغيل السلوتس</button>
@@ -94,44 +100,48 @@ input::placeholder{color:var(--text-muted);}
     </div>
 
     <!-- لعبة الروليت -->
-    <div id="roulette-game" class="card" style="display:none">
-      <h3>لعبة الروليت (Roulette)</h3>
+    <div id="roulette" class="card" style="display:none">
+      <h3>لعبة الروليت</h3>
       <input id="roulette-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-      <button class="btn btn-primary" onclick="playRoulette()">تشغيل الروليت</button>
+      <button class="btn btn-primary" onclick="playRoulette()">ابدأ</button>
       <p id="roulette-log" class="muted"></p>
     </div>
 
-    <!-- ألعاب إضافية وهمية -->
-    <div id="jackpot-game" class="card" style="display:none">
-      <h3>لعبة Jackpot</h3>
+    <!-- Jackpot -->
+    <div id="jackpot" class="card" style="display:none">
+      <h3>Jackpot</h3>
       <input id="jackpot-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="winGame('jackpot')">ابدأ اللعبة</button>
       <p id="jackpot-log" class="muted"></p>
     </div>
 
-    <div id="wheel-game" class="card" style="display:none">
-      <h3>عجلة الحظ (Wheel)</h3>
+    <!-- Wheel -->
+    <div id="wheel" class="card" style="display:none">
+      <h3>Wheel</h3>
       <input id="wheel-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="winGame('wheel')">ابدأ اللعبة</button>
       <p id="wheel-log" class="muted"></p>
     </div>
 
-    <div id="crash2-game" class="card" style="display:none">
-      <h3>Crash 2</h3>
+    <!-- Crash2 -->
+    <div id="crash2" class="card" style="display:none">
+      <h3>Crash2</h3>
       <input id="crash2-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="winGame('crash2')">ابدأ اللعبة</button>
       <p id="crash2-log" class="muted"></p>
     </div>
 
-    <div id="dice2-game" class="card" style="display:none">
-      <h3>Dice 2</h3>
+    <!-- Dice2 -->
+    <div id="dice2" class="card" style="display:none">
+      <h3>Dice2</h3>
       <input id="dice2-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="winGame('dice2')">ابدأ اللعبة</button>
       <p id="dice2-log" class="muted"></p>
     </div>
 
-    <div id="coin2-game" class="card" style="display:none">
-      <h3>Coin 2</h3>
+    <!-- Coin2 -->
+    <div id="coin2" class="card" style="display:none">
+      <h3>Coin2</h3>
       <input id="coin2-bet" type="number" placeholder="مبلغ الرهان (USDT)">
       <button class="btn btn-primary" onclick="winGame('coin2')">ابدأ اللعبة</button>
       <p id="coin2-log" class="muted"></p>
@@ -141,37 +151,32 @@ input::placeholder{color:var(--text-muted);}
 </div>
 
 <script>
-/* فتح اللعبة المحددة */
-function openGame(gameId){
-  document.querySelectorAll('#games-container > div').forEach(d=>d.style.display='none');
-  const game = document.getElementById(gameId+'-game');
-  if(game) game.style.display='block';
+let demoBalance=1000;
+let realBalance=500;
+function updateBalance(){
+  document.getElementById('demo-balance').innerText = demoBalance.toFixed(2);
+  document.getElementById('real-balance').innerText = realBalance.toFixed(2);
 }
 
-/* لعبة الطائرة Crash */
+/* فتح اللعبة */
+function openGame(gameId){
+  document.querySelectorAll('#games-container > div').forEach(d=>d.style.display='none');
+  document.getElementById(gameId).style.display='block';
+}
+
+/* Crash */
 let crashInterval=null;
 let crashMultiplier=1;
 function crashStart(){
-  const bet = parseFloat(document.getElementById('crash-bet').value);
-  if(isNaN(bet) || bet <=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  const bet=parseFloat(document.getElementById('crash-bet').value);
+  if(isNaN(bet)||bet<=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  if(bet>demoBalance){ alert('رصيد تجريبي غير كافٍ'); return; }
+  demoBalance -= bet;
+  updateBalance();
   document.getElementById('crash-log').innerText='اللعبة بدأت!';
   document.getElementById('crash-cash').disabled=false;
   crashMultiplier=1;
   const plane=document.getElementById('plane');
   let bottom=10;
   if(crashInterval) clearInterval(crashInterval);
-  crashInterval=setInterval(()=>{
-    crashMultiplier += 0.02;
-    document.getElementById('crash-multi').innerText=crashMultiplier.toFixed(2)+'x';
-    bottom += Math.random()*2;
-    plane.style.bottom=bottom+'px';
-    if(crashMultiplier>=5 || Math.random()<0.01){
-      clearInterval(crashInterval);
-      document.getElementById('crash-log').innerText='انتهت اللعبة!';
-      document.getElementById('crash-cash').disabled=true;
-    }
-  },50);
-}
-function crashCashOut(){
-  clearInterval(crashInterval);
-  document.getElementById('
+  crashInterval=setInterval
