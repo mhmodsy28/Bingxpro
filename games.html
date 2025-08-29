@@ -1,52 +1,108 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>التداول - اختبار الستايل</title>
-
-  <!-- الرابط الخارجي (إن وُجد) -->
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- ----- كود CSS مؤقت لصق هنا لاختبار الستايل مباشرة ----- -->
-  <style>
-    :root{
-      --bg1:#0f2027;
-      --bg2:#203a43;
-      --accent:#f1c40f;
-    }
-    body{
-      background: linear-gradient(135deg,var(--bg1),var(--bg2));
-      color:#fff;
-      direction:rtl;
-      font-family:'Tajawal', sans-serif;
-    }
-    .brand{color:var(--accent); font-weight:700; font-size:20px}
-    .card{background:rgba(255,255,255,0.04); padding:14px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.45); margin:12px 0}
-  </style>
-  <!-- ----------------------------------------------------- -->
-</head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>الألعاب - BingX</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الألعاب - BingX</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --accent:#f1c40f;
+  --card-bg:rgba(255,255,255,0.05);
+}
+body{
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  font-family:'Tajawal', sans-serif;
+  direction:rtl;
+  margin:0;
+}
+.container{
+  max-width:800px;
+  margin:20px auto;
+  padding:10px;
+}
+.brand{
+  font-size:24px;
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+.card{
+  background:var(--card-bg);
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.5);
+}
+.btn{
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.2s;
+}
+.btn-primary{background:var(--accent); color:#000;}
+.btn-ghost{background:transparent; border:1px solid #fff; color:#fff;}
+.btn:hover{opacity:0.9;}
+input[type="number"]{
+  width:100%;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  margin-top:6px;
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+input::placeholder{color:rgba(255,255,255,0.6);}
+.game-area{
+  position:relative;
+  height:120px;
+  background:rgba(255,255,255,0.05);
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+#plane{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  font-size:24px;
+  transition:bottom 0.1s linear;
+}
+.muted{color:rgba(255,255,255,0.6); font-size:14px;}
+.multiplier{margin-top:6px; font-size:16px; font-weight:600;}
+.game-selector{
+  display:flex;
+  gap:12px;
+  margin-bottom:15px;
+}
+.game-selector button{flex:1;}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="brand">الألعاب</div>
-      <div><a class="link" href="index.html">العودة</a></div>
-    </div>
+<div class="container">
+  <div class="brand">الألعاب</div>
 
-    <div class="card">
+  <!-- اختيار اللعبة -->
+  <div class="game-selector">
+    <button class="btn btn-primary" onclick="openGame('crash')">لعبة الطائرة (Crash)</button>
+    <button class="btn btn-primary" onclick="openGame('dummy')">لعبة أخرى</button>
+  </div>
+
+  <!-- قسم الألعاب -->
+  <div id="games-container">
+    <!-- لعبة الطائرة -->
+    <div id="crash-game" class="card" style="display:none">
       <h3>لعبة الطائرة (Crash)</h3>
       <div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
 
       <div style="margin-top:10px">
         <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-        <div class="game-area" style="margin-top:10px">
+        <div class="game-area">
           <div id="plane">✈️</div>
         </div>
         <div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
@@ -57,11 +113,52 @@
         <p id="crash-log" class="muted"></p>
       </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', ()=>{ if(!ensureLoggedInOrRedirect()) return; });
-  </script>
+    <!-- لعبة تجريبية أخرى -->
+    <div id="dummy-game" class="card" style="display:none">
+      <h3>لعبة أخرى</h3>
+      <p class="muted">هذه اللعبة قيد التطوير.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openGame(gameId){
+  document.querySelectorAll('#games-container > div').forEach(d=>d.style.display='none');
+  const game = document.getElementById(gameId+'-game');
+  if(game) game.style.display='block';
+}
+
+/* لعبة الطائرة */
+let crashInterval=null;
+let crashMultiplier=1;
+function crashStart(){
+  const bet = parseFloat(document.getElementById('crash-bet').value);
+  if(isNaN(bet) || bet <=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  document.getElementById('crash-log').innerText='اللعبة بدأت!';
+  document.getElementById('crash-cash').disabled=false;
+  crashMultiplier = 1;
+  const plane = document.getElementById('plane');
+  let bottom = 10;
+  if(crashInterval) clearInterval(crashInterval);
+  crashInterval = setInterval(()=>{
+    crashMultiplier += 0.01;
+    document.getElementById('crash-multi').innerText = crashMultiplier.toFixed(2)+'x';
+    bottom += 1;
+    plane.style.bottom = bottom+'px';
+    if(crashMultiplier>=5 || Math.random()<0.01){
+      clearInterval(crashInterval);
+      document.getElementById('crash-log').innerText='انتهت اللعبة!';
+      document.getElementById('crash-cash').disabled=true;
+    }
+  },100);
+}
+
+function crashCashOut(){
+  clearInterval(crashInterval);
+  document.getElementById('crash-log').innerText='تم السحب!';
+  document.getElementById('crash-cash').disabled=true;
+}
+</script>
 </body>
 </html>
