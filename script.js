@@ -25,7 +25,7 @@ function register(){
   const pass = (document.getElementById('reg-password')?.value || '').trim();
   if(!first||!last||!phone||!email||!pass){ alert('يرجى ملء جميع الحقول'); return; }
   if(findUser(email)){ alert('هذا البريد مستخدم مسبقاً'); return; }
-  const user = { first, last, phone, email, password: pass, balance:50.00, history:[] };
+  const user = { first, last, phone, email, password: pass, balance:65000, history:[] };
   saveOrUpdateUser(user); setLogged(user); alert('تم إنشاء الحساب وتسجيل الدخول'); openApp();
 }
 
