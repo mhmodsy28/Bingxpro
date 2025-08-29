@@ -1,69 +1,168 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-  :root{ --bg1:#0f2027; --bg2:#203a43; --accent:#f1c40f; }
-  body{ background: linear-gradient(135deg,var(--bg1),var(--bg2)); color:#fff; direction:rtl; font-family: 'Tajawal', sans-serif; }
-  .brand{color:var(--accent); font-weight:700; font-size:20px}
-  .card{background:rgba(255,255,255,0.04); padding:14px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.45); margin:12px 0}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>التداول - BingX</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --accent:#f1c40f;
+  --card-bg:rgba(255,255,255,0.05);
+  --text-muted:rgba(255,255,255,0.6);
+}
+body{
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  font-family:'Tajawal', sans-serif;
+  direction:rtl;
+  margin:0;
+}
+.container{max-width:900px;margin:20px auto;padding:10px;}
+.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;}
+.card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
+.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
+.btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
+.btn-primary{background:var(--accent); color:#000;}
+.btn-ghost{background:transparent;border:1px solid #fff;color:#fff;}
+.btn:hover{opacity:0.9;transform:translateY(-2px);}
+input[type="number"], select{width:100%;padding:10px;border-radius:6px;border:none;margin-top:6px;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;}
+input::placeholder, select{color:var(--text-muted);}
+.market-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.market-card{flex:1;background:rgba(255,255,255,0.1);padding:10px;border-radius:8px;text-align:center;}
+.stat-value{font-weight:700;font-size:18px;margin-top:4px;}
+.chart-wrap{padding:10px;}
+.muted{color:var(--text-muted);font-size:14px;}
 </style>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>التداول - BingX</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="brand">التداول</div>
-      <div><a class="link" href="index.html">العودة</a></div>
-    </div>
+<div class="container">
+  <div class="brand">التداول الاحترافي - BingX</div>
 
-    <div class="card">
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <label class="muted">اختر العملة:</label>
-        <select id="trade-symbol">
-          <option value="bitcoin">Bitcoin (BTC)</option>
-          <option value="ethereum">Ethereum (ETH)</option>
-          <option value="binancecoin">BNB</option>
-          <option value="solana">SOL</option>
-        </select>
-        <button class="btn btn-ghost small" onclick="refreshMarket()">تحديث</button>
-      </div>
-
-      <div class="market-row" style="margin-top:12px">
-        <div class="market-card"><small>السعر الحالي</small><div id="trade-price" class="stat-value">--</div></div>
-        <div class="market-card"><small>تغير 24س</small><div id="trade-change" class="stat-value">--</div></div>
-        <div class="market-card"><small>SMA(14)</small><div id="trade-sma" class="stat-value">--</div></div>
-        <div class="market-card"><small>RSI(14)</small><div id="trade-rsi" class="stat-value">--</div></div>
-      </div>
-
-      <div class="chart-wrap card" style="margin-top:12px">
-        <canvas id="tradeChart"></canvas>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <h4>تنفيذ صفقة</h4>
-        <input id="trade-amount" type="number" placeholder="المبلغ (USDT)">
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn btn-primary" onclick="doTrade('buy')">شراء</button>
-          <button class="btn btn-ghost" onclick="doTrade('sell')">بيع</button>
-        </div>
-        <p id="trade-log" class="muted" style="margin-top:8px"></p>
-      </div>
-    </div>
+  <div class="balance" style="display:flex;justify-content:space-between;margin-bottom:15px;font-size:16px;">
+    <span>الرصيد التجريبي: <span id="demo-balance">1000</span> USDT</span>
+    <span>الرصيد الحقيقي: <span id="real-balance">0</span> USDT</span>
   </div>
 
-  <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', ()=>{
-      if(!ensureLoggedInOrRedirect()) return;
-      const sel = document.getElementById('trade-symbol');
-      sel.addEventListener('change', ()=> loadMarket(sel.value));
-      loadMarket(sel.value);
-    });
-  </script>
+  <div class="card">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <label class="muted">اختر العملة:</label>
+      <select id="trade-symbol">
+        <option value="bitcoin">Bitcoin (BTC) 🟠</option>
+        <option value="ethereum">Ethereum (ETH) 🔵</option>
+        <option value="binancecoin">BNB 🟡</option>
+        <option value="solana">SOL 🟣</option>
+        <option value="ripple">XRP 🔷</option>
+        <option value="cardano">ADA 🔴</option>
+        <option value="dogecoin">DOGE 🟤</option>
+        <option value="polkadot">DOT 🟣</option>
+        <option value="litecoin">LTC ⚪</option>
+      </select>
+      <button class="btn btn-ghost small" onclick="refreshMarket()">تحديث</button>
+    </div>
+
+    <div class="market-row">
+      <div class="market-card"><small>السعر الحالي</small><div id="trade-price" class="stat-value">--</div></div>
+      <div class="market-card"><small>تغير 24س</small><div id="trade-change" class="stat-value">--</div></div>
+      <div class="market-card"><small>SMA(14)</small><div id="trade-sma" class="stat-value">--</div></div>
+      <div class="market-card"><small>RSI(14)</small><div id="trade-rsi" class="stat-value">--</div></div>
+    </div>
+
+    <div class="chart-wrap card">
+      <canvas id="tradeChart"></canvas>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h4>تنفيذ عقد</h4>
+      <input id="trade-amount" type="number" placeholder="المبلغ (USDT)">
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <select id="trade-duration">
+          <option value="1">1 دقيقة</option>
+          <option value="5">5 دقائق</option>
+          <option value="10">10 دقائق</option>
+        </select>
+        <button class="btn btn-primary" onclick="doTrade('buy')">شراء</button>
+        <button class="btn btn-ghost" onclick="doTrade('sell')">بيع</button>
+      </div>
+      <p id="trade-log" class="muted" style="margin-top:8px"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+let demoBalance=1000;
+let realBalance=0;
+function updateBalance(){
+  document.getElementById('demo-balance').innerText=demoBalance.toFixed(2);
+  document.getElementById('real-balance').innerText=realBalance.toFixed(2);
+}
+
+function ensureLoggedInOrRedirect(){ return true; } // مؤقت
+
+function loadMarket(symbol){
+  const price=(Math.random()*30000+1000).toFixed(2);
+  const change=(Math.random()*10-5).toFixed(2);
+  const sma=(Math.random()*30000+1000).toFixed(2);
+  const rsi=(Math.random()*100).toFixed(2);
+  document.getElementById('trade-price').innerText=price;
+  document.getElementById('trade-change').innerText=change+'%';
+  document.getElementById('trade-sma').innerText=sma;
+  document.getElementById('trade-rsi').innerText=rsi;
+
+  renderChart(price);
+}
+
+function refreshMarket(){
+  const sym=document.getElementById('trade-symbol').value;
+  loadMarket(sym);
+}
+
+function renderChart(currentPrice){
+  const ctx=document.getElementById('tradeChart').getContext('2d');
+  const data=Array.from({length:20},()=> (Math.random()*30000+1000).toFixed(2));
+  if(window.tradeChart) window.tradeChart.destroy();
+  window.tradeChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:data.map((_,i)=>i+1),datasets:[{label:'السعر',data:data,borderColor:'#f1c40f',backgroundColor:'rgba(241,196,15,0.2)',tension:0.3}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false}}}
+  });
+}
+
+function doTrade(type){
+  const amount=parseFloat(document.getElementById('trade-amount').value);
+  const duration=parseInt(document.getElementById('trade-duration').value);
+  if(isNaN(amount)||amount<=0){ alert('أدخل مبلغ صالح'); return; }
+  if(amount>demoBalance){ 
+    alert('يجب الإيداع أولاً، رصيدك غير كافٍ'); 
+    return; 
+  }
+  demoBalance-=amount;
+  updateBalance();
+
+  // محاكاة انتهاء العقد بعد المدة الزمنية
+  document.getElementById('trade-log').innerText=`تم شراء عقد ${type} بقيمة ${amount} USDT لمدة ${duration} دقيقة...`;
+  setTimeout(()=>{
+    const profit=Math.random()<0.5 ? amount*1.5 : -amount; // ربح أو خسارة عشوائية
+    if(profit>0) {
+      demoBalance+=amount+profit;
+      document.getElementById('trade-log').innerText=`ربح الزبون! ربح ${profit.toFixed(2)} USDT`;
+    } else {
+      document.getElementById('trade-log').innerText=`خسارة! خسرت ${(-profit).toFixed(2)} USDT`;
+    }
+    updateBalance();
+  },duration*1000); // الوقت بالمحاكاة (1s = 1 دقيقة تقريبية)
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(!ensureLoggedInOrRedirect()) return;
+  const sel = document.getElementById('trade-symbol');
+  sel.addEventListener('change', ()=> loadMarket(sel.value));
+  loadMarket(sel.value);
+});
+updateBalance();
+</script>
 </body>
 </html>
