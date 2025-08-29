@@ -22,7 +22,7 @@ body{
   direction:rtl;
 }
 .container{max-width:1000px;margin:20px auto;padding:10px;}
-.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;}
+.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;}
 .card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
 .card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
 .btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
@@ -50,31 +50,37 @@ input::placeholder, select{color:var(--text-muted);}
 }
 .comment-item span{flex:1;}
 .comment-item:hover{color:#f1c40f;opacity:1;}
+
+/* تسجيل الدخول وواجهة التسجيل */
+#login-block, #register-block{
+  padding:20px;
+}
+#login-block h3, #register-block h3{text-align:center;}
+#register-block input{margin-top:6px;}
+.two-cols input{flex:1;}
 </style>
 </head>
 <body>
 <div class="container">
   <!-- Auth card -->
   <div id="auth-card" class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div class="brand">BingX</div>
-    </div>
+    <div class="brand">BingX</div>
 
     <!-- Login -->
     <div id="login-block">
       <h3>تسجيل الدخول</h3>
       <input id="login-email" placeholder="البريد الإلكتروني" type="email">
       <input id="login-password" placeholder="كلمة المرور" type="password">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;justify-content:center;">
         <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
         <button class="btn btn-ghost" onclick="showRegister()">إنشاء حساب</button>
       </div>
-      <p class="muted" style="margin-top:8px">البيانات تُخزن محليًا على جهازك.</p>
+      <p class="muted" style="margin-top:8px;text-align:center;">البيانات تُخزن محليًا على جهازك.</p>
     </div>
 
     <!-- Register -->
     <div id="register-block" class="hidden">
-      <h3>إنشاء حساب</h3>
+      <h3>إنشاء حساب جديد</h3>
       <div class="two-cols">
         <input id="first-name" placeholder="الاسم الأول">
         <input id="last-name" placeholder="الاسم الثاني">
@@ -82,11 +88,11 @@ input::placeholder, select{color:var(--text-muted);}
       <input id="phone" placeholder="رقم الهاتف">
       <input id="reg-email" placeholder="البريد الإلكتروني" type="email">
       <input id="reg-password" placeholder="كلمة المرور" type="password">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;justify-content:center;">
         <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
         <button class="btn btn-ghost" onclick="showLogin()">إلغاء</button>
       </div>
-      <p class="muted" style="margin-top:8px">الحساب مخزن محليًا للاستخدام في الواجهة.</p>
+      <p class="muted" style="margin-top:8px;text-align:center;">الحساب مخزن محليًا للاستخدام في الواجهة.</p>
     </div>
   </div>
 
@@ -98,12 +104,12 @@ input::placeholder, select{color:var(--text-muted);}
     </div>
 
     <div class="main-grid">
-      <!-- left: الحساب والإجراءات -->
+      <!-- الحساب والإجراءات -->
       <section class="card">
         <h3>الحساب</h3>
         <div style="margin-top:8px">
           <div class="stat-value" style="font-size:20px"><span id="current-balance">0.00</span> USDT</div>
-          <div class="muted">رصيدك المتاح</div>
+          <div class="muted">رصيدك التجريبي</div>
         </div>
 
         <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
@@ -116,18 +122,18 @@ input::placeholder, select{color:var(--text-muted);}
         <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">تسجيل الخروج</button>
       </section>
 
-      <!-- center: إجراءات سريعة -->
+      <!-- إجراءات سريعة -->
       <section class="card">
         <h3>إجراءات سريعة</h3>
         <input id="quick-amount" type="number" placeholder="مبلغ (للتجربة)">
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;justify-content:center;">
           <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد</button>
           <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
         </div>
         <p class="note">الأموال تُخزن محليًا على متصفحك.</p>
       </section>
 
-      <!-- right: لوحة التعليقات -->
+      <!-- لوحة التعليقات -->
       <section class="card">
         <h3>مستخدمون نشطون <span id="user-count">1250</span></h3>
         <div class="comment-board">
@@ -149,31 +155,49 @@ const comments=[
   "واجهة سهلة وممتعة!",
   "حقق أرباح جيدة مع هذا التطبيق!"
 ];
-
 const icons=['<i class="fas fa-user-circle"></i>','<i class="fas fa-star"></i>','<i class="fas fa-smile"></i>','<i class="fas fa-thumbs-up"></i>'];
 
-function showLogin(){document.getElementById('register-block').classList.add('hidden');document.getElementById('login-block').classList.remove('hidden');}
-function showRegister(){document.getElementById('login-block').classList.add('hidden');document.getElementById('register-block').classList.remove('hidden');}
+function showLogin(){
+  document.getElementById('register-block').classList.add('hidden');
+  document.getElementById('login-block').classList.remove('hidden');
+}
+function showRegister(){
+  document.getElementById('login-block').classList.add('hidden');
+  document.getElementById('register-block').classList.remove('hidden');
+}
 
 function login(){
   const email=document.getElementById('login-email').value;
+  if(!email) return alert("ادخل بريدك الإلكتروني");
   const name=email.split('@')[0];
-  document.getElementById('user-name').innerText=name;
-  document.getElementById('auth-card').classList.add('hidden');
-  document.getElementById('app-card').classList.remove('hidden');
-  startCommentScroll();
+  localStorage.setItem('loggedUser', name);
+  showApp(name);
+}
+
+function register(){
+  const name=document.getElementById('first-name').value || "مستخدم";
+  localStorage.setItem('loggedUser', name);
+  showApp(name);
 }
 
 function logout(){
+  localStorage.removeItem('loggedUser');
+  localStorage.removeItem('balance');
   document.getElementById('auth-card').classList.remove('hidden');
   document.getElementById('app-card').classList.add('hidden');
 }
 
 function quickAdd(){
   let amt=parseFloat(document.getElementById('quick-amount').value)||0;
-  document.getElementById('current-balance').innerText=parseFloat(document.getElementById('current-balance').innerText)+amt;
+  let current=parseFloat(localStorage.getItem('balance')||0);
+  current+=amt;
+  localStorage.setItem('balance', current);
+  document.getElementById('current-balance').innerText=current.toFixed(2);
 }
-function quickReset(){document.getElementById('current-balance').innerText=0;}
+function quickReset(){
+  localStorage.setItem('balance',0);
+  document.getElementById('current-balance').innerText=0;
+}
 
 function startCommentScroll(){
   const list=document.getElementById('comment-list');
@@ -190,6 +214,23 @@ function startCommentScroll(){
     list.style.top=pos+'px';
   },50);
 }
+
+function showApp(name){
+  document.getElementById('user-name').innerText=name;
+  document.getElementById('auth-card').classList.add('hidden');
+  document.getElementById('app-card').classList.remove('hidden');
+  let savedBalance=parseFloat(localStorage.getItem('balance')||0);
+  document.getElementById('current-balance').innerText=savedBalance.toFixed(2);
+  startCommentScroll();
+}
+
+// عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', ()=>{
+  const savedUser = localStorage.getItem('loggedUser');
+  if(savedUser){
+    showApp(savedUser);
+  }
+});
 </script>
 </body>
 </html>
