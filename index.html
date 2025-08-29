@@ -20,9 +20,10 @@ body{
   background: linear-gradient(135deg,var(--bg1),var(--bg2));
   color:#fff;
   direction:rtl;
+  overflow-x:hidden;
 }
 .container{max-width:1000px;margin:20px auto;padding:10px;}
-.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;}
+.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;display:flex;align-items:center;gap:10px;}
 .card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
 .card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
 .btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
@@ -37,7 +38,7 @@ input::placeholder, select{color:var(--text-muted);}
 .hidden{display:none;}
 .two-cols{display:flex;gap:8px;}
 .main-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:15px;}
-.stat-value{font-size:20px;font-weight:600;margin-top:6px;}
+.stat-value{font-size:20px;font-weight:600;margin-top:6px;transition:1s;}
 .stat-card{background:rgba(241,196,15,0.1);padding:12px;border-radius:10px;text-align:center;transition:0.3s;}
 .stat-card:hover{background:rgba(241,196,15,0.2);}
 .comment-board{height:250px;overflow:hidden;position:relative;background:rgba(255,255,255,0.1);border-radius:10px;padding:10px;}
@@ -50,21 +51,53 @@ input::placeholder, select{color:var(--text-muted);}
 }
 .comment-item span{flex:1;}
 .comment-item:hover{color:#f1c40f;opacity:1;}
-
-/* تسجيل الدخول وواجهة التسجيل */
-#login-block, #register-block{
-  padding:20px;
+#support-btn{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  background:var(--accent);
+  color:#000;
+  padding:12px 16px;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  z-index:9999;
 }
-#login-block h3, #register-block h3{text-align:center;}
-#register-block input{margin-top:6px;}
-.two-cols input{flex:1;}
+.user-img{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+}
+/* اهتزاز عند الخطأ */
+.shake{animation:shake 0.5s;}
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+  75%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
+}
+/* توهج عند إضافة الرصيد */
+.glow{
+  animation:glow 1s forwards;
+}
+@keyframes glow{
+  0%{text-shadow:0 0 0px #f1c40f;}
+  50%{text-shadow:0 0 15px #f1c40f;}
+  100%{text-shadow:0 0 0px #f1c40f;}
+}
 </style>
 </head>
 <body>
 <div class="container">
   <!-- Auth card -->
   <div id="auth-card" class="card">
-    <div class="brand">BingX</div>
+    <div class="brand"><i class="fas fa-coins"></i> BingX</div>
 
     <!-- Login -->
     <div id="login-block">
@@ -72,9 +105,10 @@ input::placeholder, select{color:var(--text-muted);}
       <input id="login-email" placeholder="البريد الإلكتروني" type="email">
       <input id="login-password" placeholder="كلمة المرور" type="password">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;justify-content:center;">
-        <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
-        <button class="btn btn-ghost" onclick="showRegister()">إنشاء حساب</button>
+        <button class="btn btn-primary" onclick="playSound();login()">تسجيل الدخول</button>
+        <button class="btn btn-ghost" onclick="playSound();showRegister()">إنشاء حساب</button>
       </div>
+      <button class="btn btn-ghost" onclick="forgotPassword()" style="margin-top:4px;">هل نسيت كلمة السر؟</button>
       <p class="muted" style="margin-top:8px;text-align:center;">البيانات تُخزن محليًا على جهازك.</p>
     </div>
 
@@ -89,8 +123,8 @@ input::placeholder, select{color:var(--text-muted);}
       <input id="reg-email" placeholder="البريد الإلكتروني" type="email">
       <input id="reg-password" placeholder="كلمة المرور" type="password">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;justify-content:center;">
-        <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
-        <button class="btn btn-ghost" onclick="showLogin()">إلغاء</button>
+        <button class="btn btn-primary" onclick="playSound();register()">إنشاء وتسجيل</button>
+        <button class="btn btn-ghost" onclick="playSound();showLogin()">إلغاء</button>
       </div>
       <p class="muted" style="margin-top:8px;text-align:center;">الحساب مخزن محليًا للاستخدام في الواجهة.</p>
     </div>
@@ -98,9 +132,9 @@ input::placeholder, select{color:var(--text-muted);}
 
   <!-- App card -->
   <div id="app-card" class="hidden">
-    <div class="header">
-      <div class="brand">BingX</div>
-      <div><span id="user-greet">مرحباً، <strong id="user-name"></strong></span></div>
+    <div class="header" style="display:flex;align-items:center;gap:10px;">
+      <img src="https://i.pravatar.cc/40" class="user-img" id="user-img">
+      <div><span id="user-greet">مرحباً، <strong id="user-name"></strong></span><br><small>ID: <span id="user-id"></span></small></div>
     </div>
 
     <div class="main-grid">
@@ -108,7 +142,7 @@ input::placeholder, select{color:var(--text-muted);}
       <section class="card">
         <h3>الحساب</h3>
         <div style="margin-top:8px">
-          <div class="stat-value" style="font-size:20px"><span id="current-balance">0.00</span> USDT</div>
+          <div class="stat-value glow" style="font-size:20px" id="current-balance">0.00</div>
           <div class="muted">رصيدك التجريبي</div>
         </div>
 
@@ -119,7 +153,7 @@ input::placeholder, select{color:var(--text-muted);}
           <a class="btn btn-ghost" href="games.html">🎮 الألعاب</a>
         </div>
 
-        <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">تسجيل الخروج</button>
+        <button class="btn btn-danger" style="margin-top:12px" onclick="playSound();logout()">تسجيل الخروج</button>
       </section>
 
       <!-- إجراءات سريعة -->
@@ -127,10 +161,10 @@ input::placeholder, select{color:var(--text-muted);}
         <h3>إجراءات سريعة</h3>
         <input id="quick-amount" type="number" placeholder="مبلغ (للتجربة)">
         <div style="display:flex;gap:8px;justify-content:center;">
-          <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد</button>
-          <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
+          <button class="btn btn-primary" onclick="playSound();quickAdd()">إضافة رصيد</button>
+          <button class="btn btn-ghost" onclick="playSound();quickReset()">إعادة ضبط</button>
         </div>
-        <p class="note">الأموال تُخزن محليًا على متصفحك.</p>
+        <p class="note">يمكنك إضافة الرصيد التجريبي مرة واحدة فقط.</p>
       </section>
 
       <!-- لوحة التعليقات -->
@@ -144,7 +178,16 @@ input::placeholder, select{color:var(--text-muted);}
   </div>
 </div>
 
+<!-- زر الدعم الفني -->
+<div id="support-btn" onclick="openSupport()"><i class="fab fa-whatsapp"></i> دعم فني</div>
+
+<!-- الأصوات -->
+<audio id="click-sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
 <script>
+const clickSound = document.getElementById('click-sound');
+function playSound(){clickSound.currentTime=0;clickSound.play();}
+
 const comments=[
   "لقد ربحت من هذا التطبيق 1000$!",
   "تجربة ممتازة، أنصح الجميع!",
@@ -166,37 +209,63 @@ function showRegister(){
   document.getElementById('register-block').classList.remove('hidden');
 }
 
+function generateUserId(){
+  return Math.floor(100000 + Math.random()*900000);
+}
+
 function login(){
   const email=document.getElementById('login-email').value;
-  if(!email) return alert("ادخل بريدك الإلكتروني");
+  if(!email){document.getElementById('auth-card').classList.add('shake');setTimeout(()=>document.getElementById('auth-card').classList.remove('shake'),500); return alert("ادخل بريدك الإلكتروني");}
   const name=email.split('@')[0];
+  const id = generateUserId();
   localStorage.setItem('loggedUser', name);
-  showApp(name);
+  localStorage.setItem('userId', id);
+  showApp(name,id);
 }
 
 function register(){
   const name=document.getElementById('first-name').value || "مستخدم";
+  const id = generateUserId();
   localStorage.setItem('loggedUser', name);
-  showApp(name);
+  localStorage.setItem('userId', id);
+  showApp(name,id);
 }
 
 function logout(){
   localStorage.removeItem('loggedUser');
-  localStorage.removeItem('balance');
+  localStorage.removeItem('userId');
   document.getElementById('auth-card').classList.remove('hidden');
   document.getElementById('app-card').classList.add('hidden');
 }
 
 function quickAdd(){
+  if(localStorage.getItem('balanceAdded')) return alert("يمكنك إضافة الرصيد التجريبي مرة واحدة فقط.");
   let amt=parseFloat(document.getElementById('quick-amount').value)||0;
   let current=parseFloat(localStorage.getItem('balance')||0);
   current+=amt;
   localStorage.setItem('balance', current);
-  document.getElementById('current-balance').innerText=current.toFixed(2);
+  localStorage.setItem('balanceAdded', true);
+  animateBalance(current);
 }
+
 function quickReset(){
   localStorage.setItem('balance',0);
+  localStorage.removeItem('balanceAdded');
   document.getElementById('current-balance').innerText=0;
+}
+
+function animateBalance(amount){
+  const el=document.getElementById('current-balance');
+  el.classList.add('glow');
+  let start=parseFloat(el.innerText)||0;
+  let end=amount;
+  let step=(end-start)/30;
+  let i=0;
+  const interval=setInterval(()=>{
+    if(i>=30){clearInterval(interval);el.classList.remove('glow');el.innerText=end.toFixed(2);return;}
+    el.innerText=(start+step*i).toFixed(2);
+    i++;
+  },30);
 }
 
 function startCommentScroll(){
@@ -209,26 +278,36 @@ function startCommentScroll(){
   list.innerHTML=html;
   let pos=0;
   setInterval(()=>{
-    pos-=1;
+    pos-=0.5;
     if(Math.abs(pos)>list.scrollHeight/2) pos=0;
     list.style.top=pos+'px';
-  },50);
+  },30);
 }
 
-function showApp(name){
+function showApp(name,id){
   document.getElementById('user-name').innerText=name;
+  document.getElementById('user-id').innerText=id;
   document.getElementById('auth-card').classList.add('hidden');
   document.getElementById('app-card').classList.remove('hidden');
+  document.getElementById('user-img').src=`https://i.pravatar.cc/40?u=${id}`;
   let savedBalance=parseFloat(localStorage.getItem('balance')||0);
   document.getElementById('current-balance').innerText=savedBalance.toFixed(2);
   startCommentScroll();
 }
 
-// عند تحميل الصفحة
+function forgotPassword(){
+  alert("لتغيير كلمة السر، يرجى التواصل مع الدعم الفني عبر واتساب: +212784607357");
+}
+
+function openSupport(){
+  window.open("https://wa.me/212784607357","_blank");
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
   const savedUser = localStorage.getItem('loggedUser');
-  if(savedUser){
-    showApp(savedUser);
+  const savedId = localStorage.getItem('userId');
+  if(savedUser && savedId){
+    showApp(savedUser,savedId);
   }
 });
 </script>
