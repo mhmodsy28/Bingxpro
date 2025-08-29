@@ -148,11 +148,18 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
     <h4>طلب سحب بعد التحقق</h4>
     <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة</div>
 
+    <!-- المبلغ المراد سحبه -->
     <div class="wallet-row">
       <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)"/>
+    </div>
+
+    <!-- خانة المحفظة مع توضيح -->
+    <div style="margin-top:8px">
+      <label>ضع محفظتك هنا (USDT BEP20)</label>
       <input id="withdraw-target-wallet" placeholder="عنوان محفظتك لاستلام السحب (BEP20)"/>
     </div>
 
+    <!-- رفع صورة الأموال العالقة -->
     <div style="margin-top:10px">
       <label>رفع صورة الأموال العالقة</label>
       <input id="locked-funds-file" type="file" accept="image/*"/>
