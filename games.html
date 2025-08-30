@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الألعاب - BingX</title>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  body{ background: linear-gradient(135deg,#0f2027,#203a43); color:#fff; font-family:'Tajawal',sans-serif; }
+  .container{ max-width:900px; margin:20px auto; }
+  .card{ background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:15px; }
+  #plane{ font-size:40px; position:relative; top:0; transition: top 0.2s; }
+  .btn{ padding:10px; border-radius:8px; border:none; cursor:pointer; }
+  .btn-primary{ background:#f1c40f; color:#000; }
+  .btn-ghost{ background:transparent; color:#f1c40f; border:1px solid #f1c40f; }
+  .log-comments{ max-height:200px; overflow:auto; margin-top:10px; border-top:1px solid #fff; padding-top:10px; }
+</style>
 </head>
 <body>
 <div class="container">
-<div class="header"><div class="brand">الألعاب</div><div><a class="link" href="index.html">العودة</a></div></div>
-
-<div class="card">
-<h3>لعبة الطائرة (Crash)</h3>
-<div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
-<input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-<div class="game-area" style="margin-top:10px"><div id="plane">✈️</div></div>
-<div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
-<div style="display:flex;gap:8px;margin-top:8px">
-<button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
-<button id="crash-cash" class="btn btn-ghost" onclick="crashCashOut()" disabled>سحب</button>
-</div>
-<p id="crash-log" class="muted"></p>
-</div>
+  <div class="card">
+    <h3>لعبة الطائرة (Crash)</h3>
+    <input id="crash-bet" type="number" placeholder="مبلغ الرهان">
+    <div id="plane">✈️</div>
+    <div style="margin-top:10px;">
+      <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
+      <button class="btn btn-ghost" onclick="crashCashOut()">سحب</button>
+    </div>
+    <div class="log-comments" id="game-log">
+      <p>محمد ربح 100$ 🎉</p>
+      <p>أحمد خسر 50$ 😢</p>
+    </div>
+  </div>
 </div>
 <script src="script.js"></script>
 </body>
