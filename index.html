@@ -1,84 +1,83 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BingX - منصة تداول</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>منصة BingX</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="container">
-
-  <!-- Auth card -->
   <div id="auth-card" class="card">
     <div class="brand">BingX</div>
 
-    <!-- Login -->
     <div id="login-block">
       <h3>تسجيل الدخول</h3>
-      <input id="login-email" placeholder="البريد الإلكتروني" type="email">
-      <input id="login-password" placeholder="كلمة المرور" type="password">
-      <div style="display:flex; gap:8px; margin-top:8px;">
+      <input id="login-email" type="email" placeholder="البريد الإلكتروني">
+      <input id="login-password" type="password" placeholder="كلمة المرور">
+      <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
         <button class="btn btn-ghost" onclick="showRegister()">إنشاء حساب</button>
       </div>
-      <button class="btn btn-link" onclick="forgotPassword()">هل نسيت كلمة السر؟</button>
-      <p class="muted">البيانات تُخزن على السيرفر بأمان.</p>
+      <p class="muted" style="margin-top:8px">البيانات تُخزن محليًا على جهازك.</p>
+      <button class="btn btn-ghost" onclick="forgotPassword()">هل نسيت كلمة السر؟</button>
     </div>
 
-    <!-- Register -->
     <div id="register-block" class="hidden">
       <h3>إنشاء حساب</h3>
       <input id="first-name" placeholder="الاسم الأول">
       <input id="last-name" placeholder="الاسم الثاني">
-      <input id="phone" placeholder="رقم الهاتف">
-      <input id="reg-email" placeholder="البريد الإلكتروني" type="email">
-      <input id="reg-password" placeholder="كلمة المرور" type="password">
-      <div style="display:flex; gap:8px; margin-top:8px;">
+      <input id="reg-email" type="email" placeholder="البريد الإلكتروني">
+      <input id="reg-password" type="password" placeholder="كلمة المرور">
+      <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
         <button class="btn btn-ghost" onclick="showLogin()">إلغاء</button>
       </div>
+      <p class="muted" style="margin-top:8px">الحساب مخزن محليًا للاستخدام في الواجهة.</p>
     </div>
   </div>
 
-  <!-- App card -->
   <div id="app-card" class="hidden">
     <div class="header">
-      <img src="user.png" class="user-avatar">
-      <span id="user-greet">مرحباً، <strong id="user-name"></strong></span>
-      <span id="user-id"></span>
+      <div class="brand">BingX</div>
+      <div><span id="user-greet">مرحباً، <strong id="user-name"></strong></span></div>
     </div>
 
     <div class="main-grid">
       <section class="card">
         <h3>الحساب</h3>
-        <div class="stat-value"><span id="current-balance">0.00</span> USDT</div>
-        <div class="muted">رصيدك المتاح</div>
-        <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+        <div style="margin-top:8px">
+          <div class="stat-value" style="font-size:20px"><span id="current-balance">0</span> USDT</div>
+          <div class="muted">الرصيد التجريبي</div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
           <a class="btn btn-ghost" href="trade.html">📈 التداول</a>
           <a class="btn btn-ghost" href="invest.html">💼 الاستثمار</a>
           <a class="btn btn-ghost" href="deposit.html">💳 الإيداع</a>
           <a class="btn btn-ghost" href="games.html">🎮 الألعاب</a>
         </div>
-        <button class="btn btn-danger" style="margin-top:12px;" onclick="logout()">تسجيل الخروج</button>
+
+        <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">تسجيل الخروج</button>
       </section>
 
       <section class="card">
-        <h3>الدعم الفني</h3>
-        <p>للتواصل عبر واتساب:</p>
-        <a class="btn btn-success" href="https://wa.me/212784607357" target="_blank"><i class="fab fa-whatsapp"></i> تواصل الآن</a>
-      </section>
-
-      <section class="card">
-        <h3>اللوحة العامة</h3>
-        <div id="public-feed" class="feed">
-          <!-- التعليقات الإيجابية ستضاف هنا تلقائياً -->
+        <h3>إجراءات سريعة</h3>
+        <input id="quick-amount" type="number" placeholder="مبلغ (للتجربة)">
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد</button>
+          <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
         </div>
+        <p class="note">الأموال تُخزن محليًا على متصفحك.</p>
+      </section>
+
+      <section class="card" id="activity-card">
+        <h3>آخر النشاطات</h3>
+        <div id="activity-log" style="max-height:200px;overflow:auto;"></div>
       </section>
     </div>
   </div>
-
 </div>
 
 <script src="script.js"></script>
