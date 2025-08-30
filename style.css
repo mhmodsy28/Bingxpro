@@ -1,115 +1,44 @@
-/* styles.css - تصميم داكن احترافي */
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-
 :root{
   --bg1:#0f2027;
   --bg2:#203a43;
   --accent:#f1c40f;
-  --muted:rgba(255,255,255,0.78);
-  --card: rgba(255,255,255,0.04);
-  --glass: rgba(255,255,255,0.03);
 }
-
-*{box-sizing:border-box}
-html,body{height:100%}
 body{
-  margin:0;
-  font-family:'Tajawal',system-ui,Arial;
   background: linear-gradient(135deg,var(--bg1),var(--bg2));
   color:#fff;
-  direction: rtl;
-  -webkit-font-smoothing:antialiased;
+  font-family:'Tajawal',sans-serif;
+  direction:rtl;
+  margin:0;
 }
-
-/* container / header */
-.container{width:100%;max-width:1024px;margin:20px auto;padding:16px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:8px 0;margin-bottom:12px}
-.brand{font-size:22px;color:var(--accent);font-weight:700}
-
-/* cards */
+.container{max-width:900px;margin:auto;padding:10px;}
 .card{
-  background:var(--card);
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-}
-
-/* inputs/buttons */
-input,select,textarea{
-  width:100%; padding:12px; margin:8px 0; border-radius:8px; border:none;
-  background: var(--glass); color:#fff; font-size:15px;
-}
-.two-cols{display:flex;gap:8px}
-.two-cols input{flex:1}
-.btn{
-  display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;text-decoration:none;
-}
-.btn-primary{background:linear-gradient(45deg,#f39c12,#d35400);color:#fff}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
-.btn-danger{background:crimson;color:#fff}
-.small{padding:6px 10px;font-size:14px}
-
-/* layout grids */
-.main-grid{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
-@media(max-width:880px){ .main-grid{grid-template-columns:1fr} .two-cols{flex-direction:column} }
-
-/* wallet */
-.wallet-address{font-family:monospace;background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;word-break:break-all}
-
-/* market / chart */
-.chart-wrap{height:340px;background:rgba(255,255,255,0.02);border-radius:10px;padding:8px;margin-top:12px}
-.market-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.market-card{flex:1;min-width:120px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center}
-.stat-value{color:var(--accent);font-weight:700}
-
-/* games */
-.game-area{height:160px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.14));border-radius:10px;position:relative;overflow:hidden;padding:8px}
-#plane{position:absolute;left:10px;top:45%;font-size:36px;transition:left 0.06s linear}
-.multiplier{font-weight:800;color:var(--accent);margin-top:8px}
-
-/* deposit page small styles */
-.wallet-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.small-input{width:48%}
-@media(max-width:720px){ .small-input{width:100%} }
-.proof-name{font-size:13px;color:var(--muted);margin-top:6px}
-.status-pill{display:inline-block;padding:6px 10px;border-radius:8px;font-weight:700}
-.status-pending{background: rgba(241,196,15,0.12); color: var(--accent);}
-.status-approved{background: rgba(46,204,113,0.10); color: #2ecc71;}
-.status-rejected{background: rgba(231,76,60,0.08); color: #e74c3c;}
-
-.muted{color:var(--muted);font-size:13px}
-.hidden{display:none}
-.link{color:var(--accent);text-decoration:none}
-.note{font-size:13px;color:var(--muted);margin-top:8px}
-/* تصميم عام للأزرار */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* مسافة بين النص والأيقونة */
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  border: none;
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
   border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  text-align: center;
+  box-shadow:0 8px 20px rgba(0,0,0,0.45);
+  margin-bottom:12px;
 }
-
-/* تأثير hover */
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-  opacity: 0.95;
+.brand{color:var(--accent);font-weight:700;font-size:22px;}
+input,select,button{
+  font-family:'Tajawal',sans-serif;
 }
-
-/* ألوان للأقسام */
-.btn-gold   { background: linear-gradient(135deg, #f1c40f, #e67e22); } /* استثمار */
-.btn-blue   { background: linear-gradient(135deg, #3498db, #2980b9); } /* تداول */
-.btn-green  { background: linear-gradient(135deg, #2ecc71, #27ae60); } /* إيداع */
-.btn-red    { background: linear-gradient(135deg, #e74c3c, #c0392b); } /* سحب */
-.btn-purple { background: linear-gradient(135deg, #8e44ad, #6c3483); } /* ألعاب */
+input,select{
+  width:100%;
+  padding:8px;
+  margin-top:6px;
+  border-radius:6px;
+  border:none;
+  outline:none;
+}
+button{
+  cursor:pointer;
+  padding:8px 12px;
+  border-radius:6px;
+  border:none;
+}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-ghost{background:transparent;color:#fff;border:1px solid #fff;}
+.btn-danger{background:#ff4c4c;color:#fff;}
+.muted{color:rgba(255,255,255,0.6);font-size:14px;}
+.hidden{display:none;}
+.main-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;}
