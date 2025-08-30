@@ -7,18 +7,18 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body { background: linear-gradient(135deg,#0f2027,#203a43); font-family:'Tajawal',sans-serif; color:#fff; }
-  .container{ max-width:400px; margin:50px auto; }
-  .card{ background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.5);}
-  .brand{ color:#f1c40f; font-size:24px; font-weight:700; text-align:center; margin-bottom:15px; }
-  input{ width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none; }
-  .btn{ padding:10px; border:none; border-radius:8px; cursor:pointer; }
-  .btn-primary{ background:#f1c40f; color:#000; }
-  .btn-ghost{ background:transparent; border:1px solid #f1c40f; color:#f1c40f; }
-  .hidden{ display:none; }
-  .muted{ font-size:14px; color:#ccc; }
-  .flex-between{ display:flex; justify-content:space-between; align-items:center; }
-  .forgot{ font-size:13px; color:#f1c40f; cursor:pointer; text-decoration:underline; }
+body { background: linear-gradient(135deg,#0f2027,#203a43); font-family:'Tajawal',sans-serif; color:#fff; }
+.container{ max-width:400px; margin:50px auto; }
+.card{ background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.5);}
+.brand{ color:#f1c40f; font-size:24px; font-weight:700; text-align:center; margin-bottom:15px; }
+input, select{ width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none; }
+.btn{ padding:10px; border:none; border-radius:8px; cursor:pointer; }
+.btn-primary{ background:#f1c40f; color:#000; }
+.btn-ghost{ background:transparent; border:1px solid #f1c40f; color:#f1c40f; }
+.hidden{ display:none; }
+.muted{ font-size:14px; color:#ccc; }
+.flex-between{ display:flex; justify-content:space-between; align-items:center; }
+.forgot{ font-size:13px; color:#f1c40f; cursor:pointer; text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -44,8 +44,17 @@
       <input id="reg-name" placeholder="الاسم الكامل">
       <input id="reg-email" placeholder="البريد الإلكتروني" type="email">
       <input id="reg-password" placeholder="كلمة المرور" type="password">
+      <input id="reg-phone" placeholder="رقم الهاتف">
+      <select id="reg-country">
+        <option value="">اختر الدولة</option>
+        <option value="Morocco">المغرب</option>
+        <option value="Egypt">مصر</option>
+        <option value="Saudi Arabia">السعودية</option>
+        <option value="Jordan">الأردن</option>
+        <option value="Other">أخرى</option>
+      </select>
       <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="register()">إنشاء حساب</button>
+        <button class="btn btn-primary" onclick="register()">إنشاء وتسجيل</button>
         <button class="btn btn-ghost" onclick="showLogin()">إلغاء</button>
       </div>
     </div>
