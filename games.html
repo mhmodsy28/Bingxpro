@@ -4,34 +4,210 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الألعاب - BingX</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body{ background: linear-gradient(135deg,#0f2027,#203a43); color:#fff; font-family:'Tajawal',sans-serif; }
-  .container{ max-width:900px; margin:20px auto; }
-  .card{ background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:15px; }
-  #plane{ font-size:40px; position:relative; top:0; transition: top 0.2s; }
-  .btn{ padding:10px; border-radius:8px; border:none; cursor:pointer; }
-  .btn-primary{ background:#f1c40f; color:#000; }
-  .btn-ghost{ background:transparent; color:#f1c40f; border:1px solid #f1c40f; }
-  .log-comments{ max-height:200px; overflow:auto; margin-top:10px; border-top:1px solid #fff; padding-top:10px; }
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --accent:#f1c40f;
+  --card-bg:rgba(255,255,255,0.05);
+  --text-muted:rgba(255,255,255,0.6);
+}
+body{
+  margin:0;
+  font-family:'Tajawal', sans-serif;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  direction:rtl;
+}
+.container{max-width:900px;margin:20px auto;padding:10px;}
+.brand{font-size:28px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+.balance{display:flex;justify-content:space-between;margin-bottom:15px;font-size:16px;}
+.balance span{font-weight:600;}
+.card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
+.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
+.btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
+.btn-primary{background:var(--accent); color:#000;}
+.btn-ghost{background:transparent;border:1px solid #fff;color:#fff;}
+.btn:hover{opacity:0.9;transform:translateY(-2px);}
+input[type="number"]{width:100%;padding:10px;border-radius:6px;border:none;margin-top:6px;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;}
+input::placeholder{color:var(--text-muted);}
+.game-area{position:relative;height:150px;background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.multiplier{margin-top:6px; font-size:16px; font-weight:600;}
+.game-selector{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;}
+.game-selector button{flex:1;}
+.muted{color:var(--text-muted); font-size:14px;margin-top:6px;}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="card">
-    <h3>لعبة الطائرة (Crash)</h3>
-    <input id="crash-bet" type="number" placeholder="مبلغ الرهان">
-    <div id="plane">✈️</div>
-    <div style="margin-top:10px;">
-      <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
-      <button class="btn btn-ghost" onclick="crashCashOut()">سحب</button>
+  <div class="brand">الألعاب الاحترافية - BingX</div>
+
+  <div class="balance">
+    <span>الرصيد التجريبي: <span id="demo-balance">1000</span> USDT</span>
+    <span>الرصيد الحقيقي: <span id="real-balance">0</span> USDT</span>
+  </div>
+
+  <div class="game-selector">
+    <button class="btn btn-primary" onclick="openGame('crash')">Crash</button>
+    <button class="btn btn-primary" onclick="openGame('dice')">Dice</button>
+    <button class="btn btn-primary" onclick="openGame('coin')">Coin Flip</button>
+    <button class="btn btn-primary" onclick="openGame('slots')">Slots</button>
+  </div>
+
+  <div id="games-container">
+    <!-- Crash -->
+    <div id="crash" class="card" style="display:none">
+      <h3>لعبة الطائرة (Crash)</h3>
+      <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+      <div class="game-area"><div id="plane">✈️</div></div>
+      <div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
+        <button id="crash-cash" class="btn btn-ghost" onclick="crashCashOut()" disabled>سحب</button>
+      </div>
+      <p id="crash-log" class="muted"></p>
     </div>
-    <div class="log-comments" id="game-log">
-      <p>محمد ربح 100$ 🎉</p>
-      <p>أحمد خسر 50$ 😢</p>
+
+    <!-- Dice -->
+    <div id="dice" class="card" style="display:none">
+      <h3>لعبة النرد (Dice)</h3>
+      <input id="dice-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+      <div class="game-area">🎲</div>
+      <button class="btn btn-primary" onclick="playDice()">رمي النرد</button>
+      <p id="dice-log" class="muted"></p>
     </div>
+
+    <!-- Coin Flip -->
+    <div id="coin" class="card" style="display:none">
+      <h3>لعبة العملة (Coin Flip)</h3>
+      <input id="coin-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+      <div class="game-area">🪙</div>
+      <button class="btn btn-primary" onclick="playCoin()">اقلب العملة</button>
+      <p id="coin-log" class="muted"></p>
+    </div>
+
+    <!-- Slots -->
+    <div id="slots" class="card" style="display:none">
+      <h3>لعبة السلوتس (Slots)</h3>
+      <input id="slots-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+      <div class="game-area" id="slots-area">🎰</div>
+      <button class="btn btn-primary" onclick="playSlots()">تشغيل السلوتس</button>
+      <p id="slots-log" class="muted"></p>
+    </div>
+
   </div>
 </div>
-<script src="script.js"></script>
+
+<script>
+let demoBalance=1000;
+let realBalance=0;
+function updateBalance(){
+  document.getElementById('demo-balance').innerText=demoBalance.toFixed(2);
+  document.getElementById('real-balance').innerText=realBalance.toFixed(2);
+}
+
+/* فتح اللعبة */
+function openGame(gameId){
+  document.querySelectorAll('#games-container > div').forEach(d=>d.style.display='none');
+  document.getElementById(gameId).style.display='block';
+}
+
+/* Crash */
+let crashInterval=null;
+let crashMultiplier=1;
+function crashStart(){
+  const bet=parseFloat(document.getElementById('crash-bet').value);
+  if(isNaN(bet)||bet<=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  if(bet>demoBalance){ alert('الرصيد التجريبي غير كافٍ'); return; }
+  demoBalance-=bet;
+  updateBalance();
+  document.getElementById('crash-log').innerText='اللعبة بدأت!';
+  document.getElementById('crash-cash').disabled=false;
+  crashMultiplier=1;
+  const plane=document.getElementById('plane');
+  let bottom=10;
+  if(crashInterval) clearInterval(crashInterval);
+  crashInterval=setInterval(()=>{
+    crashMultiplier += 0.02;
+    document.getElementById('crash-multi').innerText=crashMultiplier.toFixed(2)+'x';
+    bottom += Math.random()*2;
+    plane.style.bottom=bottom+'px';
+    if(crashMultiplier>=5 || Math.random()<0.01){
+      clearInterval(crashInterval);
+      document.getElementById('crash-log').innerText=`خسارة! خسرت ${bet.toFixed(2)} USDT`;
+      document.getElementById('crash-cash').disabled=true;
+      updateBalance();
+    }
+  },50);
+}
+function crashCashOut(){
+  clearInterval(crashInterval);
+  const bet=parseFloat(document.getElementById('crash-bet').value);
+  const winAmount=(crashMultiplier*bet).toFixed(2);
+  document.getElementById('crash-log').innerText=`ربح الزبون! فزت بـ ${winAmount} USDT ✅`;
+  demoBalance+=parseFloat(winAmount);
+  updateBalance();
+  document.getElementById('crash-cash').disabled=true;
+}
+
+/* Dice */
+function playDice(){
+  const bet=parseFloat(document.getElementById('dice-bet').value);
+  if(isNaN(bet)||bet<=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  if(bet>demoBalance){ alert('الرصيد التجريبي غير كافٍ'); return; }
+  demoBalance-=bet;
+  updateBalance();
+  const result=Math.floor(Math.random()*6)+1;
+  if(result>=4){
+    const win=bet*2;
+    demoBalance+=win;
+    document.getElementById('dice-log').innerText=`ربح الزبون! فزت بـ ${win.toFixed(2)} USDT ✅`;
+  } else {
+    document.getElementById('dice-log').innerText=`خسارة! خسرت ${bet.toFixed(2)} USDT`;
+  }
+  updateBalance();
+}
+
+/* Coin Flip */
+function playCoin(){
+  const bet=parseFloat(document.getElementById('coin-bet').value);
+  if(isNaN(bet)||bet<=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  if(bet>demoBalance){ alert('الرصيد التجريبي غير كافٍ'); return; }
+  demoBalance-=bet;
+  updateBalance();
+  const result=Math.random()<0.5;
+  if(result){
+    const win=bet*2;
+    demoBalance+=win;
+    document.getElementById('coin-log').innerText=`ربح الزبون! فزت بـ ${win.toFixed(2)} USDT ✅`;
+  } else {
+    document.getElementById('coin-log').innerText=`خسارة! خسرت ${bet.toFixed(2)} USDT`;
+  }
+  updateBalance();
+}
+
+/* Slots */
+function playSlots(){
+  const bet=parseFloat(document.getElementById('slots-bet').value);
+  if(isNaN(bet)||bet<=0){ alert('أدخل مبلغ رهان صالح'); return; }
+  if(bet>demoBalance){ alert('الرصيد التجريبي غير كافٍ'); return; }
+  demoBalance-=bet;
+  updateBalance();
+  const symbols=['🍒','🍋','🍊','🍇','⭐','💎'];
+  const reel=Array.from({length:3},()=>symbols[Math.floor(Math.random()*symbols.length)]);
+  const win = reel[0]===reel[1] && reel[1]===reel[2];
+  if(win){
+    const winAmount=bet*3;
+    demoBalance+=winAmount;
+    document.getElementById('slots-log').innerText=`ربح الزبون! فزت بـ ${winAmount.toFixed(2)} USDT ✅`;
+  } else {
+    document.getElementById('slots-log').innerText=`خسارة! خسرت ${bet.toFixed(2)} USDT`;
+  }
+  document.getElementById('slots-area').innerText=reel.join(' | ');
+  updateBalance();
+}
+updateBalance();
+</script>
 </body>
 </html>
