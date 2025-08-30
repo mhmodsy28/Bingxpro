@@ -1,37 +1,168 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الاستثمار - BingX</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --accent:#f1c40f;
+  --card-bg:rgba(255,255,255,0.05);
+  --text-muted:rgba(255,255,255,0.6);
+}
+body{
+  margin:0;
+  font-family:'Tajawal', sans-serif;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#fff;
+  direction:rtl;
+}
+.container{max-width:1000px;margin:20px auto;padding:10px;}
+.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;}
+.card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
+.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
+.btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
+.btn-primary{background:var(--accent); color:#000;}
+.btn-ghost{background:transparent;border:1px solid #fff;color:#fff;}
+.btn:hover{opacity:0.9;transform:translateY(-2px);}
+input[type="number"], select{width:100%;padding:10px;border-radius:6px;border:none;margin-top:6px;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;}
+input::placeholder, select{color:var(--text-muted);}
+.investment-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:15px;}
+.invest-card{background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;display:flex;align-items:center;gap:10px;transition:0.3s;cursor:pointer;}
+.invest-card:hover{background:rgba(241,196,15,0.2);}
+.invest-icon{font-size:28px;color:var(--accent);}
+.muted{color:var(--text-muted);font-size:14px;margin-top:6px;}
+.chart-container{margin-top:20px;background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;}
+</style>
 </head>
 <body>
 <div class="container">
-<div class="header"><div class="brand">الاستثمار</div><div><a class="link" href="index.html">العودة</a></div></div>
+  <div class="brand">الاستثمار الاحترافي - BingX</div>
 
-<div class="card">
-<h4>إعداد عقد استثماري</h4>
-<label>نوع العقد</label>
-<select id="invest-type">
-<option value="short">قصير (7 أيام)</option>
-<option value="long">طويل (90 يوم)</option>
-</select>
+  <div class="balance" style="display:flex;justify-content:space-between;margin-bottom:15px;font-size:16px;">
+    <span>الرصيد التجريبي: <span id="demo-balance">5000</span> USDT</span>
+    <span>الرصيد الحقيقي: <span id="real-balance">0</span> USDT</span>
+  </div>
 
-<label>المبلغ (USDT)</label>
-<input id="invest-amount" type="number" placeholder="أدخل المبلغ">
+  <div class="card">
+    <h4>إعداد عقد استثماري</h4>
 
-<div style="display:flex;gap:8px;margin-top:8px">
-<button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
-<button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
+    <label>اختر الاستثمار</label>
+    <select id="invest-type"></select>
+
+    <label>مدة العقد</label>
+    <select id="invest-duration">
+      <option value="1">1 شهر</option>
+      <option value="3">3 أشهر</option>
+      <option value="6">6 أشهر</option>
+      <option value="12">12 شهر</option>
+    </select>
+
+    <label>المبلغ (USDT)</label>
+    <input id="invest-amount" type="number" placeholder="أدخل المبلغ">
+
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
+      <button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
+    </div>
+
+    <div style="margin-top:12px" class="muted">
+      APR: <span id="apr">--</span> — المخاطر: <span id="risk">--</span>
+      <div style="margin-top:6px">العائد المتوقع: <span id="invest-est">--</span></div>
+    </div>
+  </div>
+
+  <div class="chart-container card">
+    <canvas id="investChart"></canvas>
+  </div>
+
+  <div class="investment-list" id="investment-list"></div>
 </div>
 
-<div style="margin-top:12px" class="muted">
-APR: <span id="apr">--</span> — المخاطر: <span id="risk">--</span>
-<div style="margin-top:6px">العائد المتوقع: <span id="invest-est">--</span></div>
-</div>
-</div>
-</div>
-<script src="script.js"></script>
+<script>
+let demoBalance=5000;
+let realBalance=0;
+
+const investments=[
+  {name:'Bitcoin',icon:'🟠',apr:12,risk:'متوسط'},
+  {name:'Ethereum',icon:'🔵',apr:10,risk:'متوسط'},
+  {name:'BNB',icon:'🟡',apr:8,risk:'منخفض'},
+  {name:'Solana',icon:'🟣',apr:15,risk:'مرتفع'},
+  {name:'XRP',icon:'🔷',apr:7,risk:'منخفض'},
+  {name:'Cardano',icon:'🔴',apr:9,risk:'متوسط'},
+  {name:'DOGE',icon:'🟤',apr:20,risk:'مرتفع'},
+  {name:'DOT',icon:'🟣',apr:11,risk:'متوسط'},
+  {name:'LTC',icon:'⚪',apr:6,risk:'منخفض'},
+  {name:'TRX',icon:'🟢',apr:5,risk:'منخفض'}
+];
+
+let selectedInvestment=null;
+let investChart=null;
+
+function updateBalance(){
+  document.getElementById('demo-balance').innerText=demoBalance.toFixed(2);
+  document.getElementById('real-balance').innerText=realBalance.toFixed(2);
+}
+
+function populateInvestments(){
+  const select=document.getElementById('invest-type');
+  select.innerHTML='';
+  investments.forEach(inv=>{
+    select.innerHTML+=`<option value="${inv.name}">${inv.name} ${inv.icon}</option>`;
+  });
+  selectedInvestment=investments[0];
+}
+
+function calculateInvest(){
+  const amount=parseFloat(document.getElementById('invest-amount').value);
+  const duration=parseInt(document.getElementById('invest-duration').value);
+  const type=document.getElementById('invest-type').value;
+  const inv=investments.find(i=>i.name===type);
+  if(!inv || isNaN(amount)||amount<=0) { alert('أدخل مبلغ صالح'); return; }
+  selectedInvestment=inv;
+  const est=(amount*inv.apr*duration/12/100).toFixed(2);
+  document.getElementById('invest-est').innerText=`${est} USDT`;
+  document.getElementById('apr').innerText=`${inv.apr}%`;
+  document.getElementById('risk').innerText=inv.risk;
+
+  renderChart(amount,duration,inv.apr);
+}
+
+function startInvestment(){
+  const amount=parseFloat(document.getElementById('invest-amount').value);
+  if(isNaN(amount)||amount<=0){ alert('أدخل مبلغ صالح'); return; }
+  if(amount>demoBalance){ alert('يجب الإيداع أولاً، رصيدك غير كافٍ'); return; }
+  demoBalance-=amount;
+  updateBalance();
+  calculateInvest();
+  alert(`تم بدء الاستثمار! استثمار بقيمة ${amount} USDT في ${selectedInvestment.name}`);
+}
+
+function renderChart(amount,duration,apr){
+  const labels=[];
+  const data=[];
+  for(let i=1;i<=duration;i++){
+    labels.push(`شهر ${i}`);
+    data.push((amount*(1+(apr/100)*(i/12))).toFixed(2));
+  }
+  const ctx=document.getElementById('investChart').getContext('2d');
+  if(investChart) investChart.destroy();
+  investChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:labels,datasets:[{label:`تطور الاستثمار - ${selectedInvestment.name}`,data:data,borderColor:'#f1c40f',backgroundColor:'rgba(241,196,15,0.2)',tension:0.3,fill:true}]},
+    options:{responsive:true,plugins:{legend:{display:true}},scales:{y:{beginAtZero:false}}}
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  populateInvestments();
+  updateBalance();
+  calculateInvest();
+});
+</script>
 </body>
 </html>
