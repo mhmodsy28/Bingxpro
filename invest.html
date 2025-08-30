@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الاستثمار - BingX</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-<div class="header">
-  <a href="index.html" class="btn btn-ghost">العودة</a>
-  <span class="brand">الاستثمار</span>
+<div class="header"><div class="brand">الاستثمار</div><div><a class="link" href="index.html">العودة</a></div></div>
+
+<div class="card">
+<h4>إعداد عقد استثماري</h4>
+<label>نوع العقد</label>
+<select id="invest-type">
+<option value="short">قصير (7 أيام)</option>
+<option value="long">طويل (90 يوم)</option>
+</select>
+
+<label>المبلغ (USDT)</label>
+<input id="invest-amount" type="number" placeholder="أدخل المبلغ">
+
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
+<button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
 </div>
 
-<section class="card">
-  <label>اختر العقد:</label>
-  <select id="invest-type">
-    <option value="short">قصير (1 شهر)</option>
-    <option value="medium">متوسط (3 أشهر)</option>
-    <option value="long">طويل (12 شهر)</option>
-  </select>
-
-  <input id="invest-amount" type="number" placeholder="المبلغ (USDT)">
-  <button class="btn btn-primary" onclick="startInvestment()">بدء الاستثمار</button>
-  <button class="btn btn-ghost" onclick="calculateInvest()">حساب تقديري</button>
-
-  <p>العائد المتوقع: <span id="invest-est">--</span></p>
-  <p>APR: <span id="apr">--</span> — المخاطر: <span id="risk">--</span></p>
-</section>
+<div style="margin-top:12px" class="muted">
+APR: <span id="apr">--</span> — المخاطر: <span id="risk">--</span>
+<div style="margin-top:6px">العائد المتوقع: <span id="invest-est">--</span></div>
+</div>
+</div>
 </div>
 <script src="script.js"></script>
 </body>
