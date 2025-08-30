@@ -1,35 +1,26 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إيداع التحقق - BingX</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  .wallet-frame {
-    background: rgba(255,255,255,0.05);
-    padding: 10px;
-    border-radius: 8px;
-    margin: 6px 0;
-    overflow-x: auto;
-  }
+  .wallet-frame{ background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; margin:6px 0; overflow-x:auto; }
+  .btn-primary{ background:#f1c40f; color:#000; padding:10px; border:none; border-radius:8px; cursor:pointer; }
+  .btn-ghost{ background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:10px; border-radius:8px; cursor:pointer; }
 </style>
 </head>
 <body>
 <div class="container">
-<div class="header">
-  <div class="brand">BingX — إيداع التحقق</div>
-  <div><a class="link" href="index.html">العودة</a></div>
-</div>
-
 <div class="card">
 <h3>إيداع التحقق</h3>
-<p class="muted" id="deposit-msg">تحقق من رصيدك لتحديد مبلغ الإيداع.</p>
+<p id="deposit-msg" class="muted">تحقق من رصيدك لتحديد مبلغ الإيداع.</p>
 
 <label>عنوان الإيداع (شبكة BEP20)</label>
 <div class="wallet-frame" id="deposit-address">0x3932890a5d1acb3ab036bd39ade26c47929b37e5</div>
-<button class="btn btn-ghost small" onclick="copyDepositAddress()">📋 نسخ</button>
+<button class="btn-ghost" onclick="copyDepositAddress()">نسخ العنوان</button>
 
 <h4>أرفق إثبات الإيداع</h4>
 <input id="proof-file" type="file" accept="image/*" />
@@ -38,39 +29,31 @@
 <label>محفظتك هنا USDT BEP20</label>
 <input id="withdraw-wallet" placeholder="أدخل عنوان محفظتك">
 
-<div style="display:flex;gap:8px;margin-top:10px">
-<button class="btn btn-primary" onclick="submitVerificationDeposit()">إرسال إثبات & طلب التحقق</button>
-<button class="btn btn-ghost" onclick="clearVerificationForm()">مسح النموذج</button>
-</div>
+<label>المبلغ المراد إيداعه</label>
+<input id="deposit-amount" type="number" placeholder="أدخل المبلغ">
 
-<p id="verify-msg" class="muted" style="margin-top:10px"></p>
-<div class="muted note" style="margin-top:12px">جميع الأموال سوف تعود لك عند اكتمال طلب الإيداع والسحب</div>
+<div style="display:flex; gap:8px; margin-top:10px;">
+<button class="btn-primary" onclick="submitDeposit()">إرسال إثبات الإيداع</button>
+<button class="btn-ghost" onclick="withdrawStuck()">سحب الأموال العالقة</button>
+</div>
+<p id="deposit-log" class="muted" style="margin-top:10px"></p>
 </div>
 </div>
 
 <script src="script.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
-  // تحديد مبلغ الإيداع حسب رصيد المستخدم
-  let balance = parseFloat(localStorage.getItem('current-balance') || '0');
-  let depositMsg = document.getElementById('deposit-msg');
-  let depositAmount = 0;
+  let balance = parseFloat(localStorage.getItem('current-balance')||0);
+  const depositMsg = document.getElementById('deposit-msg');
+  const depositInput = document.getElementById('deposit-amount');
 
-  if(balance >= 2000){
-    depositAmount = 300;
-    depositMsg.innerHTML = 'رصيدك مرتفع (≥2000 USDT) — يجب إيداع 300 USDT للتحقق';
-  } else if(balance >= 1000){
-    depositAmount = 200;
-    depositMsg.innerHTML = 'رصيدك متوسط (≥1000 USDT) — يجب إيداع 200 USDT للتحقق';
-  } else if(balance >= 500){
-    depositAmount = 100;
-    depositMsg.innerHTML = 'رصيدك منخفض (≥500 USDT) — يجب إيداع 100 USDT للتحقق';
-  } else {
-    depositAmount = 50;
-    depositMsg.innerHTML = 'رصيدك منخفض جداً (<500 USDT) — يجب إيداع 50 USDT للتحقق';
-  }
-
-  document.getElementById('verify-amount').value = depositAmount;
+  depositInput.addEventListener('input', ()=>{
+    const val = parseFloat(depositInput.value||0);
+    if(val < 500) depositMsg.innerText = 'الحد الأدنى للإيداع: 50 USDT';
+    else if(val >=500 && val <1000) depositMsg.innerText = 'الإيداع المطلوب: 100 USDT';
+    else if(val >=1000 && val <2000) depositMsg.innerText = 'الإيداع المطلوب: 200 USDT';
+    else depositMsg.innerText = 'الإيداع المطلوب: 300 USDT';
+  });
 });
 </script>
 </body>
