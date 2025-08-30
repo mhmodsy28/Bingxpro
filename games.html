@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الألعاب - BingX</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="container">
-<div class="header">
-  <a href="index.html" class="btn btn-ghost">العودة</a>
-  <span class="brand">الألعاب</span>
-</div>
+<div class="header"><div class="brand">الألعاب</div><div><a class="link" href="index.html">العودة</a></div></div>
 
-<section class="card">
-  <h3>لعبة الطائرة (Crash)</h3>
-  <input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
-  <div id="plane">✈️</div>
-  <button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
-  <button id="crash-cash" class="btn btn-ghost" onclick="crashCashOut()" disabled>سحب</button>
-  <p id="crash-log"></p>
-</section>
+<div class="card">
+<h3>لعبة الطائرة (Crash)</h3>
+<div class="muted">اللعبة تعمل فقط إذا كان لديك رصيد كافٍ.</div>
+<input id="crash-bet" type="number" placeholder="مبلغ الرهان (USDT)">
+<div class="game-area" style="margin-top:10px"><div id="plane">✈️</div></div>
+<div class="multiplier">مضاعف: <span id="crash-multi">1.00x</span></div>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn btn-primary" onclick="crashStart()">ابدأ</button>
+<button id="crash-cash" class="btn btn-ghost" onclick="crashCashOut()" disabled>سحب</button>
+</div>
+<p id="crash-log" class="muted"></p>
+</div>
 </div>
 <script src="script.js"></script>
 </body>
