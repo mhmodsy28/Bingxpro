@@ -1,210 +1,164 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>منصة BingX</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root{
-  --bg1:#0f2027;
-  --bg2:#203a43;
-  --accent:#f1c40f;
-  --card-bg:rgba(255,255,255,0.05);
-  --text-muted:rgba(255,255,255,0.6);
-  --btn-danger:#e74c3c;
-  --success:#2ecc71;
-  --warning:#f39c12;
-  --error:#e74c3c;
-}
-body{
-  margin:0;
-  font-family:'Tajawal', sans-serif;
-  background: linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:#fff;
-  direction:rtl;
-  overflow-x:hidden;
-}
-.container{max-width:1000px;margin:20px auto;padding:10px;}
-.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;display:flex;align-items:center;gap:10px;}
-.card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
-.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
-.btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
-.btn-primary{background:var(--accent); color:#000;}
-.btn-ghost{background:transparent;border:1px solid #fff;color:#fff;}
-.btn-danger{background:var(--btn-danger); color:#fff;}
-.btn:hover{opacity:0.9;transform:translateY(-2px);}
-input{width:100%;padding:10px;border-radius:6px;border:none;margin-top:6px;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;}
-input::placeholder{color:var(--text-muted);}
-.muted{color:var(--text-muted);font-size:14px;margin-top:6px;}
-.note{color:var(--text-muted);font-size:12px;margin-top:4px;}
-.hidden{display:none;}
-.main-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:15px;}
-.stat-value{font-size:20px;font-weight:600;margin-top:6px;transition:1s;}
-.glow{animation:glow 1s forwards;}
-@keyframes glow{0%{text-shadow:0 0 0px #f1c40f;}50%{text-shadow:0 0 15px #f1c40f;}100%{text-shadow:0 0 0px #f1c40f;}}
+  <meta charset="UTF-8">
+  <title>BingX Pro</title>
+  <style>
+    body {
+      background: #111;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background: #1c1c1c;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px auto;
+      width: 320px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .card h3 {
+      margin-bottom: 15px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn-yellow { background: #f1c40f; color: #000; }
+    .btn-red { background: #e74c3c; color: #fff; }
+    .btn-gray { background: #555; color: #fff; }
+    .btn-green { background: #2ecc71; color: #fff; }
+    .btn-blue { background: #3498db; color: #fff; }
+    .btn-purple { background: #9b59b6; color: #fff; }
 
-/* نافذة منبثقة */
-.modal{
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,0.6);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-.modal-content{
-  background:var(--card-bg);
-  padding:20px;
-  border-radius:12px;
-  max-width:350px;
-  text-align:center;
-  box-shadow:0 8px 25px rgba(0,0,0,0.6);
-}
-.modal-icon{
-  font-size:40px;
-  margin-bottom:10px;
-}
-.success{color:var(--success);}
-.warning{color:var(--warning);}
-.error{color:var(--error);}
-.modal-content h3{color:var(--accent);margin-bottom:10px;}
-.modal-content p{color:#fff;margin-bottom:15px;}
-.close-btn{
-  background:var(--accent);
-  border:none;
-  padding:10px 18px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-  color:#000;
-}
-</style>
+    /* المودال */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: #fff;
+      width: 260px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .modal-content button {
+      background: #f1c40f;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <!-- Login -->
-  <div id="auth-card" class="card">
-    <div class="brand"><i class="fas fa-coins"></i> BingX</div>
-    <div id="login-block">
-      <h3>تسجيل الدخول</h3>
-      <input id="login-email" placeholder="البريد الإلكتروني" type="email">
-      <input id="login-password" placeholder="كلمة المرور" type="password">
-      <button class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
+
+  <!-- بطاقة الحساب -->
+  <div class="card">
+    <h3>💰 الحساب</h3>
+    <p>الرصيد الحقيقي: <span id="realBalance">20</span></p>
+    <p>الرصيد التجريبي: <span id="demoBalance">0</span></p>
+    <button class="btn btn-red">تسجيل الخروج</button>
+  </div>
+
+  <!-- إجراءات سريعة -->
+  <div class="card">
+    <h3>⚡ إجراءات سريعة</h3>
+    <button class="btn btn-yellow" onclick="addDemoBalance()">إضافة رصيد تجريبي</button>
+    <button class="btn btn-gray" onclick="resetDemoBalance()">إعادة ضبط</button>
+    <p style="font-size:12px;opacity:0.7;">يمكنك إضافة الرصيد التجريبي مرة واحدة فقط.</p>
+  </div>
+
+  <!-- التداول -->
+  <div class="card">
+    <h3>📈 التداول</h3>
+    <button class="btn btn-green">فتح صفقة جديدة</button>
+    <button class="btn btn-gray">إدارة الصفقات</button>
+  </div>
+
+  <!-- الاستثمار -->
+  <div class="card">
+    <h3>💼 الاستثمار</h3>
+    <button class="btn btn-blue">خطة استثمار</button>
+    <button class="btn btn-gray">متابعة الأرباح</button>
+  </div>
+
+  <!-- الإيداع -->
+  <div class="card">
+    <h3>💳 الإيداع</h3>
+    <button class="btn btn-yellow">إيداع أموال</button>
+    <button class="btn btn-gray">سجل الإيداعات</button>
+  </div>
+
+  <!-- الألعاب -->
+  <div class="card">
+    <h3>🎮 الألعاب</h3>
+    <button class="btn btn-purple">ابدأ لعبة</button>
+    <button class="btn btn-gray">سجل الألعاب</button>
+  </div>
+
+  <!-- المودال -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <h3>إشعار</h3>
+      <p id="modalMsg">تمت العملية ✅</p>
+      <button onclick="closeModal()">حسناً</button>
     </div>
   </div>
 
-  <!-- App -->
-  <div id="app-card" class="hidden">
-    <div class="main-grid">
-      <section class="card">
-        <h3>الحساب</h3>
-        <div style="margin-top:8px">
-          <div class="stat-value" id="real-balance">20</div>
-          <div class="muted">رصيدك المتاح</div>
-        </div>
-        <div style="margin-top:8px">
-          <div class="stat-value glow" id="demo-balance">0</div>
-          <div class="muted">الرصيد التجريبي</div>
-        </div>
-        <button class="btn btn-danger" style="margin-top:12px" onclick="logout()">تسجيل الخروج</button>
-      </section>
+  <script>
+    let demoBalance = 0;
+    let added = false;
 
-      <section class="card">
-        <h3>إجراءات سريعة</h3>
-        <input id="quick-amount" type="number" placeholder="مبلغ (للتجربة)">
-        <div style="display:flex;gap:8px;justify-content:center;">
-          <button class="btn btn-primary" onclick="quickAdd()">إضافة رصيد</button>
-          <button class="btn btn-ghost" onclick="quickReset()">إعادة ضبط</button>
-        </div>
-        <p class="note">يمكنك إضافة الرصيد التجريبي مرة واحدة فقط.</p>
-      </section>
-    </div>
-  </div>
-</div>
+    function addDemoBalance() {
+      if (!added) {
+        demoBalance = 100;
+        document.getElementById("demoBalance").textContent = demoBalance;
+        document.getElementById("modalMsg").textContent = "تمت إضافة 100 رصيد تجريبي ✅";
+        added = true;
+      } else {
+        document.getElementById("modalMsg").textContent = "يمكنك إضافة الرصيد التجريبي مرة واحدة فقط ⚠️";
+      }
+      showModal();
+    }
 
-<!-- نافذة منبثقة -->
-<div id="modal" class="modal hidden">
-  <div class="modal-content">
-    <div id="modal-icon" class="modal-icon"></div>
-    <h3 id="modal-title">إشعار</h3>
-    <p id="modal-message"></p>
-    <button class="close-btn" onclick="closeModal()">حسناً</button>
-  </div>
-</div>
+    function resetDemoBalance() {
+      demoBalance = 0;
+      document.getElementById("demoBalance").textContent = demoBalance;
+      added = false;
+      document.getElementById("modalMsg").textContent = "تمت إعادة ضبط الرصيد التجريبي 🔄";
+      showModal();
+    }
 
-<script>
-function showModal(type,title,message){
-  const icon=document.getElementById('modal-icon');
-  icon.className="modal-icon"; // reset
-  if(type==="success"){icon.innerHTML='<i class="fas fa-check-circle success"></i>';}
-  else if(type==="warning"){icon.innerHTML='<i class="fas fa-exclamation-triangle warning"></i>';}
-  else if(type==="error"){icon.innerHTML='<i class="fas fa-times-circle error"></i>';}
-  document.getElementById('modal-title').innerText=title;
-  document.getElementById('modal-message').innerText=message;
-  document.getElementById('modal').classList.remove('hidden');
-}
-function closeModal(){
-  document.getElementById('modal').classList.add('hidden');
-}
+    function showModal() {
+      document.getElementById("myModal").style.display = "flex";
+    }
 
-function login(){
-  const email=document.getElementById('login-email').value;
-  if(!email){showModal("error","خطأ","الرجاء إدخال البريد الإلكتروني");return;}
-  const name=email.split('@')[0];
-  localStorage.setItem('loggedUser',name);
-  showApp(name);
-}
-function logout(){
-  localStorage.clear();
-  document.getElementById('auth-card').classList.remove('hidden');
-  document.getElementById('app-card').classList.add('hidden');
-}
-function showApp(name){
-  document.getElementById('auth-card').classList.add('hidden');
-  document.getElementById('app-card').classList.remove('hidden');
-  document.getElementById('real-balance').innerText=20;
-  document.getElementById('demo-balance').innerText=localStorage.getItem('demoBalance')||0;
-}
-function quickAdd(){
-  if(localStorage.getItem('balanceAdded')){
-    showModal("warning","تنبيه","يمكنك إضافة الرصيد التجريبي مرة واحدة فقط.");
-    return;
-  }
-  let amt=parseFloat(document.getElementById('quick-amount').value)||0;
-  if(amt<=0){showModal("error","خطأ","أدخل مبلغ صحيح لإضافته.");return;}
-  let current=parseFloat(localStorage.getItem('demoBalance')||0);
-  current+=amt;
-  localStorage.setItem('demoBalance',current);
-  localStorage.setItem('balanceAdded',true);
-  animateBalance(current);
-  showModal("success","نجاح","تمت إضافة "+amt+" إلى رصيدك التجريبي.");
-}
-function quickReset(){
-  localStorage.setItem('demoBalance',0);
-  localStorage.removeItem('balanceAdded');
-  document.getElementById('demo-balance').innerText=0;
-  showModal("success","إعادة ضبط","تمت إعادة تعيين الرصيد التجريبي إلى صفر.");
-}
-function animateBalance(amount){
-  const el=document.getElementById('demo-balance');
-  el.classList.add('glow');
-  let start=parseFloat(el.innerText)||0;
-  let end=amount;
-  let step=(end-start)/30;
-  let i=0;
-  const interval=setInterval(()=>{
-    if(i>=30){clearInterval(interval);el.classList.remove('glow');el.innerText=end.toFixed(2);return;}
-    el.innerText=(start+step*i).toFixed(2);
-    i++;
-  },30);
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  const savedUser=localStorage.getItem('loggedUser');
-  if(savedUser){showApp(savedUser);}
-});
-</script>
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+  </script>
+
 </body>
 </html>
