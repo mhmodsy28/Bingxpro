@@ -23,7 +23,7 @@ body{
   overflow-x:hidden;
 }
 .container{max-width:1000px;margin:20px auto;padding:10px;}
-.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;display:flex;align-items:center;gap:10px;justify-content:center;}
+.brand{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px;text-align:center;display:flex;align-items:center;gap:10px;}
 .card{background:var(--card-bg);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 8px 20px rgba(0,0,0,0.5);transition:0.3s;}
 .card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.7);}
 .btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;margin-top:8px;}
@@ -45,25 +45,19 @@ input::placeholder, select{color:var(--text-muted);}
 .comment-list{position:absolute;width:100%;}
 .comment-item{display:flex;align-items:center;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2);opacity:0.8;transition:0.3s,color 0.5s;}
 .comment-item i{margin-left:8px;color:#f1c40f;animation:iconBounce 1s infinite alternate;}
-@keyframes iconBounce{0%{transform:translateY(0);}100%{transform:translateY(-3px);}}
+@keyframes iconBounce{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-3px);}
+}
 .comment-item span{flex:1;}
 .comment-item:hover{color:#f1c40f;opacity:1;}
-.user-img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
-/* اهتزاز عند الخطأ */
-.shake{animation:shake 0.5s;}
-@keyframes shake{0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);}}
-/* توهج عند إضافة الرصيد */
-.glow{animation:glow 1s forwards;}
-@keyframes glow{0%{text-shadow:0 0 0px #f1c40f;}50%{text-shadow:0 0 15px #f1c40f;}100%{text-shadow:0 0 0px #f1c40f;}}
-
-/* زر واتساب في الأعلى */
 #support-btn{
   position:fixed;
-  top:20px;
+  bottom:20px;
   left:20px;
   background:var(--accent);
   color:#000;
-  padding:10px 14px;
+  padding:12px 16px;
   border-radius:50px;
   font-weight:700;
   cursor:pointer;
@@ -73,13 +67,61 @@ input::placeholder, select{color:var(--text-muted);}
   gap:6px;
   z-index:9999;
 }
+.user-img{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+}
+/* اهتزاز عند الخطأ */
+.shake{animation:shake 0.5s;}
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+  75%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
+}
+/* توهج عند إضافة الرصيد */
+.glow{
+  animation:glow 1s forwards;
+}
+@keyframes glow{
+  0%{text-shadow:0 0 0px #f1c40f;}
+  50%{text-shadow:0 0 15px #f1c40f;}
+  100%{text-shadow:0 0 0px #f1c40f;}
+}
+
+/* المحفظة (Modal) */
+.modal{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+.modal-content{
+  background:var(--card-bg);
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  width:90%;
+  max-width:400px;
+}
+.modal-content h3{margin-bottom:10px;}
+.wallet-address{word-wrap:break-word;font-size:14px;margin:10px 0;color:var(--accent);}
 </style>
 </head>
 <body>
 <div class="container">
+
   <!-- Auth card -->
   <div id="auth-card" class="card">
     <div class="brand"><i class="fas fa-coins"></i> BingX</div>
+
     <!-- Login -->
     <div id="login-block">
       <h3>تسجيل الدخول</h3>
@@ -92,6 +134,7 @@ input::placeholder, select{color:var(--text-muted);}
       <button class="btn btn-ghost" onclick="forgotPassword()" style="margin-top:4px;">هل نسيت كلمة السر؟</button>
       <p class="muted" style="margin-top:8px;text-align:center;">البيانات تُخزن محليًا على جهازك.</p>
     </div>
+
     <!-- Register -->
     <div id="register-block" class="hidden">
       <h3>إنشاء حساب جديد</h3>
@@ -126,14 +169,14 @@ input::placeholder, select{color:var(--text-muted);}
           <div class="muted">رصيدك التجريبي</div>
         </div>
 
-        <button class="btn btn-primary" onclick="showWallet()">👛 عرض المحفظة</button>
-
         <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
           <a class="btn btn-ghost" href="trade.html">📈 التداول</a>
           <a class="btn btn-ghost" href="invest.html">💼 الاستثمار</a>
           <a class="btn btn-ghost" href="deposit.html">💳 الإيداع</a>
           <a class="btn btn-ghost" href="games.html">🎮 الألعاب</a>
+          <button class="btn btn-primary" onclick="playSound();openWallet()">👛 عرض المحفظة</button>
         </div>
+
         <button class="btn btn-danger" style="margin-top:12px" onclick="playSound();logout()">تسجيل الخروج</button>
       </section>
 
@@ -159,7 +202,20 @@ input::placeholder, select{color:var(--text-muted);}
   </div>
 </div>
 
-<!-- زر الدعم الفني بالأعلى -->
+<!-- Modal المحفظة -->
+<div class="modal" id="wallet-modal">
+  <div class="modal-content">
+    <h3>محفظتك</h3>
+    <p>رصيدك: <strong id="wallet-balance">0.00</strong> USDT</p>
+    <p>عنوان الشبكة:</p>
+    <div class="wallet-address" id="wallet-address">0x1234abcd5678efgh9012ijkl</div>
+    <button class="btn btn-primary" onclick="copyAddress()">📋 نسخ العنوان</button>
+    <br>
+    <button class="btn btn-danger" onclick="closeWallet()">إغلاق</button>
+  </div>
+</div>
+
+<!-- زر الدعم الفني -->
 <div id="support-btn" onclick="openSupport()"><i class="fab fa-whatsapp"></i> دعم فني</div>
 
 <!-- الأصوات -->
@@ -169,13 +225,21 @@ input::placeholder, select{color:var(--text-muted);}
 const clickSound = document.getElementById('click-sound');
 function playSound(){clickSound.currentTime=0;clickSound.play();}
 
-function showWallet(){
-  const balance = localStorage.getItem('balance') || "0.00";
-  const walletAddress = "0x" + Math.random().toString(16).substr(2, 32); 
-  alert("💰 الرصيد: " + balance + "$\n📡 العنوان: " + walletAddress);
+function openWallet(){
+  document.getElementById('wallet-balance').innerText = document.getElementById('current-balance').innerText;
+  document.getElementById('wallet-modal').style.display='flex';
+}
+function closeWallet(){
+  document.getElementById('wallet-modal').style.display='none';
+}
+function copyAddress(){
+  const addr=document.getElementById('wallet-address').innerText;
+  navigator.clipboard.writeText(addr);
+  alert("تم نسخ العنوان بنجاح!");
 }
 
-// باقي الأكواد كما هي (تسجيل الدخول، التعليقات، الرصيد...)
+// باقي الأكواد (تسجيل دخول، رصيد، تعليقات ...) نفس ما عندك
+// ...
 </script>
 </body>
 </html>
